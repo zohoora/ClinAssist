@@ -134,8 +134,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         mainWindow?.contentView = NSHostingView(rootView: contentView)
         mainWindow?.isReleasedWhenClosed = false
         mainWindow?.delegate = self
-        mainWindow?.minSize = NSSize(width: 380, height: 500)
-        mainWindow?.maxSize = NSSize(width: 380, height: screen.frame.height)
+        mainWindow?.minSize = NSSize(width: 320, height: 500)
+        mainWindow?.maxSize = NSSize(width: 600, height: screen.frame.height)
         
         // Position on right edge
         mainWindow?.setFrameOrigin(NSPoint(x: windowX, y: windowY))

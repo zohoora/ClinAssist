@@ -101,36 +101,53 @@ struct LLMPrompts {
           "typical_adult_dose": "Dosing info",
           "key_cautions": ["caution1", "caution2"]
         }
+      ],
+      "issues": [
+        {
+          "label": "Patient concern or symptom",
+          "addressed_in_plan": false
+        }
       ]
     }
+    
+    For "issues": Track all symptoms, concerns, or problems the patient mentions. Set "addressed_in_plan" to true if the physician has clearly addressed it in the conversation.
     
     Include drug cards for EVERY medication mentioned. If nothing useful for a category, return empty array.
     Keep everything short and practical. No disclaimers.
     """
     
     static let soapRenderer = """
-    Generate a problem-oriented SOAP note for a family physician in Ontario.
-    
-    Input: Structured encounter state JSON.
-    
-    Output format (plain text, not JSON):
-    
-    PROBLEM 1: [Problem Name]
-    S: 
-    • [bullet point]
-    • [bullet point]
-    O:
-    • [bullet point]
-    A:
-    • [bullet point]
-    P:
-    • [bullet point]
-    
-    PROBLEM 2: [Problem Name]
-    ...
-    
-    Use 5-8 bullet points per section. Be concise but capture key details.
-    No disclaimers or headers beyond the problem structure.
+    You will be analyzing the provided medical transcript or recording to create professional SOAP notes for each patient mentioned.
+
+    Your task is to create concise, professional SOAP notes for each patient in the transcript. Follow these specific requirements:
+
+    SOAP Note Format:
+
+    - S (Subjective): Patient's reported symptoms, concerns, and history
+
+    - O (Objective): Observable findings, vital signs, physical exam results. Do not include any procedure descriptions here. If no objective elements exist at all, omit this section. If a particular detail (such as blood pressure) is not mentioned, simply do not list it. For example, do not say things like '(No other vitals/exam documented)'.
+
+    - A (Assessment): Clinical impression, diagnosis, or differential diagnosis. Keep this brief.
+
+    - P (Plan): Procedures performed, Treatment plan, follow-up, referrals, medication changes.
+
+    - If multiple patients are discussed, create separate SOAP notes for each
+
+    **Problem Organization:**
+
+    - If a patient has multiple distinct medical problems, separate each problem into its own section within that patient's SOAP note
+
+    - Focus on significant issues; minor factors may be omitted for conciseness
+
+    - If bloodwork is being ordered, do not list the specific tests. Only state that bloodwork is ordered as per requisition.
+
+    - In the body of the SOAP note, do not write the patient's name as you may misspell it
+
+    - Do not number the problems
+
+    Format your final response with clear headings for each patient and use the standard SOAP format outlined above. Make it formatted and easy to copy/paste into the EMR.
+
+    **CRITICAL FORMATTING RULE:** Do NOT use any markdown formatting. No asterisks (*), no bold (**), no underscores (_), no hash symbols (#). Use plain text only. The output will be pasted into an EMR that does not support markdown.
     """
 }
 

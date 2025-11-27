@@ -34,7 +34,7 @@ struct SOAPView: View {
                         .padding(12)
                 } else {
                     Text(soapNote)
-                        .font(.system(size: 13, design: .monospaced))
+                        .font(.system(size: 11, design: .monospaced))
                         .foregroundColor(.primary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(12)

@@ -11,11 +11,11 @@ enum AppState: Equatable {
         case .idle:
             return "Ready"
         case .recording:
-            return "Recording"
+            return "Processing"
         case .paused:
             return "Paused"
         case .processing:
-            return "Processing"
+            return "Finalizing"
         }
     }
     
@@ -24,7 +24,7 @@ enum AppState: Equatable {
         case .idle:
             return "gray"
         case .recording:
-            return "red"
+            return "blue"
         case .paused:
             return "yellow"
         case .processing:

@@ -2,7 +2,6 @@ import SwiftUI
 
 struct HelperPanelView: View {
     let suggestions: HelperSuggestions
-    let issues: [Issue]
     
     @State private var expandedSections: Set<String> = []
     
@@ -17,13 +16,13 @@ struct HelperPanelView: View {
                 // Issues
                 ExpandableSection(
                     title: "Issues",
-                    count: issues.count,
+                    count: suggestions.issues.count,
                     isExpanded: expandedSections.contains("issues")
                 ) {
                     toggleSection("issues")
                 } content: {
-                    ForEach(issues) { issue in
-                        IssueRowView(issue: issue)
+                    ForEach(suggestions.issues) { issue in
+                        IssueRowViewFromLLM(issue: issue)
                     }
                 }
                 
@@ -175,6 +174,26 @@ struct IssueRowView: View {
     }
 }
 
+struct IssueRowViewFromLLM: View {
+    let issue: IssueFromLLM
+    
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: issue.addressedInPlan ? "checkmark.circle.fill" : "circle")
+                .font(.system(size: 12))
+                .foregroundColor(issue.addressedInPlan ? .green : .secondary)
+            
+            Text(issue.label)
+                .font(.system(size: 12))
+                .foregroundColor(issue.addressedInPlan ? .secondary : .primary)
+                .strikethrough(issue.addressedInPlan)
+            
+            Spacer()
+        }
+        .padding(.leading, 12)
+    }
+}
+
 // MARK: - Simple Row
 
 struct SimpleRowView: View {
@@ -273,11 +292,7 @@ struct DrugCardView: View {
 
 #Preview {
     HelperPanelView(
-        suggestions: HelperSuggestions(),
-        issues: [
-            Issue(label: "Headache", addressedInPlan: false),
-            Issue(label: "Nausea", addressedInPlan: true)
-        ]
+        suggestions: HelperSuggestions()
     )
     .padding()
     .frame(width: 380)

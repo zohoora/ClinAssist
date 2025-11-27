@@ -110,12 +110,14 @@ struct HelperSuggestions: Codable {
     var redFlags: [String]
     var suggestedQuestions: [String]
     var drugCards: [DrugCard]
+    var issues: [IssueFromLLM]
     
     enum CodingKeys: String, CodingKey {
         case ddx
         case redFlags = "red_flags"
         case suggestedQuestions = "suggested_questions"
         case drugCards = "drug_cards"
+        case issues
     }
     
     init() {
@@ -123,6 +125,18 @@ struct HelperSuggestions: Codable {
         self.redFlags = []
         self.suggestedQuestions = []
         self.drugCards = []
+        self.issues = []
+    }
+}
+
+struct IssueFromLLM: Codable, Identifiable {
+    var id: UUID { UUID() }
+    var label: String
+    var addressedInPlan: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case label
+        case addressedInPlan = "addressed_in_plan"
     }
 }
 

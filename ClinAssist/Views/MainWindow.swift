@@ -45,7 +45,7 @@ struct MainWindowView: View {
                 BottomActionView(appDelegate: appDelegate)
             }
         }
-        .frame(minWidth: 380, maxWidth: 380)
+        .frame(minWidth: 320, maxWidth: 600)
         .background(Color(NSColor.windowBackgroundColor))
         .sheet(isPresented: $appDelegate.showEndEncounterSheet) {
             EndEncounterSheet(
@@ -130,7 +130,7 @@ struct StatusBarView: View {
         case .idle:
             return .gray
         case .recording:
-            return .red
+            return .blue
         case .paused:
             return .yellow
         case .processing:
@@ -141,7 +141,7 @@ struct StatusBarView: View {
     private var statusBackgroundColor: Color {
         switch appState {
         case .recording:
-            return Color.red.opacity(0.1)
+            return Color.blue.opacity(0.1)
         case .paused:
             return Color.yellow.opacity(0.1)
         case .processing:
@@ -220,8 +220,7 @@ struct ActiveEncounterView: View {
             
             // Assistant Section
             HelperPanelView(
-                suggestions: encounterController.helperSuggestions,
-                issues: encounterController.state?.issuesMentioned ?? []
+                suggestions: encounterController.helperSuggestions
             )
         }
     }
@@ -308,7 +307,7 @@ struct BottomActionView: View {
         case .idle:
             return .blue
         case .recording, .paused:
-            return .red
+            return .orange
         case .processing:
             return .gray
         }
