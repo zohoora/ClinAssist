@@ -7,6 +7,25 @@ struct EndEncounterSheet: View {
     
     @State private var isCopied: Bool = false
     
+    // Extract patient names from PATIENT: header lines
+    private var patientNames: [String] {
+        soapNote.components(separatedBy: .newlines)
+            .filter { $0.uppercased().hasPrefix("PATIENT:") }
+            .map { line in
+                line.replacingOccurrences(of: "PATIENT:", with: "", options: .caseInsensitive)
+                    .trimmingCharacters(in: .whitespaces)
+            }
+            .filter { !$0.isEmpty }
+    }
+    
+    // SOAP note with PATIENT: header lines removed (for copying)
+    private var soapNoteForCopy: String {
+        soapNote.components(separatedBy: .newlines)
+            .filter { !$0.uppercased().hasPrefix("PATIENT:") }
+            .joined(separator: "\n")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             // Header
@@ -25,12 +44,34 @@ struct EndEncounterSheet: View {
             }
             .padding()
             
+            // Patient names (not included in copy)
+            if !patientNames.isEmpty {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Patient\(patientNames.count > 1 ? "s" : ""):")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    ForEach(patientNames, id: \.self) { name in
+                        Text(name)
+                            .font(.system(size: 13, weight: .medium))
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
+                .padding(.bottom, 8)
+                
+                Text("(Patient names shown above are not included when copying)")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal)
+            }
+            
             Divider()
             
-            // SOAP Note Content
+            // SOAP Note Content (without patient headers)
             ScrollView {
-                Text(soapNote.isEmpty ? "No SOAP note generated." : soapNote)
-                    .font(.system(size: 13, design: .monospaced))
+                Text(soapNoteForCopy.isEmpty ? "No SOAP note generated." : soapNoteForCopy)
+                    .font(.system(size: 11, design: .monospaced))
                     .foregroundColor(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
@@ -52,7 +93,7 @@ struct EndEncounterSheet: View {
                     .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(soapNote.isEmpty)
+                .disabled(soapNoteForCopy.isEmpty)
                 
                 Button(action: onDismiss) {
                     Text("Done")
@@ -68,7 +109,8 @@ struct EndEncounterSheet: View {
     
     private func copyToClipboard() {
         NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(soapNote, forType: .string)
+        // Copy the SOAP note WITHOUT patient header lines
+        NSPasteboard.general.setString(soapNoteForCopy, forType: .string)
         
         isCopied = true
         onCopyToClipboard()

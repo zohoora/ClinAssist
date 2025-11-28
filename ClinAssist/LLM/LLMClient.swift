@@ -121,6 +121,14 @@ struct LLMPrompts {
 
     Your task is to create concise, professional SOAP notes for each patient in the transcript. Follow these specific requirements:
 
+    **Patient Header Format:**
+    
+    Start each patient's section with a header line in this exact format:
+    PATIENT: [Name or identifier]
+    
+    - Use the patient's name if mentioned in the transcript (e.g., "PATIENT: Alex" or "PATIENT: Mr. Jones")
+    - If no name is mentioned, use identifying info like gender and chief complaint (e.g., "PATIENT: Male with chest pain")
+    
     SOAP Note Format:
 
     - S (Subjective): Patient's reported symptoms, concerns, and history
@@ -141,7 +149,7 @@ struct LLMPrompts {
 
     - If bloodwork is being ordered, do not list the specific tests. Only state that bloodwork is ordered as per requisition.
 
-    - In the body of the SOAP note, do not write the patient's name as you may misspell it
+    - In the body of the SOAP note (S, O, A, P sections), do not write the patient's name as you may misspell it. The name only goes in the PATIENT: header line.
 
     - Do not number the problems
 

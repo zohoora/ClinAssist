@@ -226,15 +226,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             await MainActor.run {
                 // Save the encounter
                 if let state = encounterController.state {
+                    let soapNote = encounterController.soapNote
+                    
                     do {
                         _ = try EncounterStorage.shared.saveEncounter(
                             state,
-                            soapNote: encounterController.soapNote,
+                            soapNote: soapNote,
                             keepAudio: false
                         )
                     } catch {
                         print("Failed to save encounter: \(error)")
                     }
+                    
+                    // Append to daily record
+                    let patientIdentifier = EncounterStorage.shared.extractPatientIdentifier(from: soapNote)
+                    EncounterStorage.shared.appendToDailyRecord(
+                        state: state,
+                        soapNote: soapNote,
+                        patientIdentifier: patientIdentifier
+                    )
                 }
                 
                 showEndEncounterSheet = true
