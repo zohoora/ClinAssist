@@ -211,6 +211,9 @@ struct ActiveEncounterView: View {
                 isExpanded: $transcriptExpanded
             )
             
+            // Clinical Notes Input (for manual observations/procedures)
+            ClinicalNotesInputView(encounterController: encounterController)
+            
             // SOAP Note Section
             SOAPView(
                 soapNote: encounterController.soapNote,

@@ -8,6 +8,7 @@ struct EncounterState: Codable {
     var problems: [Problem]
     var issuesMentioned: [Issue]
     var medicationsMentioned: [MedicationMention]
+    var clinicalNotes: [ClinicalNote]  // Manual notes entered during encounter
     
     init(id: UUID = UUID(), startedAt: Date = Date()) {
         self.id = id
@@ -17,18 +18,19 @@ struct EncounterState: Codable {
         self.problems = []
         self.issuesMentioned = []
         self.medicationsMentioned = []
+        self.clinicalNotes = []
     }
+}
+
+struct ClinicalNote: Codable, Identifiable {
+    let id: UUID
+    let timestamp: Date
+    let text: String
     
-    var duration: TimeInterval {
-        let endTime = endedAt ?? Date()
-        return endTime.timeIntervalSince(startedAt)
-    }
-    
-    var formattedDuration: String {
-        let hours = Int(duration) / 3600
-        let minutes = (Int(duration) % 3600) / 60
-        let seconds = Int(duration) % 60
-        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+    init(text: String, timestamp: Date = Date()) {
+        self.id = UUID()
+        self.timestamp = timestamp
+        self.text = text
     }
 }
 

@@ -8,8 +8,8 @@ class EncounterStorage {
     
     init() {
         basePath = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Desktop")
-            .appendingPathComponent("ClinAssist")
+            .appendingPathComponent("Dropbox")
+            .appendingPathComponent("livecode_records")
         
         // EST timezone
         estTimeZone = TimeZone(identifier: "America/New_York") ?? TimeZone.current

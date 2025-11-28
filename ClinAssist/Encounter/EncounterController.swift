@@ -81,6 +81,14 @@ class EncounterController: ObservableObject {
         startUpdateTasks()
     }
     
+    // MARK: - Clinical Notes (Manual Input)
+    
+    func addClinicalNote(_ text: String) {
+        guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+        let note = ClinicalNote(text: text.trimmingCharacters(in: .whitespacesAndNewlines))
+        state?.clinicalNotes.append(note)
+    }
+    
     // MARK: - Update Tasks
     
     private func startUpdateTasks() {

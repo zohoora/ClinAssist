@@ -121,6 +121,12 @@ struct LLMPrompts {
 
     Your task is to create concise, professional SOAP notes for each patient in the transcript. Follow these specific requirements:
 
+    **Important:** The input includes both:
+    1. "transcript" - spoken conversation during the encounter
+    2. "clinicalNotes" - additional observations typed by the physician (procedures performed, physical exam findings, etc.)
+    
+    Integrate BOTH the transcript AND the clinical notes into the SOAP note as if they were all part of the same encounter documentation. The clinical notes often contain important objective findings and procedures that were not verbalized.
+
     **Patient Header Format:**
     
     Start each patient's section with a header line in this exact format:

@@ -47,21 +47,21 @@ class ConfigManager: ObservableObject {
     }
     
     init() {
-        let desktopPath = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Desktop")
-            .appendingPathComponent("ClinAssist")
+        let dropboxPath = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Dropbox")
+            .appendingPathComponent("livecode_records")
         
-        configPath = desktopPath.appendingPathComponent("config.json")
+        configPath = dropboxPath.appendingPathComponent("config.json")
         
-        // Create ClinAssist folder if needed
-        try? FileManager.default.createDirectory(at: desktopPath, withIntermediateDirectories: true)
+        // Create livecode_records folder if needed
+        try? FileManager.default.createDirectory(at: dropboxPath, withIntermediateDirectories: true)
         
         loadConfig()
     }
     
     func loadConfig() {
         guard FileManager.default.fileExists(atPath: configPath.path) else {
-            configError = "Config file not found at ~/Desktop/ClinAssist/config.json"
+            configError = "Config file not found at ~/Dropbox/livecode_records/config.json"
             return
         }
         
