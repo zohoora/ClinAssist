@@ -43,37 +43,6 @@ struct HelperPanelView: View {
                 
                 Divider().padding(.horizontal, 8)
                 
-                // Red Flags
-                ExpandableSection(
-                    title: "Red Flags",
-                    count: suggestions.redFlags.count,
-                    isExpanded: expandedSections.contains("redFlags"),
-                    badgeColor: suggestions.redFlags.isEmpty ? .gray : .red
-                ) {
-                    toggleSection("redFlags")
-                } content: {
-                    ForEach(suggestions.redFlags, id: \.self) { flag in
-                        SimpleRowView(text: flag, icon: "exclamationmark.triangle.fill", iconColor: .red)
-                    }
-                }
-                
-                Divider().padding(.horizontal, 8)
-                
-                // Questions
-                ExpandableSection(
-                    title: "Questions",
-                    count: suggestions.suggestedQuestions.count,
-                    isExpanded: expandedSections.contains("questions")
-                ) {
-                    toggleSection("questions")
-                } content: {
-                    ForEach(suggestions.suggestedQuestions, id: \.self) { question in
-                        SimpleRowView(text: question, icon: "questionmark.circle.fill", iconColor: .blue)
-                    }
-                }
-                
-                Divider().padding(.horizontal, 8)
-                
                 // Drug Cards
                 ExpandableSection(
                     title: "Drug Cards",

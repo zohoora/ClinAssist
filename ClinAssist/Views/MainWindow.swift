@@ -219,12 +219,14 @@ struct ActiveEncounterView: View {
                 soapNote: encounterController.soapNote,
                 isUpdating: false
             )
-            .frame(minHeight: 200)
             
             // Assistant Section
             HelperPanelView(
                 suggestions: encounterController.helperSuggestions
             )
+            
+            // Chat Section (Gemini 3 Pro)
+            ChatView(encounterController: encounterController)
         }
     }
 }

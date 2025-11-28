@@ -41,7 +41,7 @@ struct SOAPView: View {
                         .textSelection(.enabled)
                 }
             }
-            .frame(maxHeight: .infinity)
+            .frame(height: 180)
             .background(Color(NSColor.controlBackgroundColor))
             .cornerRadius(8)
             .animation(.easeInOut(duration: 0.3), value: soapNote)

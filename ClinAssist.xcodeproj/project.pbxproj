@@ -26,6 +26,7 @@
 		4A0000000000000000000027 /* EndEncounterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000037 /* EndEncounterSheet.swift */; };
 		4A0000000000000000000028 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000038 /* SetupView.swift */; };
 		4A0000000000000000000029 /* ClinicalNotesInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000042 /* ClinicalNotesInput.swift */; };
+		4A0000000000000000000030 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000043 /* ChatView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,7 @@
 		4A0000000000000000000039 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4A0000000000000000000040 /* ClinAssist.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClinAssist.entitlements; sourceTree = "<group>"; };
 		4A0000000000000000000042 /* ClinicalNotesInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinicalNotesInput.swift; sourceTree = "<group>"; };
+		4A0000000000000000000043 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +154,7 @@
 				4A0000000000000000000037 /* EndEncounterSheet.swift */,
 				4A0000000000000000000038 /* SetupView.swift */,
 				4A0000000000000000000042 /* ClinicalNotesInput.swift */,
+				4A0000000000000000000043 /* ChatView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 				4A0000000000000000000027 /* EndEncounterSheet.swift in Sources */,
 				4A0000000000000000000028 /* SetupView.swift in Sources */,
 				4A0000000000000000000029 /* ClinicalNotesInput.swift in Sources */,
+				4A0000000000000000000030 /* ChatView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
