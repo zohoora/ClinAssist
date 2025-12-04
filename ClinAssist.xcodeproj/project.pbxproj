@@ -337,6 +337,7 @@
 				4A0000000000000000000061 /* Sources */,
 				4A0000000000000000000041 /* Frameworks */,
 				4A0000000000000000000062 /* Resources */,
+				4A00000000000000000000S1 /* Copy to Dropbox */,
 			);
 			buildRules = (
 			);
@@ -419,6 +420,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4A00000000000000000000S1 /* Copy to Dropbox */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy to Dropbox";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Copy built app to Dropbox for easy access\nDROPBOX_PATH=\"$HOME/Library/CloudStorage/Dropbox/livecode_records\"\nif [ -d \"$DROPBOX_PATH\" ]; then\n    rm -rf \"$DROPBOX_PATH/ClinAssist.app\"\n    cp -R \"$BUILT_PRODUCTS_DIR/ClinAssist.app\" \"$DROPBOX_PATH/\"\n    echo \"Copied ClinAssist.app to Dropbox\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4A0000000000000000000061 /* Sources */ = {
