@@ -602,8 +602,8 @@ class ChatController: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate 
         guard let imageData = photo.fileDataRepresentation(),
               let image = NSImage(data: imageData) else { return }
         
-        DispatchQueue.main.async {
-            self.addCameraAttachment(image: image, data: imageData)
+        DispatchQueue.main.async { [weak self] in
+            self?.addCameraAttachment(image: image, data: imageData)
         }
     }
     

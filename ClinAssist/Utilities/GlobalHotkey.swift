@@ -32,7 +32,7 @@ class GlobalHotkeyManager {
         // Check if we already have accessibility permissions (no prompt)
         // Use the simple check that doesn't trigger any UI
         if AXIsProcessTrusted() {
-            print("[GlobalHotkey] Accessibility permissions already granted")
+            debugLog("Accessibility permissions already granted", component: "GlobalHotkey")
             setupEventTap()
             return
         }
@@ -41,22 +41,22 @@ class GlobalHotkeyManager {
         let hasPromptedKey = "hasPromptedForAccessibility"
         if UserDefaults.standard.bool(forKey: hasPromptedKey) {
             // Already prompted, don't prompt again - just try to set up
-            print("[GlobalHotkey] Already prompted for accessibility, skipping prompt")
+            debugLog("Already prompted for accessibility, skipping prompt", component: "GlobalHotkey")
             // Try to set up anyway - it might work if user granted in background
             setupEventTap()
             return
         }
         
         // First time - prompt the user once
-        print("[GlobalHotkey] Requesting accessibility permissions (first time)...")
+        debugLog("Requesting accessibility permissions (first time)...", component: "GlobalHotkey")
         UserDefaults.standard.set(true, forKey: hasPromptedKey)
         
         let promptOptions = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
         _ = AXIsProcessTrustedWithOptions(promptOptions)
         
         // Don't block - the user can grant permission and the event tap will work on next launch
-        print("ClinAssist needs accessibility permissions for global hotkeys.")
-        print("Please grant access in System Settings > Privacy & Security > Accessibility")
+        debugLog("ClinAssist needs accessibility permissions for global hotkeys.", component: "GlobalHotkey")
+        debugLog("Please grant access in System Settings > Privacy & Security > Accessibility", component: "GlobalHotkey")
         
         // Try to set up anyway - if user grants permission, it should work
         setupEventTap()
@@ -110,7 +110,7 @@ class GlobalHotkeyManager {
         )
         
         guard let eventTap = eventTap else {
-            print("Failed to create event tap. Please check accessibility permissions.")
+            debugLog("❌ Failed to create event tap. Please check accessibility permissions.", component: "GlobalHotkey")
             return
         }
         

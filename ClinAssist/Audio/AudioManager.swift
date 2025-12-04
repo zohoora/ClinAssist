@@ -130,7 +130,7 @@ class AudioManager: NSObject, ObservableObject {
         // Start level reporting timer
         startLevelTimer()
         
-        print("[AudioManager] Started monitoring mode")
+        debugLog("✅ Started monitoring mode", component: "Audio")
     }
     
     func stopMonitoring() {
@@ -146,7 +146,7 @@ class AudioManager: NSObject, ObservableObject {
         isMonitoring = false
         currentAudioLevel = 0
         
-        print("[AudioManager] Stopped monitoring mode")
+        debugLog("Stopped monitoring mode", component: "Audio")
     }
     
     private func processLevelBuffer(_ buffer: AVAudioPCMBuffer) {
@@ -283,7 +283,7 @@ class AudioManager: NSObject, ObservableObject {
         // Keep level timer running
         startLevelTimer()
         
-        print("[AudioManager] Started recording mode for encounter: \(encounterId) (streaming: \(streamingEnabled), backup: \(saveAudioBackup))")
+        debugLog("✅ Started recording mode for encounter: \(encounterId) (streaming: \(streamingEnabled), backup: \(saveAudioBackup))", component: "Audio")
     }
     
     func stopRecording() {
@@ -312,7 +312,7 @@ class AudioManager: NSObject, ObservableObject {
         currentAudioLevel = 0
         audioBuffer = []
         
-        print("[AudioManager] Stopped recording mode")
+        debugLog("Stopped recording mode", component: "Audio")
     }
     
     func pauseRecording() {
@@ -375,7 +375,7 @@ class AudioManager: NSObject, ObservableObject {
             }
             startLevelTimer()
             
-            print("[AudioManager] Transitioned from monitoring to recording (streaming: \(streamingEnabled), backup: \(saveAudioBackup))")
+            debugLog("✅ Transitioned from monitoring to recording (streaming: \(streamingEnabled), backup: \(saveAudioBackup))", component: "Audio")
         } else {
             // Not monitoring, do regular start
             try startRecording(encounterId: encounterId)
@@ -485,7 +485,7 @@ class AudioManager: NSObject, ObservableObject {
             // Log once that streaming is disabled
             struct Once { static var logged = false }
             if !Once.logged {
-                print("[AudioManager] ⚠️ streamingEnabled is FALSE - not sending to streaming client")
+                debugLog("⚠️ streamingEnabled is FALSE - not sending to streaming client", component: "Audio")
                 Once.logged = true
             }
         }
@@ -527,11 +527,13 @@ class AudioManager: NSObject, ObservableObject {
             
             do {
                 try self.writeWAVFile(samples: samples, to: chunkPath)
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.delegate?.audioManager(self, didSaveChunk: chunkPath, chunkNumber: self.chunkNumber)
                 }
             } catch {
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.delegate?.audioManager(self, didEncounterError: error)
                 }
             }

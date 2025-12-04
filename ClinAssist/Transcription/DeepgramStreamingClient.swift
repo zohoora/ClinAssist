@@ -39,9 +39,9 @@ class DeepgramStreamingClient: StreamingSTTClient {
     private let enableInterimResults: Bool
     private let enableDiarization: Bool
     
-    // Reconnection
+    // Reconnection - high limit for long sessions (hours)
     private var reconnectAttempts = 0
-    private let maxReconnectAttempts = 5  // Increased from 3
+    private let maxReconnectAttempts = 100  // Support sessions up to several hours
     private var reconnectTimer: Timer?
     private var shouldReconnect = false
     
@@ -88,7 +88,8 @@ class DeepgramStreamingClient: StreamingSTTClient {
             // Start keep-alive timer to prevent timeout
             self.startKeepAliveTimer()
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self.delegate?.streamingClient(self, didChangeConnectionState: true)
             }
             
@@ -103,7 +104,8 @@ class DeepgramStreamingClient: StreamingSTTClient {
             
             debugLog("❌ Disconnected: \(error?.localizedDescription ?? "clean disconnect")", component: "Streaming")
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self.delegate?.streamingClient(self, didChangeConnectionState: false)
             }
             
@@ -129,7 +131,8 @@ class DeepgramStreamingClient: StreamingSTTClient {
                 
             case .failure(let error):
                 debugLog("❌ Message error: \(error.localizedDescription)", component: "Streaming")
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.delegate?.streamingClient(self, didEncounterError: error)
                 }
             }
@@ -203,7 +206,8 @@ class DeepgramStreamingClient: StreamingSTTClient {
         guard reconnectAttempts < maxReconnectAttempts else {
             debugLog("❌ Max reconnect attempts (\(maxReconnectAttempts)) reached - giving up", component: "Streaming")
             let error = StreamingSTTError.connectionFailed("Max reconnection attempts exceeded")
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self.delegate?.streamingClient(self, didEncounterError: error)
             }
             return
@@ -328,7 +332,8 @@ class DeepgramStreamingClient: StreamingSTTClient {
                 if let errorMessage = json["message"] as? String {
                     debugLog("❌ Error from Deepgram: \(errorMessage)", component: "Streaming")
                     let error = StreamingSTTError.transcriptionFailed(errorMessage)
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.delegate?.streamingClient(self, didEncounterError: error)
                     }
                 }
@@ -363,14 +368,16 @@ class DeepgramStreamingClient: StreamingSTTClient {
             if let words = firstAlternative["words"] as? [[String: Any]], !words.isEmpty {
                 let segments = parseWordsWithDiarization(words)
                 for segment in segments {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.delegate?.streamingClient(self, didReceiveFinal: segment)
                     }
                 }
             } else {
                 // No word-level data, use full transcript
                 let segment = TranscriptSegment(speaker: "Unknown", text: transcript)
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
                     self.delegate?.streamingClient(self, didReceiveFinal: segment)
                 }
             }
@@ -383,7 +390,8 @@ class DeepgramStreamingClient: StreamingSTTClient {
                 speaker = mapSpeakerLabel(speakerIndex)
             }
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self.delegate?.streamingClient(self, didReceiveInterim: transcript, speaker: speaker)
             }
         }

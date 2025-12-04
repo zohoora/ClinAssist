@@ -74,29 +74,29 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         case .notDetermined:
             // Request permission - this will show the system dialog
             AVCaptureDevice.requestAccess(for: .audio) { [weak self] granted in
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
                     if granted {
-                        print("[AppDelegate] Microphone permission granted")
+                        debugLog("Microphone permission granted", component: "AppDelegate")
                         self?.audioManager.checkPermissions()
                         // Now that permission is granted, start auto-detection if enabled
                         self?.startAutoDetectionIfReady()
                     } else {
-                        print("[AppDelegate] Microphone permission denied")
+                        debugLog("Microphone permission denied", component: "AppDelegate")
                         self?.showWindow() // Show window to display the permission warning
                     }
                 }
             }
         case .denied, .restricted:
             // Permission was denied - show the window with warning
-            DispatchQueue.main.async {
-                self.showWindow()
+            DispatchQueue.main.async { [weak self] in
+                self?.showWindow()
             }
         case .authorized:
-            print("[AppDelegate] Microphone already authorized")
+            debugLog("Microphone already authorized", component: "AppDelegate")
             audioManager.checkPermissions()
             // Permission already granted, start auto-detection if enabled
-            DispatchQueue.main.async {
-                self.startAutoDetectionIfReady()
+            DispatchQueue.main.async { [weak self] in
+                self?.startAutoDetectionIfReady()
             }
         @unknown default:
             break
@@ -242,7 +242,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         hotkeyManager = GlobalHotkeyManager()
         // Control + Option + S (keycode 1 = 'S')
         hotkeyManager?.register(keyCode: 1, modifiers: [.control, .option]) { [weak self] in
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
                 self?.toggleEncounter()
             }
         }

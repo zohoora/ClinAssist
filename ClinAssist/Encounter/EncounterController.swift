@@ -143,41 +143,41 @@ class EncounterController: ObservableObject {
         // Setup Groq client for fast final SOAP generation
         if configManager.useGroqForFinalSoap {
             let groqModel = configManager.groqModel
-            print("[EncounterController] 🚀 Groq enabled for final SOAP: model=\(groqModel)")
+            debugLog("🚀 Groq enabled for final SOAP: model=\(groqModel)", component: "Encounter")
             groqClient = GroqClient(apiKey: configManager.groqApiKey, model: groqModel)
         } else {
-            print("[EncounterController] ☁️ Using OpenRouter for final SOAP")
+            debugLog("☁️ Using OpenRouter for final SOAP", component: "Encounter")
         }
         
         // Setup Ollama client if enabled
-        print("[EncounterController] 🔧 Checking Ollama config: enabled=\(configManager.isOllamaEnabled)")
+        debugLog("🔧 Checking Ollama config: enabled=\(configManager.isOllamaEnabled)", component: "Encounter")
         if configManager.isOllamaEnabled {
             let ollamaBaseUrl = configManager.ollamaBaseUrl
             let ollamaModel = configManager.ollamaModel
-            print("[EncounterController] 🔧 Creating Ollama client: \(ollamaBaseUrl), model: \(ollamaModel)")
+            debugLog("🔧 Creating Ollama client: \(ollamaBaseUrl), model: \(ollamaModel)", component: "Encounter")
             ollamaClient = OllamaClient(baseURL: ollamaBaseUrl, model: ollamaModel)
             
             // Check if Ollama is available
             Task {
-                print("[EncounterController] 🔍 Checking Ollama availability...")
+                debugLog("🔍 Checking Ollama availability...", component: "Encounter")
                 let available = await ollamaClient?.isAvailable() ?? false
                 await MainActor.run {
                     self.ollamaAvailable = available
                     if available {
-                        print("[EncounterController] ✅ Ollama available (\(ollamaModel))")
+                        debugLog("✅ Ollama available (\(ollamaModel))", component: "Encounter")
                         // Pass Ollama client to session detector for LLM-based detection
-                        print("[EncounterController] 🔧 useOllamaForSessionDetection=\(self.configManager.useOllamaForSessionDetection)")
+                        debugLog("🔧 useOllamaForSessionDetection=\(self.configManager.useOllamaForSessionDetection)", component: "Encounter")
                         if self.configManager.useOllamaForSessionDetection {
-                            print("[EncounterController] 🔗 Passing Ollama client to SessionDetector...")
+                            debugLog("🔗 Passing Ollama client to SessionDetector...", component: "Encounter")
                             self.sessionDetector.setOllamaClient(self.ollamaClient)
                         }
                     } else {
-                        print("[EncounterController] ⚠️ Ollama not available, using cloud LLM")
+                        debugLog("⚠️ Ollama not available, using cloud LLM", component: "Encounter")
                     }
                 }
             }
         } else {
-            print("[EncounterController] ⚠️ Ollama not enabled in config")
+            debugLog("⚠️ Ollama not enabled in config", component: "Encounter")
         }
         
         // Setup LLM Orchestrator for intelligent LLM selection
@@ -234,7 +234,7 @@ class EncounterController: ObservableObject {
     func stopMonitoring() {
         audioManager.stopMonitoring()
         sessionDetector.stopMonitoring()
-        print("[EncounterController] Stopped monitoring mode")
+        debugLog("Stopped monitoring mode", component: "Encounter")
     }
     
     // MARK: - Encounter Lifecycle
@@ -481,7 +481,7 @@ class EncounterController: ObservableObject {
             
             // Use Ollama if available and enabled for helpers
             if ollamaAvailable && configManager.useOllamaForHelpers, let ollama = ollamaClient {
-                print("[EncounterController] 🦙 Using Ollama for helper suggestions")
+                debugLog("🦙 Using Ollama for helper suggestions", component: "Encounter")
                 response = try await ollama.complete(
                     systemPrompt: LLMPrompts.helperSuggestions,
                     userContent: userContent
@@ -506,7 +506,7 @@ class EncounterController: ObservableObject {
             await MainActor.run {
                 self.llmError = error.localizedDescription
             }
-            print("Helper update error: \(error)")
+            debugLog("❌ Helper update error: \(error)", component: "Encounter")
         }
     }
     
@@ -634,7 +634,7 @@ class EncounterController: ObservableObject {
         do {
             return try JSONDecoder().decode(type, from: data)
         } catch {
-            print("JSON parsing failed: \(error)")
+            debugLog("⚠️ JSON parsing failed: \(error)", component: "Encounter")
             return nil
         }
     }
@@ -676,7 +676,7 @@ extension EncounterController: AudioManagerDelegate {
     }
     
     func audioManager(_ manager: AudioManager, didEncounterError error: Error) {
-        print("Audio error: \(error)")
+        debugLog("❌ Audio error: \(error)", component: "Audio")
     }
     
     func audioManager(_ manager: AudioManager, didUpdateAudioLevel level: Float) {
@@ -697,7 +697,8 @@ extension EncounterController: SessionDetectorDelegate {
     func sessionDetectorDidDetectEncounterStart(_ detector: SessionDetector) {
         debugLog("🎬 Auto-detected encounter start confirmed by LLM!", component: "Encounter")
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             // If we were in provisional recording, transition to full encounter
             if self.isProvisionalRecording {
                 self.confirmProvisionalRecording()
@@ -712,26 +713,24 @@ extension EncounterController: SessionDetectorDelegate {
     }
     
     func sessionDetectorDidDetectEncounterEnd(_ detector: SessionDetector) {
-        print("[EncounterController] 🎬 Auto-detected encounter end!")
-        
-        DispatchQueue.main.async {
+        debugLog("🎬 Auto-detected encounter end!", component: "Encounter")
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.delegate?.encounterControllerDidAutoEnd(self)
         }
     }
     
     func sessionDetectorDidStartBuffering(_ detector: SessionDetector) {
         debugLog("📦 Buffering started - starting provisional recording", component: "Encounter")
-        
-        DispatchQueue.main.async {
-            self.startProvisionalRecording()
+        DispatchQueue.main.async { [weak self] in
+            self?.startProvisionalRecording()
         }
     }
     
     func sessionDetectorDidCancelBuffering(_ detector: SessionDetector) {
         debugLog("📦 Buffering cancelled - stopping provisional recording", component: "Encounter")
-        
-        DispatchQueue.main.async {
-            self.cancelProvisionalRecording()
+        DispatchQueue.main.async { [weak self] in
+            self?.cancelProvisionalRecording()
         }
     }
 }
@@ -844,9 +843,9 @@ extension EncounterController {
             try audioManager.transitionToRecording(encounterId: encounterId)
             sessionDetector.encounterStartedManually()
             startUpdateTasks()
-            print("[EncounterController] ✅ Encounter started from auto-detection")
+            debugLog("✅ Encounter started from auto-detection", component: "Encounter")
         } catch {
-            print("[EncounterController] ❌ Failed to start recording: \(error)")
+            debugLog("❌ Failed to start recording: \(error)", component: "Encounter")
         }
     }
 }
@@ -897,13 +896,13 @@ extension EncounterController: StreamingSTTClientDelegate {
         isStreamingConnected = connected
         
         if connected {
-            print("[EncounterController] ✅ Streaming connected")
+            debugLog("✅ Streaming connected", component: "Encounter")
             transcriptionError = nil
         } else {
-            print("[EncounterController] ⚠️ Streaming disconnected")
+            debugLog("⚠️ Streaming disconnected", component: "Encounter")
             // If we disconnect during an active encounter, fall back to chunk-based transcription
             if audioManager.mode == .recording && !pendingChunks.isEmpty {
-                print("[EncounterController] 📦 Falling back to chunk transcription...")
+                debugLog("📦 Falling back to chunk transcription...", component: "Encounter")
                 Task {
                     await processRemainingChunks()
                 }
@@ -912,7 +911,7 @@ extension EncounterController: StreamingSTTClientDelegate {
     }
     
     func streamingClient(_ client: StreamingSTTClient, didEncounterError error: Error) {
-        print("[EncounterController] ❌ Streaming error: \(error.localizedDescription)")
+        debugLog("❌ Streaming error: \(error.localizedDescription)", component: "Encounter")
         transcriptionError = error.localizedDescription
     }
 }
