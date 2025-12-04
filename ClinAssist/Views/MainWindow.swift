@@ -471,12 +471,6 @@ struct ActiveEncounterView: View {
             // Clinical Notes Input (for manual observations/procedures)
             ClinicalNotesInputView(encounterController: encounterController)
             
-            // SOAP Note Section
-            SOAPView(
-                soapNote: encounterController.soapNote,
-                isUpdating: false
-            )
-            
             // Assistant Section
             HelperPanelView(
                 suggestions: encounterController.helperSuggestions
