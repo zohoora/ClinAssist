@@ -168,10 +168,7 @@ struct LLMPrompts {
     """
     
     static let psstPrediction = """
-    What is the physician likely to want to know in the next couple of minutes? Take your best guess.
-    
-    Based on the transcript, give a brief, practical answer. Be specific and actionable.
-    Keep it short - 1-3 sentences max. No disclaimers.
+    What is the physician likely to want to know in the next couple of minutes? Take your best guess. Keep it really short as though you're whispering a short phrase to the physician as an assist. Start with "pssstt..."
     """
 }
 
