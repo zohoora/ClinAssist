@@ -4,6 +4,15 @@ import Foundation
 protocol AudioManagerDelegate: AnyObject {
     func audioManager(_ manager: AudioManager, didSaveChunk chunkURL: URL, chunkNumber: Int)
     func audioManager(_ manager: AudioManager, didEncounterError error: Error)
+    func audioManager(_ manager: AudioManager, didUpdateAudioLevel level: Float)
+    /// Called in streaming mode with real-time audio samples (16kHz, mono, Int16)
+    func audioManager(_ manager: AudioManager, didCaptureAudioSamples samples: [Int16])
+}
+
+// Make delegate methods optional with default implementations
+extension AudioManagerDelegate {
+    func audioManager(_ manager: AudioManager, didUpdateAudioLevel level: Float) {}
+    func audioManager(_ manager: AudioManager, didCaptureAudioSamples samples: [Int16]) {}
 }
 
 class AudioManager: NSObject, ObservableObject {
@@ -13,16 +22,36 @@ class AudioManager: NSObject, ObservableObject {
     private var inputNode: AVAudioInputNode?
     
     @Published var isRecording = false
+    @Published var isMonitoring = false
     @Published var permissionGranted = false
     @Published var permissionError: String?
+    @Published var currentAudioLevel: Float = 0
     
     private var currentEncounterId: UUID?
     private var chunkNumber: Int = 0
     private var audioBuffer: [Int16] = []
     private var chunkTimer: Timer?
+    private var levelTimer: Timer?
+    
+    // Audio level tracking for VAD
+    private var recentLevels: [Float] = []
+    private let levelHistorySize = 10
     
     private let sampleRate: Double = 16000
     private let chunkDurationSeconds: TimeInterval = 10
+    
+    // Streaming mode configuration
+    @Published var streamingEnabled: Bool = true  // Stream audio in real-time
+    @Published var saveAudioBackup: Bool = true   // Also save chunks as backup
+    
+    // Mode of operation
+    enum Mode {
+        case idle
+        case monitoring  // Low-power listening for speech detection
+        case recording   // Full recording for transcription
+    }
+    
+    @Published var mode: Mode = .idle
     
     override init() {
         super.init()
@@ -58,11 +87,139 @@ class AudioManager: NSObject, ObservableObject {
         }
     }
     
-    // MARK: - Recording
+    // MARK: - Monitoring Mode (VAD)
+    
+    func startMonitoring() throws {
+        debugLog("startMonitoring called - current mode: \(mode)", component: "Audio")
+        guard permissionGranted else {
+            throw AudioError.permissionDenied
+        }
+        
+        guard mode == .idle else {
+            debugLog("⚠️ startMonitoring skipped - already in \(mode) mode", component: "Audio")
+            return
+        }
+        
+        // Setup audio engine for monitoring
+        audioEngine = AVAudioEngine()
+        guard let audioEngine = audioEngine else {
+            throw AudioError.engineSetupFailed
+        }
+        
+        inputNode = audioEngine.inputNode
+        let nativeFormat = inputNode!.outputFormat(forBus: 0)
+        
+        // Install tap for level monitoring (lower buffer size for responsiveness)
+        inputNode!.installTap(onBus: 0, bufferSize: 1024, format: nativeFormat) { [weak self] buffer, time in
+            self?.processLevelBuffer(buffer)
+        }
+        
+        try audioEngine.start()
+        mode = .monitoring
+        isMonitoring = true
+        
+        // Start level reporting timer
+        startLevelTimer()
+        
+        print("[AudioManager] Started monitoring mode")
+    }
+    
+    func stopMonitoring() {
+        guard mode == .monitoring else { return }
+        
+        stopLevelTimer()
+        audioEngine?.inputNode.removeTap(onBus: 0)
+        audioEngine?.stop()
+        audioEngine = nil
+        inputNode = nil
+        
+        mode = .idle
+        isMonitoring = false
+        currentAudioLevel = 0
+        
+        print("[AudioManager] Stopped monitoring mode")
+    }
+    
+    private func processLevelBuffer(_ buffer: AVAudioPCMBuffer) {
+        guard let channelData = buffer.floatChannelData else { 
+            debugLog("⚠️ No channel data in buffer", component: "Audio")
+            return 
+        }
+        
+        let frameLength = Int(buffer.frameLength)
+        guard frameLength > 0 else {
+            debugLog("⚠️ Empty buffer received", component: "Audio")
+            return
+        }
+        
+        let channelDataValue = channelData[0]
+        
+        // Calculate RMS (Root Mean Square) for audio level
+        var sum: Float = 0
+        for i in 0..<frameLength {
+            let sample = channelDataValue[i]
+            sum += sample * sample
+        }
+        
+        let rms = sqrt(sum / Float(frameLength))
+        
+        // Also send raw samples to delegate for streaming
+        if mode == .monitoring {
+            var samples: [Int16] = []
+            for i in 0..<frameLength {
+                let sample = channelDataValue[i]
+                let clipped = max(-1.0, min(1.0, sample))
+                samples.append(Int16(clipped * 32767.0))
+            }
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.audioManager(self, didCaptureAudioSamples: samples)
+            }
+        }
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            // Smooth the level with recent history
+            self.recentLevels.append(rms)
+            if self.recentLevels.count > self.levelHistorySize {
+                self.recentLevels.removeFirst()
+            }
+            
+            let averageLevel = self.recentLevels.reduce(0, +) / Float(self.recentLevels.count)
+            self.currentAudioLevel = averageLevel
+        }
+    }
+    
+    private func startLevelTimer() {
+        debugLog("🕐 Starting level timer", component: "Audio")
+        // Ensure timer runs on main thread's run loop
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.levelTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+                guard let self = self else { return }
+                self.delegate?.audioManager(self, didUpdateAudioLevel: self.currentAudioLevel)
+            }
+            debugLog("✅ Level timer scheduled on main run loop", component: "Audio")
+        }
+    }
+    
+    private func stopLevelTimer() {
+        levelTimer?.invalidate()
+        levelTimer = nil
+    }
+    
+    // MARK: - Recording Mode
     
     func startRecording(encounterId: UUID) throws {
         guard permissionGranted else {
             throw AudioError.permissionDenied
+        }
+        
+        // If monitoring, transition to recording
+        if mode == .monitoring {
+            stopMonitoring()
         }
         
         currentEncounterId = encounterId
@@ -100,21 +257,38 @@ class AudioManager: NSObject, ObservableObject {
         // Install tap on input node
         inputNode!.installTap(onBus: 0, bufferSize: 4096, format: nativeFormat) { [weak self] buffer, time in
             self?.processAudioBuffer(buffer, converter: converter, targetFormat: targetFormat)
+            // Also process for level monitoring during recording
+            self?.processLevelBuffer(buffer)
         }
         
         // Start the engine
         try audioEngine.start()
+        mode = .recording
         isRecording = true
+        isMonitoring = false
         
-        // Start chunk timer
-        startChunkTimer()
+        // Start chunk timer only if backup is enabled
+        if saveAudioBackup {
+            startChunkTimer()
+        }
+        // Keep level timer running
+        startLevelTimer()
+        
+        print("[AudioManager] Started recording mode for encounter: \(encounterId) (streaming: \(streamingEnabled), backup: \(saveAudioBackup))")
     }
     
     func stopRecording() {
-        stopChunkTimer()
+        debugLog("stopRecording called - current mode: \(mode)", component: "Audio")
+        guard mode == .recording else { 
+            debugLog("⚠️ stopRecording skipped - not in recording mode", component: "Audio")
+            return 
+        }
         
-        // Save any remaining audio
-        if !audioBuffer.isEmpty {
+        stopChunkTimer()
+        stopLevelTimer()
+        
+        // Save any remaining audio if backup is enabled
+        if saveAudioBackup && !audioBuffer.isEmpty {
             saveCurrentChunk()
         }
         
@@ -123,8 +297,13 @@ class AudioManager: NSObject, ObservableObject {
         audioEngine = nil
         inputNode = nil
         
+        mode = .idle
         isRecording = false
         currentEncounterId = nil
+        currentAudioLevel = 0
+        audioBuffer = []
+        
+        print("[AudioManager] Stopped recording mode")
     }
     
     func pauseRecording() {
@@ -137,41 +316,166 @@ class AudioManager: NSObject, ObservableObject {
         startChunkTimer()
     }
     
+    // MARK: - Transition: Monitoring → Recording
+    
+    /// Seamlessly transition from monitoring to recording without losing audio
+    func transitionToRecording(encounterId: UUID) throws {
+        if mode == .monitoring {
+            // Stop monitoring tap
+            audioEngine?.inputNode.removeTap(onBus: 0)
+            stopLevelTimer()
+            
+            currentEncounterId = encounterId
+            chunkNumber = 0
+            audioBuffer = []
+            
+            // Create temp directory
+            let tempPath = encounterTempPath(for: encounterId)
+            try FileManager.default.createDirectory(at: tempPath, withIntermediateDirectories: true)
+            
+            guard let audioEngine = audioEngine else {
+                throw AudioError.engineSetupFailed
+            }
+            
+            inputNode = audioEngine.inputNode
+            let nativeFormat = inputNode!.outputFormat(forBus: 0)
+            
+            guard let targetFormat = AVAudioFormat(
+                commonFormat: .pcmFormatInt16,
+                sampleRate: sampleRate,
+                channels: 1,
+                interleaved: true
+            ) else {
+                throw AudioError.formatError
+            }
+            
+            let converter = AVAudioConverter(from: nativeFormat, to: targetFormat)
+            
+            // Install recording tap
+            inputNode!.installTap(onBus: 0, bufferSize: 4096, format: nativeFormat) { [weak self] buffer, time in
+                self?.processAudioBuffer(buffer, converter: converter, targetFormat: targetFormat)
+                self?.processLevelBuffer(buffer)
+            }
+            
+            mode = .recording
+            isRecording = true
+            isMonitoring = false
+            
+            if saveAudioBackup {
+                startChunkTimer()
+            }
+            startLevelTimer()
+            
+            print("[AudioManager] Transitioned from monitoring to recording (streaming: \(streamingEnabled), backup: \(saveAudioBackup))")
+        } else {
+            // Not monitoring, do regular start
+            try startRecording(encounterId: encounterId)
+        }
+    }
+    
+    /// Transition from recording back to monitoring
+    func transitionToMonitoring() throws {
+        if mode == .recording {
+            stopChunkTimer()
+            
+            // Save remaining audio
+            if !audioBuffer.isEmpty {
+                saveCurrentChunk()
+            }
+            
+            // Remove recording tap
+            audioEngine?.inputNode.removeTap(onBus: 0)
+            
+            guard let audioEngine = audioEngine else {
+                throw AudioError.engineSetupFailed
+            }
+            
+            // Clear level history for fresh monitoring
+            recentLevels = []
+            currentAudioLevel = 0
+            
+            let nativeFormat = inputNode!.outputFormat(forBus: 0)
+            debugLog("📊 Installing monitoring tap - format: \(nativeFormat.sampleRate)Hz, \(nativeFormat.channelCount) ch", component: "Audio")
+            
+            // Install monitoring tap
+            inputNode!.installTap(onBus: 0, bufferSize: 1024, format: nativeFormat) { [weak self] buffer, time in
+                self?.processLevelBuffer(buffer)
+            }
+            
+            // Ensure engine is running
+            if !audioEngine.isRunning {
+                debugLog("⚠️ Audio engine not running after tap install, restarting...", component: "Audio")
+                try audioEngine.start()
+            }
+            
+            mode = .monitoring
+            isRecording = false
+            isMonitoring = true
+            currentEncounterId = nil
+            
+            // Start level timer for audio level reporting
+            startLevelTimer()
+            
+            debugLog("✅ Transitioned from recording to monitoring", component: "Audio")
+        } else {
+            try startMonitoring()
+        }
+    }
+    
     // MARK: - Audio Processing
     
     private func processAudioBuffer(_ buffer: AVAudioPCMBuffer, converter: AVAudioConverter?, targetFormat: AVAudioFormat) {
-        guard let converter = converter else {
+        var samples: [Int16] = []
+        
+        if let converter = converter {
+            // Convert to target format
+            let frameCapacity = AVAudioFrameCount(
+                Double(buffer.frameLength) * (sampleRate / buffer.format.sampleRate)
+            )
+            
+            guard let convertedBuffer = AVAudioPCMBuffer(pcmFormat: targetFormat, frameCapacity: frameCapacity) else {
+                return
+            }
+            
+            var error: NSError?
+            let status = converter.convert(to: convertedBuffer, error: &error) { inNumPackets, outStatus in
+                outStatus.pointee = .haveData
+                return buffer
+            }
+            
+            if status == .haveData, let channelData = convertedBuffer.int16ChannelData {
+                let frameCount = Int(convertedBuffer.frameLength)
+                samples = Array(UnsafeBufferPointer(start: channelData[0], count: frameCount))
+            }
+        } else {
             // If no conversion needed, directly copy
             if let channelData = buffer.int16ChannelData {
                 let frameCount = Int(buffer.frameLength)
-                let samples = Array(UnsafeBufferPointer(start: channelData[0], count: frameCount))
-                DispatchQueue.main.async {
-                    self.audioBuffer.append(contentsOf: samples)
-                }
+                samples = Array(UnsafeBufferPointer(start: channelData[0], count: frameCount))
             }
-            return
         }
         
-        // Convert to target format
-        let frameCapacity = AVAudioFrameCount(
-            Double(buffer.frameLength) * (sampleRate / buffer.format.sampleRate)
-        )
+        guard !samples.isEmpty else { return }
         
-        guard let convertedBuffer = AVAudioPCMBuffer(pcmFormat: targetFormat, frameCapacity: frameCapacity) else {
-            return
+        // Stream samples in real-time if streaming is enabled
+        if streamingEnabled {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.audioManager(self, didCaptureAudioSamples: samples)
+            }
+        } else {
+            // Log once that streaming is disabled
+            struct Once { static var logged = false }
+            if !Once.logged {
+                print("[AudioManager] ⚠️ streamingEnabled is FALSE - not sending to streaming client")
+                Once.logged = true
+            }
         }
         
-        var error: NSError?
-        let status = converter.convert(to: convertedBuffer, error: &error) { inNumPackets, outStatus in
-            outStatus.pointee = .haveData
-            return buffer
-        }
-        
-        if status == .haveData, let channelData = convertedBuffer.int16ChannelData {
-            let frameCount = Int(convertedBuffer.frameLength)
-            let samples = Array(UnsafeBufferPointer(start: channelData[0], count: frameCount))
-            DispatchQueue.main.async {
-                self.audioBuffer.append(contentsOf: samples)
+        // Also buffer for chunk backup if enabled
+        if saveAudioBackup {
+            DispatchQueue.main.async { [weak self] in
+                self?.audioBuffer.append(contentsOf: samples)
             }
         }
     }
@@ -260,8 +564,8 @@ class AudioManager: NSObject, ObservableObject {
     
     private func encounterTempPath(for encounterId: UUID) -> URL {
         FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Desktop")
-            .appendingPathComponent("ClinAssist")
+            .appendingPathComponent("Dropbox")
+            .appendingPathComponent("livecode_records")
             .appendingPathComponent("temp")
             .appendingPathComponent(encounterId.uuidString)
     }
@@ -296,4 +600,3 @@ enum AudioError: LocalizedError {
         }
     }
 }
-

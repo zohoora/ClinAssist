@@ -1,6 +1,7 @@
 import Foundation
 
-class LLMClient {
+/// OpenRouter LLM client for cloud-based inference
+class LLMClient: LLMProvider {
     private let apiKey: String
     private let model: String
     private let baseURL = "https://openrouter.ai/api/v1/chat/completions"
@@ -10,10 +11,13 @@ class LLMClient {
         self.model = model
     }
     
-    func complete(systemPrompt: String, userContent: String) async throws -> String {
+    func complete(systemPrompt: String, userContent: String, modelOverride: String? = nil) async throws -> String {
         guard let url = URL(string: baseURL) else {
-            throw LLMError.invalidURL
+            throw LLMProviderError.invalidURL
         }
+        
+        let effectiveModel = modelOverride ?? model
+        debugLog("🤖 Calling model: \(effectiveModel)", component: "OpenRouter")
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -21,10 +25,10 @@ class LLMClient {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("https://clinassist.local", forHTTPHeaderField: "HTTP-Referer")
         request.setValue("ClinAssist", forHTTPHeaderField: "X-Title")
-        request.timeoutInterval = 60
+        request.timeoutInterval = 90
         
         let requestBody: [String: Any] = [
-            "model": model,
+            "model": effectiveModel,
             "messages": [
                 ["role": "system", "content": systemPrompt],
                 ["role": "user", "content": userContent]
@@ -38,31 +42,26 @@ class LLMClient {
         let (data, response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
-            throw LLMError.invalidResponse
+            debugLog("❌ Invalid response type", component: "OpenRouter")
+            throw LLMProviderError.invalidResponse
         }
         
+        debugLog("📡 Response status: \(httpResponse.statusCode)", component: "OpenRouter")
+        
         if httpResponse.statusCode == 401 {
-            throw LLMError.invalidAPIKey
+            debugLog("❌ Invalid API key", component: "OpenRouter")
+            throw LLMProviderError.invalidAPIKey(provider: "OpenRouter")
         }
         
         if httpResponse.statusCode != 200 {
             let errorMessage = String(data: data, encoding: .utf8) ?? "Unknown error"
-            throw LLMError.requestFailed("HTTP \(httpResponse.statusCode): \(errorMessage)")
+            debugLog("❌ Error: \(errorMessage)", component: "OpenRouter")
+            throw LLMProviderError.requestFailed(provider: "OpenRouter", message: "HTTP \(httpResponse.statusCode): \(errorMessage)")
         }
         
-        return try parseResponse(data)
-    }
-    
-    private func parseResponse(_ data: Data) throws -> String {
-        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let choices = json["choices"] as? [[String: Any]],
-              let firstChoice = choices.first,
-              let message = firstChoice["message"] as? [String: Any],
-              let content = message["content"] as? String else {
-            throw LLMError.invalidResponse
-        }
-        
-        return content
+        let result = try LLMResponseParser.parseOpenAIChatResponse(data)
+        debugLog("✅ Got response (\(result.count) chars)", component: "OpenRouter")
+        return result
     }
 }
 
@@ -119,6 +118,8 @@ struct LLMPrompts {
     static let soapRenderer = """
     You will be analyzing the provided medical transcript or recording to create professional SOAP notes for each patient mentioned.
 
+    **LANGUAGE REQUIREMENT:** The transcript may contain speech in various languages (Spanish, French, etc.). Regardless of the language spoken in the transcript, you MUST write the SOAP note entirely in English. Translate any non-English content into English for the note.
+
     Your task is to create concise, professional SOAP notes for each patient in the transcript. Follow these specific requirements:
 
     **Important:** The input includes both:
@@ -135,15 +136,17 @@ struct LLMPrompts {
     - Use the patient's name if mentioned in the transcript (e.g., "PATIENT: Alex" or "PATIENT: Mr. Jones")
     - If no name is mentioned, use identifying info like gender and chief complaint (e.g., "PATIENT: Male with chest pain")
     
+    **WRITING STYLE:** Use concise point-form notes, NOT paragraph style. Each piece of information should be a brief bullet point. Be succinct and clinical.
+    
     SOAP Note Format:
 
-    - S (Subjective): Patient's reported symptoms, concerns, and history
+    - S (Subjective): Patient's reported symptoms, concerns, and history. Use bullet points for each symptom or concern.
 
-    - O (Objective): Observable findings, vital signs, physical exam results. Do not include any procedure descriptions here. If no objective elements exist at all, omit this section. If a particular detail (such as blood pressure) is not mentioned, simply do not list it. For example, do not say things like '(No other vitals/exam documented)'.
+    - O (Objective): Observable findings, vital signs, physical exam results in point form. Do not include any procedure descriptions here. If no objective elements exist at all, omit this section. If a particular detail (such as blood pressure) is not mentioned, simply do not list it.
 
-    - A (Assessment): Clinical impression, diagnosis, or differential diagnosis. Keep this brief.
+    - A (Assessment): Clinical impression, diagnosis, or differential diagnosis. Keep this very brief - just list the diagnosis/diagnoses.
 
-    - P (Plan): Procedures performed, Treatment plan, follow-up, referrals, medication changes.
+    - P (Plan): Procedures performed, Treatment plan, follow-up, referrals, medication changes. Use bullet points for each action item.
 
     - If multiple patients are discussed, create separate SOAP notes for each
 
@@ -161,32 +164,12 @@ struct LLMPrompts {
 
     Format your final response with clear headings for each patient and use the standard SOAP format outlined above. Make it formatted and easy to copy/paste into the EMR.
 
-    **CRITICAL FORMATTING RULE:** Do NOT use any markdown formatting. No asterisks (*), no bold (**), no underscores (_), no hash symbols (#). Use plain text only. The output will be pasted into an EMR that does not support markdown.
+    **CRITICAL FORMATTING RULE:** Do NOT use any markdown formatting. No asterisks (*), no bold (**), no underscores (_), no hash symbols (#). Use plain text only with simple dashes (-) for bullet points. The output will be pasted into an EMR that does not support markdown.
     """
 }
 
-// MARK: - Errors
+// MARK: - Legacy Error Type (deprecated, use LLMProviderError)
 
-enum LLMError: LocalizedError {
-    case invalidURL
-    case invalidAPIKey
-    case invalidResponse
-    case requestFailed(String)
-    case parsingFailed
-    
-    var errorDescription: String? {
-        switch self {
-        case .invalidURL:
-            return "Invalid API URL"
-        case .invalidAPIKey:
-            return "Invalid OpenRouter API key. Please check your config.json."
-        case .invalidResponse:
-            return "Invalid response from LLM service"
-        case .requestFailed(let message):
-            return "LLM request failed: \(message)"
-        case .parsingFailed:
-            return "Failed to parse LLM response"
-        }
-    }
-}
+@available(*, deprecated, message: "Use LLMProviderError instead")
+typealias LLMError = LLMProviderError
 

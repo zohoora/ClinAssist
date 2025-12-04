@@ -1,0 +1,90 @@
+import Foundation
+
+/// Protocol for LLM completion providers
+/// Implemented by LLMClient (OpenRouter), OllamaClient, and GroqClient
+protocol LLMProvider {
+    /// Complete a prompt with system and user content
+    /// - Parameters:
+    ///   - systemPrompt: The system prompt defining the assistant's behavior
+    ///   - userContent: The user's input content
+    ///   - modelOverride: Optional model to use instead of the default
+    /// - Returns: The completion response string
+    func complete(systemPrompt: String, userContent: String, modelOverride: String?) async throws -> String
+}
+
+extension LLMProvider {
+    /// Convenience method without model override
+    func complete(systemPrompt: String, userContent: String) async throws -> String {
+        try await complete(systemPrompt: systemPrompt, userContent: userContent, modelOverride: nil)
+    }
+}
+
+// MARK: - Unified Error Type
+
+/// Unified error type for all LLM providers
+enum LLMProviderError: LocalizedError {
+    case invalidURL
+    case invalidAPIKey(provider: String)
+    case invalidResponse
+    case requestFailed(provider: String, message: String)
+    case rateLimited(provider: String, message: String)
+    case notAvailable(provider: String)
+    case timeout(provider: String)
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return "Invalid API URL"
+        case .invalidAPIKey(let provider):
+            return "Invalid \(provider) API key. Please check your config.json."
+        case .invalidResponse:
+            return "Invalid response from LLM service"
+        case .requestFailed(let provider, let message):
+            return "\(provider) request failed: \(message)"
+        case .rateLimited(let provider, let message):
+            return "\(provider) rate limited: \(message)"
+        case .notAvailable(let provider):
+            return "\(provider) is not available"
+        case .timeout(let provider):
+            return "\(provider) request timed out"
+        }
+    }
+}
+
+// MARK: - Response Parsing Utilities
+
+/// Shared utilities for parsing LLM API responses
+enum LLMResponseParser {
+    /// Parse OpenAI-compatible chat completion response format
+    /// Used by OpenRouter, Groq, and other OpenAI-compatible APIs
+    static func parseOpenAIChatResponse(_ data: Data) throws -> String {
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let choices = json["choices"] as? [[String: Any]],
+              let firstChoice = choices.first,
+              let message = firstChoice["message"] as? [String: Any],
+              let content = message["content"] as? String else {
+            throw LLMProviderError.invalidResponse
+        }
+        return content
+    }
+    
+    /// Parse Ollama chat response format
+    static func parseOllamaChatResponse(_ data: Data) throws -> String {
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let message = json["message"] as? [String: Any],
+              let content = message["content"] as? String else {
+            throw LLMProviderError.invalidResponse
+        }
+        return content
+    }
+    
+    /// Parse Ollama generate response format
+    static func parseOllamaGenerateResponse(_ data: Data) throws -> String {
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let response = json["response"] as? String else {
+            throw LLMProviderError.invalidResponse
+        }
+        return response.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+

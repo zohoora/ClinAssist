@@ -10,9 +10,11 @@ class DeepgramRESTClient: STTClient {
     
     func transcribe(audioData: Data) async throws -> [TranscriptSegment] {
         // Build URL with query parameters
+        // Note: nova-3-medical requires language=en (doesn't support multi/detect_language)
         var components = URLComponents(string: baseURL)!
         components.queryItems = [
-            URLQueryItem(name: "model", value: "nova-2"),
+            URLQueryItem(name: "model", value: "nova-3-medical"),  // Medical-optimized model with 63% better accuracy
+            URLQueryItem(name: "language", value: "en"),           // English (required for nova-3-medical)
             URLQueryItem(name: "smart_format", value: "true"),
             URLQueryItem(name: "diarize", value: "true"),
             URLQueryItem(name: "punctuate", value: "true")

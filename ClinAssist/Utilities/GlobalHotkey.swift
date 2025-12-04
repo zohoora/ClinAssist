@@ -29,16 +29,36 @@ class GlobalHotkeyManager {
         if modifiers.contains(.shift) { nsModifiers.insert(.shift) }
         self.targetModifiers = nsModifiers
         
-        // Request accessibility permissions
-        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
-        let trusted = AXIsProcessTrustedWithOptions(options)
-        
-        if !trusted {
-            print("ClinAssist needs accessibility permissions to register global hotkeys.")
-            print("Please grant access in System Settings > Privacy & Security > Accessibility")
+        // Check if we already have accessibility permissions (no prompt)
+        // Use the simple check that doesn't trigger any UI
+        if AXIsProcessTrusted() {
+            print("[GlobalHotkey] Accessibility permissions already granted")
+            setupEventTap()
             return
         }
         
+        // Check if we've already prompted the user this session
+        let hasPromptedKey = "hasPromptedForAccessibility"
+        if UserDefaults.standard.bool(forKey: hasPromptedKey) {
+            // Already prompted, don't prompt again - just try to set up
+            print("[GlobalHotkey] Already prompted for accessibility, skipping prompt")
+            // Try to set up anyway - it might work if user granted in background
+            setupEventTap()
+            return
+        }
+        
+        // First time - prompt the user once
+        print("[GlobalHotkey] Requesting accessibility permissions (first time)...")
+        UserDefaults.standard.set(true, forKey: hasPromptedKey)
+        
+        let promptOptions = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+        _ = AXIsProcessTrustedWithOptions(promptOptions)
+        
+        // Don't block - the user can grant permission and the event tap will work on next launch
+        print("ClinAssist needs accessibility permissions for global hotkeys.")
+        print("Please grant access in System Settings > Privacy & Security > Accessibility")
+        
+        // Try to set up anyway - if user grants permission, it should work
         setupEventTap()
     }
     
@@ -120,4 +140,5 @@ class GlobalHotkeyManager {
         unregister()
     }
 }
+
 

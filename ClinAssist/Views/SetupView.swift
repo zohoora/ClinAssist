@@ -38,7 +38,7 @@ struct SetupView: View {
                 Text("Please create a config file at:")
                     .font(.subheadline)
                 
-                Text("~/Desktop/ClinAssist/config.json")
+                Text("~/Dropbox/livecode_records/config.json")
                     .font(.system(size: 12, design: .monospaced))
                     .padding(8)
                     .background(Color(NSColor.controlBackgroundColor))
@@ -100,8 +100,8 @@ struct SetupView: View {
     
     private func openConfigFolder() {
         let configPath = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Desktop")
-            .appendingPathComponent("ClinAssist")
+            .appendingPathComponent("Dropbox")
+            .appendingPathComponent("livecode_records")
         
         NSWorkspace.shared.open(configPath)
     }

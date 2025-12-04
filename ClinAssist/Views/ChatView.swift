@@ -186,17 +186,46 @@ struct ChatView: View {
     }
     
     private func captureScreenshot() {
-        // Hide the app window briefly to capture clean screenshot
+        // Capture screenshot directly - macOS will prompt for permission if needed
         DispatchQueue.main.async {
-            if let screenshot = captureScreen() {
-                chatController.addScreenshotAttachment(image: screenshot)
+            if let screenshot = self.captureScreen() {
+                self.chatController.addScreenshotAttachment(image: screenshot)
+                debugLog("✅ Screenshot attached", component: "Screenshot")
+            } else {
+                debugLog("❌ Screenshot failed", component: "Screenshot")
             }
         }
     }
     
     private func captureScreen() -> NSImage? {
-        let displayID = CGMainDisplayID()
-        guard let screenshot = CGDisplayCreateImage(displayID) else { return nil }
+        // Get the main screen bounds
+        guard let mainScreen = NSScreen.main else {
+            debugLog("❌ No main screen found", component: "Screenshot")
+            return nil
+        }
+        
+        let screenRect = mainScreen.frame
+        
+        // Use CGWindowListCreateImage to capture all windows on screen
+        // CGRect uses lower-left origin, convert from NSScreen coordinates
+        let captureRect = CGRect(
+            x: screenRect.origin.x,
+            y: screenRect.origin.y,
+            width: screenRect.width,
+            height: screenRect.height
+        )
+        
+        guard let screenshot = CGWindowListCreateImage(
+            captureRect,
+            .optionAll,  // Include all windows (on-screen and off-screen owned by user)
+            kCGNullWindowID,
+            [.bestResolution]
+        ) else { 
+            debugLog("❌ CGWindowListCreateImage returned nil", component: "Screenshot")
+            return nil 
+        }
+        
+        debugLog("✅ Captured screen: \(screenshot.width)x\(screenshot.height)", component: "Screenshot")
         return NSImage(cgImage: screenshot, size: NSSize(width: screenshot.width, height: screenshot.height))
     }
     
