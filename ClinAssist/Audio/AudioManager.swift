@@ -107,10 +107,19 @@ class AudioManager: NSObject, ObservableObject {
         }
         
         inputNode = audioEngine.inputNode
-        let nativeFormat = inputNode!.outputFormat(forBus: 0)
+        
+        guard let node = inputNode else {
+            throw AudioError.engineSetupFailed
+        }
+        
+        let nativeFormat = node.outputFormat(forBus: 0)
+        guard nativeFormat.sampleRate > 0 else {
+            debugLog("❌ Invalid audio format - sample rate is 0", component: "Audio")
+            throw AudioError.engineSetupFailed
+        }
         
         // Install tap for level monitoring (lower buffer size for responsiveness)
-        inputNode!.installTap(onBus: 0, bufferSize: 1024, format: nativeFormat) { [weak self] buffer, time in
+        node.installTap(onBus: 0, bufferSize: 1024, format: nativeFormat) { [weak self] buffer, time in
             self?.processLevelBuffer(buffer)
         }
         
@@ -338,16 +347,7 @@ class AudioManager: NSObject, ObservableObject {
             }
             
             inputNode = audioEngine.inputNode
-            
-            guard let node = inputNode else {
-                throw AudioError.engineSetupFailed
-            }
-            
-            let nativeFormat = node.outputFormat(forBus: 0)
-            guard nativeFormat.sampleRate > 0 else {
-                debugLog("❌ Invalid audio format - sample rate is 0", component: "Audio")
-                throw AudioError.engineSetupFailed
-            }
+            let nativeFormat = inputNode!.outputFormat(forBus: 0)
             
             guard let targetFormat = AVAudioFormat(
                 commonFormat: .pcmFormatInt16,
@@ -361,7 +361,7 @@ class AudioManager: NSObject, ObservableObject {
             let converter = AVAudioConverter(from: nativeFormat, to: targetFormat)
             
             // Install recording tap
-            node.installTap(onBus: 0, bufferSize: 4096, format: nativeFormat) { [weak self] buffer, time in
+            inputNode!.installTap(onBus: 0, bufferSize: 4096, format: nativeFormat) { [weak self] buffer, time in
                 self?.processAudioBuffer(buffer, converter: converter, targetFormat: targetFormat)
                 self?.processLevelBuffer(buffer)
             }
@@ -403,11 +403,20 @@ class AudioManager: NSObject, ObservableObject {
             recentLevels = []
             currentAudioLevel = 0
             
-            let nativeFormat = inputNode!.outputFormat(forBus: 0)
+            guard let node = inputNode else {
+                throw AudioError.engineSetupFailed
+            }
+            
+            let nativeFormat = node.outputFormat(forBus: 0)
+            guard nativeFormat.sampleRate > 0 else {
+                debugLog("❌ Invalid audio format - sample rate is 0", component: "Audio")
+                throw AudioError.engineSetupFailed
+            }
+            
             debugLog("📊 Installing monitoring tap - format: \(nativeFormat.sampleRate)Hz, \(nativeFormat.channelCount) ch", component: "Audio")
             
             // Install monitoring tap
-            inputNode!.installTap(onBus: 0, bufferSize: 1024, format: nativeFormat) { [weak self] buffer, time in
+            node.installTap(onBus: 0, bufferSize: 1024, format: nativeFormat) { [weak self] buffer, time in
                 self?.processLevelBuffer(buffer)
             }
             
