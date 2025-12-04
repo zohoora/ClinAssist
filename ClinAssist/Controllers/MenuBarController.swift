@@ -1,6 +1,7 @@
 import AppKit
 
 /// Manages the menu bar status item and its menu
+@MainActor
 class MenuBarController {
     
     // MARK: - Properties

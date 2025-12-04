@@ -1,6 +1,7 @@
 import XCTest
 @testable import ClinAssist
 
+@MainActor
 final class LLMClientTests: XCTestCase {
     
     // MARK: - JSON Parsing Helper Tests

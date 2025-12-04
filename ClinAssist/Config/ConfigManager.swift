@@ -146,6 +146,7 @@ struct AutoDetectionConfig: Codable {
     }
 }
 
+@MainActor
 class ConfigManager: ObservableObject {
     static let shared = ConfigManager()
     

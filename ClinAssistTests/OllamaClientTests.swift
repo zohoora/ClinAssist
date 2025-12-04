@@ -1,6 +1,7 @@
 import XCTest
 @testable import ClinAssist
 
+@MainActor
 final class OllamaClientTests: XCTestCase {
     
     // MARK: - Initialization Tests
@@ -153,4 +154,3 @@ final class OllamaClientTests: XCTestCase {
         XCTAssertEqual(options?["num_predict"] as? Int, 50)  // Short response expected
     }
 }
-

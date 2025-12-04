@@ -3,6 +3,7 @@ import AVFoundation
 @testable import ClinAssist
 
 /// Mock AudioManager for testing without actual audio hardware
+@MainActor
 class MockAudioManager: AudioManager {
     
     // MARK: - Test State Tracking

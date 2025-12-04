@@ -1,6 +1,7 @@
 import XCTest
 @testable import ClinAssist
 
+@MainActor
 final class EncounterStateTests: XCTestCase {
     
     // MARK: - Initialization Tests
@@ -170,6 +171,7 @@ final class EncounterStateTests: XCTestCase {
 
 // MARK: - HelperSuggestions Tests
 
+@MainActor
 final class HelperSuggestionsTests: XCTestCase {
     
     func testHelperSuggestionsInitialization() {

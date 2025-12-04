@@ -2,6 +2,7 @@ import Foundation
 @testable import ClinAssist
 
 /// Mock LLM client for testing without API calls
+@MainActor
 class MockLLMClient: LLMClient {
     var completeResponse: String = "{}"
     var mockResponse: String = "{}"

@@ -2,6 +2,7 @@ import Foundation
 @testable import ClinAssist
 
 /// Mock STT Client for testing REST transcription
+@MainActor
 class MockSTTClient: STTClient {
     
     // MARK: - Test State Tracking

@@ -2,6 +2,7 @@ import XCTest
 @testable import ClinAssist
 
 /// Integration tests for the full transcript flow from audio capture to SOAP generation
+@MainActor
 final class TranscriptFlowTests: XCTestCase {
     
     var controller: EncounterController!

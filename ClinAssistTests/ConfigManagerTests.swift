@@ -1,6 +1,7 @@
 import XCTest
 @testable import ClinAssist
 
+@MainActor
 final class ConfigManagerTests: XCTestCase {
     
     var tempConfigURL: URL!
@@ -187,4 +188,3 @@ final class ConfigManagerTests: XCTestCase {
         XCTAssertTrue(defaults.useForSessionDetection ?? false)
     }
 }
-

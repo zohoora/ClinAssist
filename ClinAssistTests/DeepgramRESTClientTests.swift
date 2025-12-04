@@ -1,6 +1,7 @@
 import XCTest
 @testable import ClinAssist
 
+@MainActor
 final class DeepgramRESTClientTests: XCTestCase {
     
     var client: DeepgramRESTClient!
@@ -265,6 +266,7 @@ final class DeepgramRESTClientTests: XCTestCase {
 
 // MARK: - STTError Tests
 
+@MainActor
 final class STTErrorTests: XCTestCase {
     
     func testErrorDescriptions() {

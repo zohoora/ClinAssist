@@ -2,6 +2,7 @@ import Foundation
 @testable import ClinAssist
 
 /// Mock ConfigManager for testing with controlled configurations
+@MainActor
 class MockConfigManager: ConfigManager {
     
     // MARK: - Test Configuration Presets

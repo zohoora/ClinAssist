@@ -1,6 +1,7 @@
 import AVFoundation
 import Foundation
 
+@MainActor
 protocol AudioManagerDelegate: AnyObject {
     func audioManager(_ manager: AudioManager, didSaveChunk chunkURL: URL, chunkNumber: Int)
     func audioManager(_ manager: AudioManager, didEncounterError error: Error)
@@ -15,6 +16,7 @@ extension AudioManagerDelegate {
     func audioManager(_ manager: AudioManager, didCaptureAudioSamples samples: [Int16]) {}
 }
 
+@MainActor
 class AudioManager: NSObject, ObservableObject {
     weak var delegate: AudioManagerDelegate?
     

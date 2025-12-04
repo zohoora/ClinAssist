@@ -1,6 +1,7 @@
 import Foundation
 
 /// Mock URL Protocol for intercepting network requests in tests
+@MainActor
 class MockURLProtocol: URLProtocol {
     
     // MARK: - Request Handler

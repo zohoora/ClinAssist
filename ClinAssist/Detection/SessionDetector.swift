@@ -2,6 +2,7 @@ import Foundation
 import Combine
 
 /// Detects the start and end of clinical encounters based on audio activity and transcript patterns
+@MainActor
 class SessionDetector: ObservableObject {
     
     // MARK: - Private logging helper (uses global DebugLogger)
@@ -588,6 +589,7 @@ class SessionDetector: ObservableObject {
 
 // MARK: - Delegate Protocol
 
+@MainActor
 protocol SessionDetectorDelegate: AnyObject {
     func sessionDetectorDidDetectEncounterStart(_ detector: SessionDetector)
     func sessionDetectorDidDetectEncounterEnd(_ detector: SessionDetector)

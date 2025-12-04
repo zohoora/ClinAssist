@@ -2,6 +2,7 @@ import AppKit
 import SwiftUI
 
 /// Manages the main application window
+@MainActor
 class WindowController: NSObject, NSWindowDelegate {
     
     // MARK: - Properties

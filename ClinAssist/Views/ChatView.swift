@@ -385,6 +385,7 @@ struct AttachmentBadge: View {
 
 // MARK: - Chat Controller
 
+@MainActor
 class ChatController: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate {
     @Published var messages: [ChatMessage] = []
     @Published var pendingAttachments: [ChatAttachment] = []

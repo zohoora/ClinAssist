@@ -1,6 +1,7 @@
 import XCTest
 @testable import ClinAssist
 
+@MainActor
 final class SessionDetectorTests: XCTestCase {
     
     var detector: SessionDetector!
@@ -215,4 +216,3 @@ class MockSessionDetectorDelegate: SessionDetectorDelegate {
         didCancelBuffering = true
     }
 }
-

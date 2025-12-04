@@ -2,6 +2,7 @@ import Foundation
 @testable import ClinAssist
 
 /// Mock streaming STT client for testing without network
+@MainActor
 class MockStreamingSTTClient: StreamingSTTClient {
     weak var delegate: StreamingSTTClientDelegate?
     

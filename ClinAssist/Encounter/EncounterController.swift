@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 
+@MainActor
 class EncounterController: ObservableObject {
     @Published var state: EncounterState?
     @Published var helperSuggestions: HelperSuggestions = HelperSuggestions()
@@ -918,6 +919,7 @@ extension EncounterController: StreamingSTTClientDelegate {
 
 // MARK: - Delegate Protocol
 
+@MainActor
 protocol EncounterControllerDelegate: AnyObject {
     func encounterControllerDidAutoStart(_ controller: EncounterController)
     func encounterControllerDidAutoEnd(_ controller: EncounterController)

@@ -11,6 +11,7 @@ protocol StreamingSTTClient: AnyObject {
 }
 
 /// Delegate for receiving streaming transcription results
+@MainActor
 protocol StreamingSTTClientDelegate: AnyObject {
     /// Called when an interim (non-final) transcript is received - may change
     func streamingClient(_ client: StreamingSTTClient, didReceiveInterim text: String, speaker: String)

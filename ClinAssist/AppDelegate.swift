@@ -2,6 +2,7 @@ import AppKit
 import SwiftUI
 import AVFoundation
 
+@MainActor
 class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private var statusItem: NSStatusItem?
     private var mainWindow: NSWindow?

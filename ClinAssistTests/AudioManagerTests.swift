@@ -2,6 +2,7 @@ import XCTest
 import AVFoundation
 @testable import ClinAssist
 
+@MainActor
 final class AudioManagerTests: XCTestCase {
     
     var audioManager: AudioManager!

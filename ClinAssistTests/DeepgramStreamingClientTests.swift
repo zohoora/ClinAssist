@@ -1,6 +1,7 @@
 import XCTest
 @testable import ClinAssist
 
+@MainActor
 final class DeepgramStreamingClientTests: XCTestCase {
     
     var client: DeepgramStreamingClient!

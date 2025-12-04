@@ -1,6 +1,7 @@
 import XCTest
 @testable import ClinAssist
 
+@MainActor
 final class EncounterControllerTests: XCTestCase {
     
     var controller: EncounterController!
@@ -335,4 +336,3 @@ final class EncounterControllerTests: XCTestCase {
         XCTAssertEqual(mockStreamingClient.lastSentSamples, samples)
     }
 }
-

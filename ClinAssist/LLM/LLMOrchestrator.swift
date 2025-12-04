@@ -2,6 +2,7 @@ import Foundation
 
 /// Orchestrates LLM provider selection based on configuration and availability
 /// Handles fallback logic: Groq -> Ollama -> OpenRouter
+@MainActor
 class LLMOrchestrator {
     
     // MARK: - Providers

@@ -2,6 +2,7 @@ import Foundation
 @testable import ClinAssist
 
 /// Mock WebSocket provider for testing streaming transcription
+@MainActor
 class MockWebSocketProvider: WebSocketProvider {
     var onMessage: ((Result<WebSocketMessage, Error>) -> Void)?
     var onConnected: (() -> Void)?
