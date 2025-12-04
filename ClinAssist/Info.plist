@@ -30,6 +30,8 @@
     <string>NSApplication</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>ClinAssist needs microphone access to transcribe patient encounters.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>ClinAssist needs camera access to capture images for clinical documentation.</string>
     <key>NSHumanReadableCopyright</key>
     <string>Copyright © 2024 ClinAssist. All rights reserved.</string>
 </dict>
