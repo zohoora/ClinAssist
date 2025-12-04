@@ -39,13 +39,13 @@ struct PsstView: View {
                         .frame(width: 10, height: 10)
                 }
                 
-                // Local AI badge
-                Text("qwen3")
+                // AI badge
+                Text("groq")
                     .font(.system(size: 9, weight: .medium))
-                    .foregroundColor(.purple)
+                    .foregroundColor(.blue)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
-                    .background(Color.purple.opacity(0.15))
+                    .background(Color.blue.opacity(0.15))
                     .cornerRadius(4)
             }
             

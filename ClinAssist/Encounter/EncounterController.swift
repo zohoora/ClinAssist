@@ -378,14 +378,14 @@ class EncounterController: ObservableObject {
             }
         }
         
-        // Psst... prediction task (uses local Ollama with thinking mode)
+        // Psst... prediction task (uses Groq for fast, smart predictions)
         // Updates every 15 seconds with predictive insights
-        if ollamaAvailable && configManager.isOllamaEnabled {
+        if configManager.isGroqEnabled {
             psstUpdateTask = Task {
                 // Initial delay to gather some transcript
                 try? await Task.sleep(for: .seconds(10))
-            while !Task.isCancelled {
-                guard !Task.isCancelled else { break }
+                while !Task.isCancelled {
+                    guard !Task.isCancelled else { break }
                     await updatePsstPrediction()
                     try? await Task.sleep(for: .seconds(15))
                 }
@@ -537,9 +537,9 @@ class EncounterController: ObservableObject {
     
     private func updatePsstPrediction() async {
         guard let state = state, !state.transcript.isEmpty else { return }
-        guard let ollama = ollamaClient else { return }
+        guard let groq = groqClient else { return }
         
-        // Use full transcript for context (local model, no API limits)
+        // Use full transcript for context
         let transcriptText = state.transcript.map { "\($0.speaker): \($0.text)" }.joined(separator: "\n")
         
         // Skip if transcript is too short
@@ -550,15 +550,15 @@ class EncounterController: ObservableObject {
         }
         
         do {
-            debugLog("🔮 Generating Psst... prediction", component: "Psst")
+            debugLog("🔮 Generating Psst... prediction via Groq", component: "Psst")
             
             let userContent = """
             TRANSCRIPT SO FAR:
             \(transcriptText)
             """
             
-            // Use regular completion (non-thinking mode)
-            let response = try await ollama.complete(
+            // Use Groq for fast, smart predictions
+            let response = try await groq.complete(
                 systemPrompt: LLMPrompts.psstPrediction,
                 userContent: userContent
             )
