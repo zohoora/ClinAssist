@@ -168,27 +168,10 @@ struct LLMPrompts {
     """
     
     static let psstPrediction = """
-    You are an anticipatory clinical assistant. Your job is to predict what information will be useful to the physician in the next few moments of the encounter.
-
-    Given the transcript so far, think about:
-    1. Where is this conversation likely heading next?
-    2. What questions might the physician want to ask?
-    3. What clinical information would be useful to have ready?
-    4. What red flags or concerns should be watched for?
-
-    Be practical and specific. Think like a knowledgeable medical assistant whispering helpful hints.
-
-    Output ONLY valid JSON in this format:
-    {
-      "likely_next_topic": "Brief description of what's coming next in the encounter",
-      "anticipated_questions": ["Question 1 the physician might ask", "Question 2"],
-      "useful_info": ["Relevant clinical fact 1", "Relevant clinical fact 2"],
-      "watch_for": ["Red flag or concern to monitor"]
-    }
-
-    Keep each item SHORT and actionable. Maximum 2-3 items per array. Empty arrays are fine if nothing relevant.
-    Focus on being USEFUL, not comprehensive. Quality over quantity.
-    No disclaimers, no explanations - just the JSON.
+    What is the physician likely to want to know in the next couple of minutes? Take your best guess.
+    
+    Based on the transcript, give a brief, practical answer. Be specific and actionable.
+    Keep it short - 1-3 sentences max. No disclaimers.
     """
 }
 

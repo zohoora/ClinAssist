@@ -550,33 +550,31 @@ class EncounterController: ObservableObject {
         }
         
         do {
-            debugLog("🔮 Generating Psst... prediction with thinking mode", component: "Psst")
+            debugLog("🔮 Generating Psst... prediction", component: "Psst")
             
             let userContent = """
             TRANSCRIPT SO FAR:
             \(transcriptText)
-            
-            Based on this medical encounter transcript, predict what will be useful for the physician next.
             """
             
-            // Use thinking mode for deeper analysis
-            let response = try await ollama.completeWithThinking(
+            // Use regular completion (non-thinking mode)
+            let response = try await ollama.complete(
                 systemPrompt: LLMPrompts.psstPrediction,
                 userContent: userContent
             )
             
-            // Parse prediction
-            if let prediction = safeParse(response, as: PsstPrediction.self) {
+            // Store plain text response
+            let trimmedResponse = response.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !trimmedResponse.isEmpty {
                 await MainActor.run {
-                    self.psstPrediction = prediction
+                    self.psstPrediction = PsstPrediction(hint: trimmedResponse)
                     self.isPsstUpdating = false
                 }
-                debugLog("🔮 Psst... prediction updated", component: "Psst")
+                debugLog("🔮 Psst... prediction updated: \(trimmedResponse.prefix(50))...", component: "Psst")
             } else {
                 await MainActor.run {
                     self.isPsstUpdating = false
                 }
-                debugLog("⚠️ Failed to parse Psst... prediction response", component: "Psst")
             }
         } catch {
             await MainActor.run {
