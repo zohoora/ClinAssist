@@ -198,33 +198,25 @@ struct ChatView: View {
     }
     
     private func captureScreen() -> NSImage? {
-        // Get the main screen bounds
-        guard let mainScreen = NSScreen.main else {
-            debugLog("❌ No main screen found", component: "Screenshot")
-            return nil
-        }
+        // Get the main display ID
+        let mainDisplayID = CGMainDisplayID()
         
-        let screenRect = mainScreen.frame
+        // Get the display bounds (this is the proper way to get screen rect for CGWindowListCreateImage)
+        let displayBounds = CGDisplayBounds(mainDisplayID)
         
-        // Use CGWindowListCreateImage to capture all windows on screen
-        // CGRect uses lower-left origin, convert from NSScreen coordinates
-        let captureRect = CGRect(
-            x: screenRect.origin.x,
-            y: screenRect.origin.y,
-            width: screenRect.width,
-            height: screenRect.height
-        )
-        
+        // Capture all on-screen windows including the desktop
+        // .optionOnScreenOnly captures all visible windows on screen
         guard let screenshot = CGWindowListCreateImage(
-            captureRect,
-            .optionAll,  // Include all windows (on-screen and off-screen owned by user)
+            displayBounds,
+            .optionOnScreenOnly,
             kCGNullWindowID,
-            [.bestResolution]
+            [.bestResolution, .boundsIgnoreFraming]
         ) else { 
-            debugLog("❌ CGWindowListCreateImage returned nil", component: "Screenshot")
+            debugLog("❌ CGWindowListCreateImage returned nil - check Screen Recording permission in System Settings > Privacy & Security", component: "Screenshot")
             return nil 
         }
         
+        // Check if we got a valid image (not just empty/desktop)
         debugLog("✅ Captured screen: \(screenshot.width)x\(screenshot.height)", component: "Screenshot")
         return NSImage(cgImage: screenshot, size: NSSize(width: screenshot.width, height: screenshot.height))
     }
