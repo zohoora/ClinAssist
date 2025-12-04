@@ -471,6 +471,12 @@ struct ActiveEncounterView: View {
             // Clinical Notes Input (for manual observations/procedures)
             ClinicalNotesInputView(encounterController: encounterController)
             
+            // Psst... Section (local AI predictions)
+            PsstView(
+                prediction: encounterController.psstPrediction,
+                isUpdating: encounterController.isPsstUpdating
+            )
+            
             // Assistant Section
             HelperPanelView(
                 suggestions: encounterController.helperSuggestions

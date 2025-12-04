@@ -22,6 +22,7 @@
 		4A0000000000000000000023 /* EncounterStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000033 /* EncounterStorage.swift */; };
 		4A0000000000000000000024 /* TranscriptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000034 /* TranscriptView.swift */; };
 		4A0000000000000000000025 /* SOAPView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000035 /* SOAPView.swift */; };
+		4A00000000000000000000P1 /* PsstView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A00000000000000000000P2 /* PsstView.swift */; };
 		4A0000000000000000000026 /* HelperPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000036 /* HelperPanelView.swift */; };
 		4A0000000000000000000027 /* EndEncounterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000037 /* EndEncounterSheet.swift */; };
 		4A0000000000000000000028 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000038 /* SetupView.swift */; };
@@ -86,6 +87,7 @@
 		4A0000000000000000000033 /* EncounterStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterStorage.swift; sourceTree = "<group>"; };
 		4A0000000000000000000034 /* TranscriptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptView.swift; sourceTree = "<group>"; };
 		4A0000000000000000000035 /* SOAPView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOAPView.swift; sourceTree = "<group>"; };
+		4A00000000000000000000P2 /* PsstView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PsstView.swift; sourceTree = "<group>"; };
 		4A0000000000000000000036 /* HelperPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperPanelView.swift; sourceTree = "<group>"; };
 		4A0000000000000000000037 /* EndEncounterSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndEncounterSheet.swift; sourceTree = "<group>"; };
 		4A0000000000000000000038 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 				4A0000000000000000000015 /* MainWindow.swift */,
 				4A0000000000000000000034 /* TranscriptView.swift */,
 				4A0000000000000000000035 /* SOAPView.swift */,
+				4A00000000000000000000P2 /* PsstView.swift */,
 				4A0000000000000000000036 /* HelperPanelView.swift */,
 				4A0000000000000000000037 /* EndEncounterSheet.swift */,
 				4A0000000000000000000038 /* SetupView.swift */,
@@ -437,6 +440,7 @@
 				4A0000000000000000000023 /* EncounterStorage.swift in Sources */,
 				4A0000000000000000000024 /* TranscriptView.swift in Sources */,
 				4A0000000000000000000025 /* SOAPView.swift in Sources */,
+				4A00000000000000000000P1 /* PsstView.swift in Sources */,
 				4A0000000000000000000026 /* HelperPanelView.swift in Sources */,
 				4A0000000000000000000027 /* EndEncounterSheet.swift in Sources */,
 				4A0000000000000000000028 /* SetupView.swift in Sources */,

@@ -11,6 +11,10 @@ class EncounterController: ObservableObject {
     @Published var llmError: String?
     @Published var ollamaAvailable: Bool = false
     
+    // Psst... prediction state (local AI anticipatory suggestions)
+    @Published var psstPrediction: PsstPrediction = PsstPrediction()
+    @Published var isPsstUpdating: Bool = false
+    
     // Streaming transcription state
     @Published var interimTranscript: String = ""  // Current interim result (may change)
     @Published var interimSpeaker: String = ""     // Speaker for interim result
@@ -28,6 +32,7 @@ class EncounterController: ObservableObject {
     private var transcriptionTask: Task<Void, Never>?
     private var stateUpdateTask: Task<Void, Never>?
     private var soapUpdateTask: Task<Void, Never>?
+    private var psstUpdateTask: Task<Void, Never>?
     
     private var pendingChunks: [URL] = []
     private var lastTranscriptIndex: Int = 0
@@ -111,7 +116,7 @@ class EncounterController: ObservableObject {
         if let injected = injectedSTTClient {
             sttClient = injected
         } else {
-            sttClient = DeepgramRESTClient(apiKey: config.deepgramApiKey)
+        sttClient = DeepgramRESTClient(apiKey: config.deepgramApiKey)
         }
         
         // Setup streaming STT client if enabled
@@ -138,7 +143,7 @@ class EncounterController: ObservableObject {
         
         // Setup cloud LLM client (use injected or create new, fallback for final SOAP)
         if llmClient == nil {
-            llmClient = LLMClient(apiKey: config.openrouterApiKey, model: config.model)
+        llmClient = LLMClient(apiKey: config.openrouterApiKey, model: config.model)
         }
         
         // Setup Groq client for fast final SOAP generation
@@ -215,7 +220,7 @@ class EncounterController: ObservableObject {
             // Only start audio monitoring if not already monitoring
             if audioManager.mode != .monitoring {
                 debugLog("Starting audioManager monitoring...", component: "Encounter")
-                try audioManager.startMonitoring()
+            try audioManager.startMonitoring()
                 debugLog("audioManager started OK", component: "Encounter")
             } else {
                 debugLog("audioManager already in monitoring mode - skipping", component: "Encounter")
@@ -244,6 +249,7 @@ class EncounterController: ObservableObject {
         let encounterId = UUID()
         state = EncounterState(id: encounterId)
         helperSuggestions = HelperSuggestions()
+        psstPrediction = PsstPrediction()
         soapNote = ""
         interimTranscript = ""
         interimSpeaker = ""
@@ -308,7 +314,7 @@ class EncounterController: ObservableObject {
         // If streaming was active, it already transcribed everything - processing chunks would create duplicates
         if !streamingWasUsedInSession {
             debugLog("📦 Processing remaining chunks (streaming was not used)...", component: "Encounter")
-            await processRemainingChunks()
+        await processRemainingChunks()
         } else {
             debugLog("⏭️ Skipping chunk processing - streaming already transcribed everything", component: "Encounter")
             pendingChunks = []  // Clear pending chunks, they're already transcribed
@@ -372,6 +378,20 @@ class EncounterController: ObservableObject {
             }
         }
         
+        // Psst... prediction task (uses local Ollama with thinking mode)
+        // Updates every 15 seconds with predictive insights
+        if ollamaAvailable && configManager.isOllamaEnabled {
+            psstUpdateTask = Task {
+                // Initial delay to gather some transcript
+                try? await Task.sleep(for: .seconds(10))
+            while !Task.isCancelled {
+                guard !Task.isCancelled else { break }
+                    await updatePsstPrediction()
+                    try? await Task.sleep(for: .seconds(15))
+                }
+            }
+        }
+        
         // NOTE: Live SOAP updates disabled - only final SOAP is generated at encounter end
         // To re-enable, uncomment the following:
         // soapUpdateTask = Task {
@@ -387,10 +407,12 @@ class EncounterController: ObservableObject {
         transcriptionTask?.cancel()
         stateUpdateTask?.cancel()
         soapUpdateTask?.cancel()
+        psstUpdateTask?.cancel()
         
         transcriptionTask = nil
         stateUpdateTask = nil
         soapUpdateTask = nil
+        psstUpdateTask = nil
     }
     
     // MARK: - Transcription
@@ -508,6 +530,59 @@ class EncounterController: ObservableObject {
                 self.llmError = error.localizedDescription
             }
             debugLog("❌ Helper update error: \(error)", component: "Encounter")
+        }
+    }
+    
+    // MARK: - Psst... Prediction Updates
+    
+    private func updatePsstPrediction() async {
+        guard let state = state, !state.transcript.isEmpty else { return }
+        guard let ollama = ollamaClient else { return }
+        
+        // Use full transcript for context (local model, no API limits)
+        let transcriptText = state.transcript.map { "\($0.speaker): \($0.text)" }.joined(separator: "\n")
+        
+        // Skip if transcript is too short
+        guard transcriptText.count > 100 else { return }
+        
+        await MainActor.run {
+            self.isPsstUpdating = true
+        }
+        
+        do {
+            debugLog("🔮 Generating Psst... prediction with thinking mode", component: "Psst")
+            
+            let userContent = """
+            TRANSCRIPT SO FAR:
+            \(transcriptText)
+            
+            Based on this medical encounter transcript, predict what will be useful for the physician next.
+            """
+            
+            // Use thinking mode for deeper analysis
+            let response = try await ollama.completeWithThinking(
+                systemPrompt: LLMPrompts.psstPrediction,
+                userContent: userContent
+            )
+            
+            // Parse prediction
+            if let prediction = safeParse(response, as: PsstPrediction.self) {
+                await MainActor.run {
+                    self.psstPrediction = prediction
+                    self.isPsstUpdating = false
+                }
+                debugLog("🔮 Psst... prediction updated", component: "Psst")
+            } else {
+                await MainActor.run {
+                    self.isPsstUpdating = false
+                }
+                debugLog("⚠️ Failed to parse Psst... prediction response", component: "Psst")
+            }
+        } catch {
+            await MainActor.run {
+                self.isPsstUpdating = false
+            }
+            debugLog("❌ Psst... prediction error: \(error)", component: "Psst")
         }
     }
     
@@ -750,6 +825,7 @@ extension EncounterController {
         // Initialize state for transcription
         state = EncounterState(id: encounterId)
         helperSuggestions = HelperSuggestions()
+        psstPrediction = PsstPrediction()
         soapNote = ""
         interimTranscript = ""
         interimSpeaker = ""
@@ -825,6 +901,7 @@ extension EncounterController {
         let encounterId = UUID()
         state = EncounterState(id: encounterId)
         helperSuggestions = HelperSuggestions()
+        psstPrediction = PsstPrediction()
         soapNote = ""
         interimTranscript = ""
         interimSpeaker = ""
