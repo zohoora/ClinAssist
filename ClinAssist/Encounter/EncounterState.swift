@@ -105,6 +105,42 @@ struct MedicationMention: Codable, Identifiable {
     }
 }
 
+// MARK: - Encounter Attachments (for multimodal SOAP generation)
+
+/// Type of attachment for encounter
+enum EncounterAttachmentType: String, Codable {
+    case image
+    case pdf
+    case textFile
+}
+
+/// Attachment added during encounter (from Chat section)
+/// Used for multimodal SOAP generation with Gemini
+struct EncounterAttachment: Codable, Identifiable {
+    let id: UUID
+    let timestamp: Date
+    let name: String
+    let type: EncounterAttachmentType
+    let base64Data: String?      // Base64 encoded data for images/PDFs
+    let mimeType: String?        // e.g., "image/png", "application/pdf"
+    let textContent: String?     // Text content for text files
+    
+    init(name: String, type: EncounterAttachmentType, base64Data: String? = nil, mimeType: String? = nil, textContent: String? = nil) {
+        self.id = UUID()
+        self.timestamp = Date()
+        self.name = name
+        self.type = type
+        self.base64Data = base64Data
+        self.mimeType = mimeType
+        self.textContent = textContent
+    }
+    
+    /// Whether this attachment requires multimodal processing (Gemini)
+    var isMultimodal: Bool {
+        return type == .image || type == .pdf
+    }
+}
+
 // MARK: - Helper Suggestions
 
 struct HelperSuggestions: Codable {

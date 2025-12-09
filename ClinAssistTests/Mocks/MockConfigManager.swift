@@ -117,6 +117,7 @@ class MockConfigManager: ConfigManager {
         config = AppConfig(
             openrouterApiKey: openrouterApiKey,
             deepgramApiKey: deepgramApiKey,
+            geminiApiKey: nil,  // Not needed for tests
             model: model,
             timing: timingConfig,
             autoDetection: autoDetectionConfig,

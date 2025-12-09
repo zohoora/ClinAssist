@@ -1,0 +1,320 @@
+{
+  "billing_codes": [
+    {
+      "code": "A005",
+      "description": "Consultation",
+      "fee": 87.9,
+      "category": "Consultations",
+      "notes": "Standard consultation by GP/FP physician"
+    },
+    {
+      "code": "A911",
+      "description": "Special family and general practice consultation",
+      "fee": 150.7,
+      "category": "Consultations",
+      "notes": "Minimum 50 minutes direct contact. Start/stop times required in record."
+    },
+    {
+      "code": "A912",
+      "description": "Comprehensive family and general practice consultation",
+      "fee": 226.05,
+      "category": "Consultations",
+      "notes": "Minimum 75 minutes direct contact. Start/stop times required in record."
+    },
+    {
+      "code": "A945",
+      "description": "Special palliative care consultation",
+      "fee": 159.2,
+      "category": "Consultations",
+      "notes": "Minimum 50 minutes. Includes psychosocial assessment and pharmacotherapy review."
+    },
+    {
+      "code": "A905",
+      "description": "Limited consultation",
+      "fee": 73.25,
+      "category": "Consultations"
+    },
+    {
+      "code": "A006",
+      "description": "Repeat consultation",
+      "fee": 45.9,
+      "category": "Consultations"
+    },
+    {
+      "code": "A003",
+      "description": "General assessment",
+      "fee": 87.35,
+      "category": "Assessments",
+      "notes": "Not eligible for payment in patient's home."
+    },
+    {
+      "code": "A004",
+      "description": "General re-assessment",
+      "fee": 38.35,
+      "category": "Assessments",
+      "notes": "Limited to 2 per 12 months per patient per physician."
+    },
+    {
+      "code": "A001",
+      "description": "Minor assessment",
+      "fee": 23.75,
+      "category": "Assessments"
+    },
+    {
+      "code": "A007",
+      "description": "Intermediate assessment or well baby care",
+      "fee": 37.95,
+      "category": "Assessments"
+    },
+    {
+      "code": "A002",
+      "description": "Enhanced 18 month well baby visit",
+      "fee": 62.2,
+      "category": "Assessments"
+    },
+    {
+      "code": "A008",
+      "description": "Mini assessment",
+      "fee": 13.05,
+      "category": "Assessments",
+      "notes": "Only payable when WSIB component is A001."
+    },
+    {
+      "code": "A888",
+      "description": "Emergency department equivalent - partial assessment",
+      "fee": 37.95,
+      "category": "Assessments",
+      "notes": "Saturday, Sunday or Holiday for emergency."
+    },
+    {
+      "code": "A900",
+      "description": "Complex house call assessment",
+      "fee": 54.5,
+      "category": "Assessments",
+      "notes": "For frail elderly or housebound patients. First person only per visit."
+    },
+    {
+      "code": "A902",
+      "description": "House call assessment - Pronouncement of death",
+      "fee": 54.5,
+      "category": "Assessments"
+    },
+    {
+      "code": "K017",
+      "description": "Periodic health visit - child",
+      "fee": 45.25,
+      "category": "Periodic Health Visits",
+      "age_group": "child"
+    },
+    {
+      "code": "K130",
+      "description": "Periodic health visit - adolescent",
+      "fee": 77.2,
+      "category": "Periodic Health Visits",
+      "age_group": "12-17 years"
+    },
+    {
+      "code": "K131",
+      "description": "Periodic health visit - adult 18-64",
+      "fee": 56.95,
+      "category": "Periodic Health Visits",
+      "age_group": "18-64 years"
+    },
+    {
+      "code": "K132",
+      "description": "Periodic health visit - adult 65+",
+      "fee": 80.95,
+      "category": "Periodic Health Visits",
+      "age_group": "65+ years"
+    },
+    {
+      "code": "K133",
+      "description": "Periodic health visit - adult with IDD",
+      "fee": 80.95,
+      "category": "Periodic Health Visits",
+      "notes": "For adults with Intellectual and Developmental Disability"
+    },
+    {
+      "code": "K013",
+      "description": "Counselling - individual per unit",
+      "fee": 17.85,
+      "category": "Counselling",
+      "notes": "Per half hour unit or major part thereof."
+    },
+    {
+      "code": "K033",
+      "description": "Palliative care counselling",
+      "fee": 17.85,
+      "category": "Counselling",
+      "notes": "Per half hour unit. For patient and/or family."
+    },
+    {
+      "code": "K023",
+      "description": "Palliative care support",
+      "fee": 17.85,
+      "category": "Counselling",
+      "notes": "Per half hour beyond initial 50 minutes."
+    },
+    {
+      "code": "G372",
+      "description": "Diabetes management - initial assessment",
+      "fee": 40.0,
+      "category": "Chronic Disease Management"
+    },
+    {
+      "code": "G373",
+      "description": "Diabetes management - follow-up",
+      "fee": 25.0,
+      "category": "Chronic Disease Management"
+    },
+    {
+      "code": "G365",
+      "description": "Anti-coagulant supervision per visit",
+      "fee": 7.75,
+      "category": "Chronic Disease Management"
+    },
+    {
+      "code": "E430",
+      "description": "Cervical cancer screening - collection of specimen",
+      "fee": 5.15,
+      "category": "Preventive Care",
+      "notes": "Add-on to assessment when pelvic exam not part of service."
+    },
+    {
+      "code": "E431",
+      "description": "HPV cervical screening specimen collection",
+      "fee": 5.15,
+      "category": "Preventive Care"
+    },
+    {
+      "code": "G310",
+      "description": "Electrocardiogram - interpretation",
+      "fee": 15.4,
+      "category": "Diagnostic Procedures"
+    },
+    {
+      "code": "G313",
+      "description": "Electrocardiogram - technical component",
+      "fee": 13.4,
+      "category": "Diagnostic Procedures"
+    },
+    {
+      "code": "G590",
+      "description": "Injection - intramuscular",
+      "fee": 6.0,
+      "category": "Injections"
+    },
+    {
+      "code": "G591",
+      "description": "Injection - subcutaneous",
+      "fee": 6.0,
+      "category": "Injections"
+    },
+    {
+      "code": "Z100",
+      "description": "Laceration repair - simple, single",
+      "fee": 35.5,
+      "category": "Minor Procedures"
+    },
+    {
+      "code": "E502",
+      "description": "Joint injection",
+      "fee": 15.5,
+      "category": "Minor Procedures"
+    },
+    {
+      "code": "E080",
+      "description": "First visit after hospital discharge premium",
+      "fee": 0,
+      "category": "Premiums",
+      "notes": "Add 30% to eligible services. For rostered patients."
+    },
+    {
+      "code": "Q012",
+      "description": "FHO/FHN outside use premium",
+      "fee": 0,
+      "category": "Premiums",
+      "notes": "Premium for seeing patients outside regular hours."
+    }
+  ],
+  "compatibility_rules": {
+    "cannot_bill_same_day": [
+      [
+        "A911",
+        "A912"
+      ],
+      [
+        "A003",
+        "A004"
+      ],
+      [
+        "K017",
+        "K130",
+        "K131",
+        "K132",
+        "K133"
+      ],
+      [
+        "A888",
+        "K013"
+      ]
+    ],
+    "can_add_to": {
+      "E430": [
+        "A003",
+        "A004",
+        "A005",
+        "A006",
+        "A007"
+      ],
+      "E431": [
+        "A003",
+        "A004",
+        "A005",
+        "A006",
+        "A007"
+      ],
+      "K013": [
+        "A003",
+        "A004",
+        "A005",
+        "A006",
+        "A007",
+        "A001"
+      ],
+      "G310": [
+        "A003",
+        "A004",
+        "A005",
+        "A007"
+      ],
+      "G313": [
+        "A003",
+        "A004",
+        "A005",
+        "A007"
+      ],
+      "E080": [
+        "A001",
+        "A003",
+        "A004",
+        "A007",
+        "A008"
+      ]
+    },
+    "notes": [
+      "FHO rostered patients: Primary care services are capitated, but most A-codes still billable",
+      "General re-assessment (A004) limited to 2 per 12 months per patient",
+      "For special/comprehensive consultations, start and stop times must be in medical record",
+      "K codes for periodic health visits include all elements of a complete physical exam"
+    ]
+  },
+  "context": {
+    "practice_type": "FHO (Family Health Organization)",
+    "physician_type": "General Practitioner / Family Physician",
+    "setting": "Outpatient",
+    "patient_status": "Rostered",
+    "province": "Ontario",
+    "effective_date": "March 3, 2025"
+  }
+}

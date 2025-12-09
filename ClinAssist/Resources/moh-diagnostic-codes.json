@@ -1,0 +1,2310 @@
+[
+  {
+    "code": "002",
+    "description": "Intestinal Infectious Diseases: Typhoid and paratyphoid fevers"
+  },
+  {
+    "code": "003",
+    "description": "Intestinal Infectious Diseases: Other salmonella infections"
+  },
+  {
+    "code": "005",
+    "description": "Intestinal Infectious Diseases: Food poisoning"
+  },
+  {
+    "code": "006",
+    "description": "Intestinal Infectious Diseases: Amoebiasis, amoebic dysentery"
+  },
+  {
+    "code": "009",
+    "description": "Intestinal Infectious Diseases: Diarrhea, gastro-enteritis, viral gastroenteritis"
+  },
+  {
+    "code": "010",
+    "description": "Tuberculosis: Primary tuberculous infection, including recent positive TB skin test conversion"
+  },
+  {
+    "code": "011",
+    "description": "Tuberculosis: Pulmonary tuberculosis"
+  },
+  {
+    "code": "012",
+    "description": "Tuberculosis: Other respiratory tuberculosis, tuberculous pleurisy with or without effusion"
+  },
+  {
+    "code": "015",
+    "description": "Tuberculosis: Tuberculosis of bones and joints"
+  },
+  {
+    "code": "017",
+    "description": "Tuberculosis: Tuberculosis of other organs"
+  },
+  {
+    "code": "023",
+    "description": "Other Bacterial Diseases: Brucellosis"
+  },
+  {
+    "code": "030",
+    "description": "Other Bacterial Diseases: Leprosy (Hansen's Disease)"
+  },
+  {
+    "code": "032",
+    "description": "Other Bacterial Diseases: Diphtheria"
+  },
+  {
+    "code": "033",
+    "description": "Other Bacterial Diseases: Whooping cough, pertussis"
+  },
+  {
+    "code": "034",
+    "description": "Other Bacterial Diseases: Streptococcal sore throat, scarlet fever"
+  },
+  {
+    "code": "035",
+    "description": "Other Bacterial Diseases: Erysipelas"
+  },
+  {
+    "code": "036",
+    "description": "Other Bacterial Diseases: Meningococcal infection or meningitis"
+  },
+  {
+    "code": "037",
+    "description": "Other Bacterial Diseases: Tetanus"
+  },
+  {
+    "code": "038",
+    "description": "Other Bacterial Diseases: Septicemia, blood poisoning"
+  },
+  {
+    "code": "039",
+    "description": "Other Bacterial Diseases: Actinomycotic infections"
+  },
+  {
+    "code": "040",
+    "description": "Other Bacterial Diseases: Other bacterial diseases"
+  },
+  {
+    "code": "042",
+    "description": "Human Immunodeficiency Virus (HIV) Infection: AIDS"
+  },
+  {
+    "code": "043",
+    "description": "Human Immunodeficiency Virus (HIV) Infection: AIDS-related complex (ARC)"
+  },
+  {
+    "code": "044",
+    "description": "Human Immunodeficiency Virus (HIV) Infection: Other human immunodeficiency virus infection"
+  },
+  {
+    "code": "045",
+    "description": "Non-arthropod-borne Viral Diseases of Central Nervous System: Acute poliomyelitis"
+  },
+  {
+    "code": "047",
+    "description": "Non-arthropod-borne Viral Diseases of Central Nervous System: Meningitis due to enterovirus"
+  },
+  {
+    "code": "049",
+    "description": "Non-arthropod-borne Viral Diseases of Central Nervous System: Other non-arthropod-borne viral diseases of central nervous system"
+  },
+  {
+    "code": "052",
+    "description": "Viral Diseases Accompanied by Rash: Chickenpox"
+  },
+  {
+    "code": "053",
+    "description": "Viral Diseases Accompanied by Rash: Herpes zoster, shingles"
+  },
+  {
+    "code": "054",
+    "description": "Viral Diseases Accompanied by Rash: Herpes simplex, cold sore"
+  },
+  {
+    "code": "055",
+    "description": "Viral Diseases Accompanied by Rash: Measles"
+  },
+  {
+    "code": "056",
+    "description": "Viral Diseases Accompanied by Rash: German measles, rubella"
+  },
+  {
+    "code": "057",
+    "description": "Viral Diseases Accompanied by Rash: Other viral disorders accompanied by rash (e.g., roseola)"
+  },
+  {
+    "code": "062",
+    "description": "Other Viral Diseases: Mosquito-borne viral encephalitis"
+  },
+  {
+    "code": "066",
+    "description": "Other Viral Diseases: Other arthropod-borne viral diseases"
+  },
+  {
+    "code": "070",
+    "description": "Other Viral Diseases: Viral hepatitis"
+  },
+  {
+    "code": "072",
+    "description": "Other Viral Diseases: Mumps"
+  },
+  {
+    "code": "074",
+    "description": "Other Viral Diseases: Diseases due to Coxsackie virus: pleurodynia, myocarditis"
+  },
+  {
+    "code": "075",
+    "description": "Other Viral Diseases: Infectious mononucleosis, glandular fever"
+  },
+  {
+    "code": "078",
+    "description": "Other Viral Diseases: Warts"
+  },
+  {
+    "code": "080",
+    "description": "Coronavirus"
+  },
+  {
+    "code": "079",
+    "description": "Other Viral Diseases: Other viral diseases"
+  },
+  {
+    "code": "097",
+    "description": "Venereal Diseases: Syphilis-all sites and stages"
+  },
+  {
+    "code": "098",
+    "description": "Venereal Diseases: Gonococcal infections"
+  },
+  {
+    "code": "099",
+    "description": "Venereal Diseases: Other venereal diseases (e.g., herpes genitalis)"
+  },
+  {
+    "code": "110",
+    "description": "Mycoses: Ringworm of scalp, beard, or foot"
+  },
+  {
+    "code": "112",
+    "description": "Mycoses: Candidiasis, monilia infection-all sites, thrush"
+  },
+  {
+    "code": "115",
+    "description": "Mycoses: Histoplasmosis"
+  },
+  {
+    "code": "117",
+    "description": "Mycoses: Other mycoses"
+  },
+  {
+    "code": "122",
+    "description": "Helminthiases: Echinococcosis, hydadid cyst-all sites"
+  },
+  {
+    "code": "123",
+    "description": "Helminthiases: Taenia or tapeworm infestation-all types"
+  },
+  {
+    "code": "127",
+    "description": "Helminthiases: Pinworm infestation"
+  },
+  {
+    "code": "128",
+    "description": "Helminthiases: Other helminthiases"
+  },
+  {
+    "code": "130",
+    "description": "Other Infectious and Parasitic Diseases: Toxoplasmosis"
+  },
+  {
+    "code": "131",
+    "description": "Other Infectious and Parasitic Diseases: Trichomonas infection"
+  },
+  {
+    "code": "132",
+    "description": "Other Infectious and Parasitic Diseases: Head or body lice, pediculosis"
+  },
+  {
+    "code": "133",
+    "description": "Other Infectious and Parasitic Diseases: Scabies, acariasis"
+  },
+  {
+    "code": "135",
+    "description": "Other Infectious and Parasitic Diseases: Sarcoidosis"
+  },
+  {
+    "code": "136",
+    "description": "Other Infectious and Parasitic Diseases: Other infectious or parasitic diseases"
+  },
+  {
+    "code": "140",
+    "description": "Malignant Neoplasms: Lip"
+  },
+  {
+    "code": "141",
+    "description": "Malignant Neoplasms: Tongue"
+  },
+  {
+    "code": "142",
+    "description": "Malignant Neoplasms: Major salivary glands"
+  },
+  {
+    "code": "143",
+    "description": "Malignant Neoplasms: Gum"
+  },
+  {
+    "code": "144",
+    "description": "Malignant Neoplasms: Floor of mouth"
+  },
+  {
+    "code": "145",
+    "description": "Malignant Neoplasms: Other and unspecified parts of mouth"
+  },
+  {
+    "code": "146",
+    "description": "Malignant Neoplasms: Oropharynx"
+  },
+  {
+    "code": "147",
+    "description": "Malignant Neoplasms: Nasopharynx"
+  },
+  {
+    "code": "148",
+    "description": "Malignant Neoplasms: Hypopharynx"
+  },
+  {
+    "code": "149",
+    "description": "Malignant Neoplasms: Other and ill-defined sites within the lip, oral cavity, and pharynx"
+  },
+  {
+    "code": "150",
+    "description": "Malignant Neoplasms: Esophagus"
+  },
+  {
+    "code": "151",
+    "description": "Malignant Neoplasms: Stomach"
+  },
+  {
+    "code": "152",
+    "description": "Malignant Neoplasms: Small intestine, including duodenum"
+  },
+  {
+    "code": "153",
+    "description": "Malignant Neoplasms: Large intestine-excluding rectum"
+  },
+  {
+    "code": "154",
+    "description": "Malignant Neoplasms: Rectum, rectosigmoid and anus"
+  },
+  {
+    "code": "155",
+    "description": "Malignant Neoplasms: Primary malignancy of liver (not secondary spread or metastatic disease)"
+  },
+  {
+    "code": "156",
+    "description": "Malignant Neoplasms: Gallbladder and extra hepatic bile ducts"
+  },
+  {
+    "code": "157",
+    "description": "Malignant Neoplasms: Pancreas"
+  },
+  {
+    "code": "158",
+    "description": "Malignant Neoplasms: Retroperitoneum and peritoneum"
+  },
+  {
+    "code": "159",
+    "description": "Malignant Neoplasms: Other and ill-defined sites within the digestive organs and peritoneum"
+  },
+  {
+    "code": "160",
+    "description": "Malignant Neoplasms: Nasal cavities, middle ear, and accessory sinuses"
+  },
+  {
+    "code": "161",
+    "description": "Malignant Neoplasms: Larynx, trachea"
+  },
+  {
+    "code": "162",
+    "description": "Malignant Neoplasms: Bronchus, lung"
+  },
+  {
+    "code": "163",
+    "description": "Malignant Neoplasms: Pleura"
+  },
+  {
+    "code": "164",
+    "description": "Malignant Neoplasms: Thymus, heart, and mediastinum"
+  },
+  {
+    "code": "165",
+    "description": "Malignant Neoplasms: Other sites within the respiratory system and intrathoracic organs"
+  },
+  {
+    "code": "170",
+    "description": "Malignant Neoplasms: Bone"
+  },
+  {
+    "code": "171",
+    "description": "Malignant Neoplasms: Connective and other soft tissue"
+  },
+  {
+    "code": "172",
+    "description": "Malignant Neoplasms: Melanoma of skin"
+  },
+  {
+    "code": "173",
+    "description": "Malignant Neoplasms: Other skin malignancies"
+  },
+  {
+    "code": "174",
+    "description": "Malignant Neoplasms: Female breast"
+  },
+  {
+    "code": "175",
+    "description": "Malignant Neoplasms: Male breast"
+  },
+  {
+    "code": "179",
+    "description": "Malignant Neoplasms: Uterus, part unspecified"
+  },
+  {
+    "code": "180",
+    "description": "Malignant Neoplasms: Cervix"
+  },
+  {
+    "code": "181",
+    "description": "Malignant Neoplasms: Placenta"
+  },
+  {
+    "code": "182",
+    "description": "Malignant Neoplasms: Body of uterus"
+  },
+  {
+    "code": "183",
+    "description": "Malignant Neoplasms: Ovary, fallopian tube, broad ligament"
+  },
+  {
+    "code": "184",
+    "description": "Malignant Neoplasms: Vagina, vulva, other female genital organs"
+  },
+  {
+    "code": "185",
+    "description": "Malignant Neoplasms: Prostate"
+  },
+  {
+    "code": "186",
+    "description": "Malignant Neoplasms: Testis"
+  },
+  {
+    "code": "187",
+    "description": "Malignant Neoplasms: Other male genital organs"
+  },
+  {
+    "code": "188",
+    "description": "Malignant Neoplasms: Bladder"
+  },
+  {
+    "code": "189",
+    "description": "Malignant Neoplasms: Kidney, other urinary organs"
+  },
+  {
+    "code": "190",
+    "description": "Malignant Neoplasms: Eye"
+  },
+  {
+    "code": "191",
+    "description": "Malignant Neoplasms: Brain"
+  },
+  {
+    "code": "192",
+    "description": "Malignant Neoplasms: Cranial nerves, spinal cord, other parts of nervous system"
+  },
+  {
+    "code": "193",
+    "description": "Malignant Neoplasms: Thyroid"
+  },
+  {
+    "code": "194",
+    "description": "Malignant Neoplasms: Other endocrine glands and related structures"
+  },
+  {
+    "code": "195",
+    "description": "Malignant Neoplasms: Other ill-defined sites"
+  },
+  {
+    "code": "196",
+    "description": "Malignant Neoplasms: Secondary neoplasm of lymph nodes"
+  },
+  {
+    "code": "197",
+    "description": "Malignant Neoplasms: Secondary neoplasm of respiratory and digestive systems"
+  },
+  {
+    "code": "198",
+    "description": "Malignant Neoplasms: Metastatic or secondary malignant neoplasm, carcinomatosis"
+  },
+  {
+    "code": "199",
+    "description": "Malignant Neoplasms: Other malignant neoplasms"
+  },
+  {
+    "code": "200",
+    "description": "Malignant Neoplasms: Lymphosarcoma, reticulosarcoma"
+  },
+  {
+    "code": "201",
+    "description": "Malignant Neoplasms: Hodgkin's disease"
+  },
+  {
+    "code": "202",
+    "description": "Malignant Neoplasms: Other malignant neoplasms of lymphoid and histiocytic tissue"
+  },
+  {
+    "code": "203",
+    "description": "Malignant Neoplasms: Multiple myeloma, plasma cell leukemia"
+  },
+  {
+    "code": "204",
+    "description": "Malignant Neoplasms: Lymphoid leukemia (including lymphatic and histiocytic leukemia)"
+  },
+  {
+    "code": "205",
+    "description": "Malignant Neoplasms: Myeloid leukemia (including granulocytic and myelogenous leukemia)"
+  },
+  {
+    "code": "206",
+    "description": "Malignant Neoplasms: Monocytic leukemia"
+  },
+  {
+    "code": "207",
+    "description": "Malignant Neoplasms: Other specified leukemia"
+  },
+  {
+    "code": "208",
+    "description": "Malignant Neoplasms: Other types of leukemia"
+  },
+  {
+    "code": "210",
+    "description": "Benign Neoplasms: Lip, oral cavity, pharynx"
+  },
+  {
+    "code": "211",
+    "description": "Benign Neoplasms: Other parts of digestive system, peritoneum"
+  },
+  {
+    "code": "212",
+    "description": "Benign Neoplasms: Respiratory and intra-thoracic organs"
+  },
+  {
+    "code": "213",
+    "description": "Benign Neoplasms: Bone, cartilage"
+  },
+  {
+    "code": "214",
+    "description": "Benign Neoplasms: Lipoma"
+  },
+  {
+    "code": "215",
+    "description": "Benign Neoplasms: Connective and other soft tissue"
+  },
+  {
+    "code": "216",
+    "description": "Benign Neoplasms: Skin (e.g., pigmented naevus, dermatofibroma)"
+  },
+  {
+    "code": "217",
+    "description": "Benign Neoplasms: Breast"
+  },
+  {
+    "code": "218",
+    "description": "Benign Neoplasms: Uterine fibroid, leiomyoma"
+  },
+  {
+    "code": "219",
+    "description": "Benign Neoplasms: Other benign neoplasms of uterus (e.g., cervical polyp)"
+  },
+  {
+    "code": "220",
+    "description": "Benign Neoplasms: Ovary (e.g., ovarian cyst)"
+  },
+  {
+    "code": "221",
+    "description": "Benign Neoplasms: Other benign neoplasms of female genital organs"
+  },
+  {
+    "code": "222",
+    "description": "Benign Neoplasms: Benign neoplasms of male genital organs"
+  },
+  {
+    "code": "223",
+    "description": "Benign Neoplasms: Kidney, ureter, bladder"
+  },
+  {
+    "code": "224",
+    "description": "Benign Neoplasms: Eye"
+  },
+  {
+    "code": "225",
+    "description": "Benign Neoplasms: Brain, spinal cord, peripheral nerves"
+  },
+  {
+    "code": "226",
+    "description": "Benign Neoplasms: Thyroid (e.g., adenoma or cystadenoma)"
+  },
+  {
+    "code": "227",
+    "description": "Benign Neoplasms: Other endocrine glands and related structures"
+  },
+  {
+    "code": "228",
+    "description": "Benign Neoplasms: Haemangioma and lymphangiomax"
+  },
+  {
+    "code": "229",
+    "description": "Benign Neoplasms: Other benign neoplasms"
+  },
+  {
+    "code": "230",
+    "description": "Carcinoma in Situ: Digestive organs"
+  },
+  {
+    "code": "231",
+    "description": "Carcinoma in Situ: Respiratory system"
+  },
+  {
+    "code": "232",
+    "description": "Carcinoma in Situ: Skin"
+  },
+  {
+    "code": "233",
+    "description": "Carcinoma in Situ: Breast and genito-urinary system"
+  },
+  {
+    "code": "234",
+    "description": "Carcinoma in Situ: Other"
+  },
+  {
+    "code": "235",
+    "description": "Neoplasms of Uncertain Behavior: Digestive and respiratory systems"
+  },
+  {
+    "code": "236",
+    "description": "Neoplasms of Uncertain Behavior: Genitourinary organs"
+  },
+  {
+    "code": "237",
+    "description": "Neoplasms of Uncertain Behavior: Endocrine glands and nervous system"
+  },
+  {
+    "code": "238",
+    "description": "Neoplasms of Uncertain Behavior: Other and unspecified sites and tissues"
+  },
+  {
+    "code": "239",
+    "description": "Neoplasms of Uncertain Behavior: Unspecified neoplasms (e.g., polycythemia vera)"
+  },
+  {
+    "code": "240",
+    "description": "Endocrine Glands: Simple thyroid goitre"
+  },
+  {
+    "code": "241",
+    "description": "Endocrine Glands: Nontoxic nodular goitre"
+  },
+  {
+    "code": "242",
+    "description": "Endocrine Glands: Hyperthyroidism, thyrotoxicosis, exophthalmic goitre"
+  },
+  {
+    "code": "243",
+    "description": "Endocrine Glands: Hypothyroidism - congenital (i.e., cretinism)"
+  },
+  {
+    "code": "244",
+    "description": "Endocrine Glands: Hypothyroidism - acquired (i.e., myxedema)"
+  },
+  {
+    "code": "245",
+    "description": "Endocrine Glands: Thyroiditis"
+  },
+  {
+    "code": "248",
+    "description": "Diabetes : mellitus with ocular complications"
+  },
+  {
+    "code": "249",
+    "description": "Diabetes : Pre-diabetes"
+  },
+  {
+    "code": "250",
+    "description": "Diabetes : Diabetes mellitus, including complications"
+  },
+  {
+    "code": "251",
+    "description": "Diabetes : Other disorders of pancreatic internal secretions (e.g., insulinoma neo-natal hypoglycemia, Zollinger -Ellison syndrome)"
+  },
+  {
+    "code": "252",
+    "description": "Diabetes : Parathyroid gland disorders (e.g., hyperparathyroidism, hypoparathyroidism)"
+  },
+  {
+    "code": "253",
+    "description": "Diabetes : Pituitary gland disorders (e.g., acromegaly, dwarfism, diabetes insipidus)"
+  },
+  {
+    "code": "255",
+    "description": "Diabetes : Adrenal gland disorders (e.g., Cushing's syndrome, hyperaldosteronism, Conn's syndrome, adrenogenital syndrome, Addison's disease)"
+  },
+  {
+    "code": "256",
+    "description": "Diabetes : Ovarian dysfunction (e.g., ovarian failure, polycystic ovaries, Stein-Leventhal syndrome)"
+  },
+  {
+    "code": "257",
+    "description": "Diabetes : Testicular dysfunction"
+  },
+  {
+    "code": "259",
+    "description": "Diabetes : Other endocrine disorders"
+  },
+  {
+    "code": "263",
+    "description": "Nutritional and Metabolic Disorders: Unspecified malnutrition"
+  },
+  {
+    "code": "269",
+    "description": "Nutritional and Metabolic Disorders: Vitamin and other nutritional deficiencies"
+  },
+  {
+    "code": "270",
+    "description": "Nutritional and Metabolic Disorders: Disorders of amino-acid metabolism (e.g., cystinuria, Fanconi syndrome)"
+  },
+  {
+    "code": "272",
+    "description": "Nutritional and Metabolic Disorders: Disorders of lipoid metabolism (e.g., hypercholesterolemia, lipoprotein disorders)"
+  },
+  {
+    "code": "274",
+    "description": "Nutritional and Metabolic Disorders: Gout"
+  },
+  {
+    "code": "277",
+    "description": "Nutritional and Metabolic Disorders: Other metabolic disorders"
+  },
+  {
+    "code": "278",
+    "description": "Nutritional and Metabolic Disorders: Obesity"
+  },
+  {
+    "code": "279",
+    "description": "Immunity Disorders: Hypogammaglobulinemia, agammaglobulinemia, other immunity disorders"
+  },
+  {
+    "code": "280",
+    "description": "Iron deficiency anaemia"
+  },
+  {
+    "code": "281",
+    "description": "Pernicious anaemia"
+  },
+  {
+    "code": "282",
+    "description": "Hereditary hemolytic anaemia (e.g., thalassemia, sickle-cell anaemia)"
+  },
+  {
+    "code": "283",
+    "description": "Acquired hemolytic anaemia, excluding hemolytic disease of newborn"
+  },
+  {
+    "code": "284",
+    "description": "Aplastic anaemia"
+  },
+  {
+    "code": "285",
+    "description": "Other anaemias"
+  },
+  {
+    "code": "286",
+    "description": "Coagulation defects (e.g., hemophilia, other factor deficiencies)"
+  },
+  {
+    "code": "287",
+    "description": "Purpura, thrombocytopenia, other hemorrhagic conditions"
+  },
+  {
+    "code": "288",
+    "description": "Neutropenia, acranulocytosis, eosinophilia"
+  },
+  {
+    "code": "289",
+    "description": "Other diseases of blood, marrow, spleen"
+  },
+  {
+    "code": "290",
+    "description": "Psychoses: Senile dementia, presenile dementia"
+  },
+  {
+    "code": "291",
+    "description": "Psychoses: Alcoholic psychosis, delirium tremens, Korsakov's psychosis"
+  },
+  {
+    "code": "292",
+    "description": "Psychoses: Drug psychosis"
+  },
+  {
+    "code": "295",
+    "description": "Psychoses: Schizophrenia"
+  },
+  {
+    "code": "296",
+    "description": "Psychoses: Manic depressive psychosis, involutional melancholia"
+  },
+  {
+    "code": "297",
+    "description": "Psychoses: Paranoid states"
+  },
+  {
+    "code": "298",
+    "description": "Psychoses: Other psychoses"
+  },
+  {
+    "code": "299",
+    "description": "Psychoses: Childhood psychoses (e.g., autism)"
+  },
+  {
+    "code": "300",
+    "description": "Neuroses and Personality Disorders: Anxiety neurosis, hysteria, neurasthenia, obsessive compulsive neurosis, reactive depression"
+  },
+  {
+    "code": "301",
+    "description": "Neuroses and Personality Disorders: Personality disorders (e.g., paranoid personality, schizoid personality, obsessive compulsive personality)"
+  },
+  {
+    "code": "302",
+    "description": "Neuroses and Personality Disorders: Sexual deviations"
+  },
+  {
+    "code": "303",
+    "description": "Neuroses and Personality Disorders: Alcoholism"
+  },
+  {
+    "code": "304",
+    "description": "Neuroses and Personality Disorders: Drug dependence, drug addiction"
+  },
+  {
+    "code": "305",
+    "description": "Neuroses and Personality Disorders: Tobacco abuse"
+  },
+  {
+    "code": "306",
+    "description": "Neuroses and Personality Disorders: Psychosomatic disturbances"
+  },
+  {
+    "code": "307",
+    "description": "Neuroses and Personality Disorders: Habit spasms, tics, stuttering, tension headaches, anorexia nervosa, sleep disorders, enuresis"
+  },
+  {
+    "code": "309",
+    "description": "Neuroses and Personality Disorders: Adjustment reaction"
+  },
+  {
+    "code": "311",
+    "description": "Neuroses and Personality Disorders: Depressive or other nonpsychotic disorders, not elsewhere classified"
+  },
+  {
+    "code": "313",
+    "description": "Neuroses and Personality Disorders: Behaviour disorders of childhood and adolescence"
+  },
+  {
+    "code": "314",
+    "description": "Neuroses and Personality Disorders: Hyperkinetic syndrome of childhood"
+  },
+  {
+    "code": "315",
+    "description": "Neuroses and Personality Disorders: Specified delays in development (e.g., dyslexia, dyslalia, motor retardation)"
+  },
+  {
+    "code": "319",
+    "description": "Neuroses and Personality Disorders: Mental retardation"
+  },
+  {
+    "code": "320",
+    "description": "Central Nervous System: Bacterial meningitis"
+  },
+  {
+    "code": "321",
+    "description": "Central Nervous System: Meningitis due to other organisms"
+  },
+  {
+    "code": "323",
+    "description": "Central Nervous System: Encephalitis, encephalomyelitis"
+  },
+  {
+    "code": "330",
+    "description": "Central Nervous System: Tay-Sachs disease"
+  },
+  {
+    "code": "331",
+    "description": "Central Nervous System: Other cerebral degenerations"
+  },
+  {
+    "code": "332",
+    "description": "Central Nervous System: Parkinson's disease"
+  },
+  {
+    "code": "335",
+    "description": "Central Nervous System: Anterior Horn Cell Disease"
+  },
+  {
+    "code": "340",
+    "description": "Central Nervous System: Multiple sclerosis"
+  },
+  {
+    "code": "343",
+    "description": "Central Nervous System: Cerebral palsy"
+  },
+  {
+    "code": "345",
+    "description": "Central Nervous System: Epilepsy"
+  },
+  {
+    "code": "346",
+    "description": "Central Nervous System: Migraine"
+  },
+  {
+    "code": "349",
+    "description": "Central Nervous System: Other diseases of central nervous system (e.g., brain abscess, narcolepsy, motor neuron disease, syringomyelia)"
+  },
+  {
+    "code": "350",
+    "description": "Peripheral Nervous System: Trigeminal neuralgia, tic douloureux"
+  },
+  {
+    "code": "351",
+    "description": "Peripheral Nervous System: Bell's palsy, facial nerve disorders"
+  },
+  {
+    "code": "352",
+    "description": "Peripheral Nervous System: Disorders of other cranial nerves"
+  },
+  {
+    "code": "356",
+    "description": "Peripheral Nervous System: Idiopathic peripheral neuritis"
+  },
+  {
+    "code": "358",
+    "description": "Peripheral Nervous System: Myoneural disorders (e.g., myasthenia gravis)"
+  },
+  {
+    "code": "359",
+    "description": "Peripheral Nervous System: Muscular dystrophies"
+  },
+  {
+    "code": "360",
+    "description": "Eye: Aphakia"
+  },
+  {
+    "code": "361",
+    "description": "Eye: Retinal detachment"
+  },
+  {
+    "code": "362",
+    "description": "Eye: Hypertensive retinopathy and other retinal diseases not specifically listed"
+  },
+  {
+    "code": "363",
+    "description": "Eye: Chorioretinitis"
+  },
+  {
+    "code": "364",
+    "description": "Eye: Iritis"
+  },
+  {
+    "code": "365",
+    "description": "Eye: Glaucoma"
+  },
+  {
+    "code": "366",
+    "description": "Eye: Cataract, excludes diabetic or congenital"
+  },
+  {
+    "code": "367",
+    "description": "Eye: Myopia, astigmatism (except for the specific conditions defined by diagnostic code 371), presbyopia and other disorders of refraction and accommodation"
+  },
+  {
+    "code": "368",
+    "description": "Eye: Amblyopia, visual field defects"
+  },
+  {
+    "code": "369",
+    "description": "Eye: Blindness and low vision"
+  },
+  {
+    "code": "370",
+    "description": "Eye: Keratitis, corneal ulcer"
+  },
+  {
+    "code": "371",
+    "description": "Eye: High Myopia greater than 9 diopters; Irregular Astigmatism resulting from corneal grafting or corneal scarring from diseases"
+  },
+  {
+    "code": "372",
+    "description": "Eye: Conjunctiva disorders (e.g., conjunctivitis, pterygium)"
+  },
+  {
+    "code": "373",
+    "description": "Eye: Blepharitis, chalazion, stye"
+  },
+  {
+    "code": "374",
+    "description": "Eye: Other eyelid disorders (e.g., entropion, ectropion, ptosis)"
+  },
+  {
+    "code": "375",
+    "description": "Eye: Dacryocystitis, obstruction of lacrimal duct"
+  },
+  {
+    "code": "376",
+    "description": "Eye: Keratoconus"
+  },
+  {
+    "code": "377",
+    "description": "Eye: Optic neuritis"
+  },
+  {
+    "code": "378",
+    "description": "Eye: Strabismus"
+  },
+  {
+    "code": "379",
+    "description": "Eye: Other disorders of the eye"
+  },
+  {
+    "code": "972",
+    "description": "Eye: Recurrent Uveitis"
+  },
+  {
+    "code": "976",
+    "description": "Eye: Poisoning by eye anti-infectives and other eye drugs"
+  },
+  {
+    "code": "380",
+    "description": "Ear and Mastoid: Otitis externa"
+  },
+  {
+    "code": "381",
+    "description": "Ear and Mastoid: Serous otitis media, eustachian tube disorders"
+  },
+  {
+    "code": "382",
+    "description": "Ear and Mastoid: Suppurative otitis media"
+  },
+  {
+    "code": "383",
+    "description": "Ear and Mastoid: Mastoiditis"
+  },
+  {
+    "code": "384",
+    "description": "Ear and Mastoid: Perforation of tympanic membrane"
+  },
+  {
+    "code": "386",
+    "description": "Ear and Mastoid: Meniere's disease, labyrinthitis"
+  },
+  {
+    "code": "387",
+    "description": "Ear and Mastoid: Otosclerosis"
+  },
+  {
+    "code": "388",
+    "description": "Ear and Mastoid: Wax or cerumen in ear, other disorders of ear and mastoid, tinnitus"
+  },
+  {
+    "code": "389",
+    "description": "Ear and Mastoid: Deafness"
+  },
+  {
+    "code": "780",
+    "description": "Signs and Symptoms Not Yet Diagnosed: Convulsions, ataxia, vertigo, headache, except tension headache and migraine"
+  },
+  {
+    "code": "390",
+    "description": "Rheumatic Fever and Rheumatic Heart Disease: Rheumatic fever without endocarditis, myocarditis or pericarditis"
+  },
+  {
+    "code": "391",
+    "description": "Rheumatic Fever and Rheumatic Heart Disease: Rheumatic fever with endocarditis, myocarditis, or pericarditis"
+  },
+  {
+    "code": "392",
+    "description": "Rheumatic Fever and Rheumatic Heart Disease: Chorea"
+  },
+  {
+    "code": "394",
+    "description": "Rheumatic Fever and Rheumatic Heart Disease: Mitral stenosis, mitral insufficiency"
+  },
+  {
+    "code": "398",
+    "description": "Rheumatic Fever and Rheumatic Heart Disease: Other rheumatic heart disease"
+  },
+  {
+    "code": "401",
+    "description": "Hypertensive Disease: Essential, benign hypertension"
+  },
+  {
+    "code": "402",
+    "description": "Hypertensive Disease: Hypertensive heart disease"
+  },
+  {
+    "code": "403",
+    "description": "Hypertensive Disease: Hypertensive renal disease"
+  },
+  {
+    "code": "410",
+    "description": "Ischaemic and Other Forms of Heart Disease: Acute myocardial infarction"
+  },
+  {
+    "code": "412",
+    "description": "Ischaemic and Other Forms of Heart Disease: Old myocardial infarction, chronic coronary artery disease of arteriosclerotic heart disease, without symptoms"
+  },
+  {
+    "code": "413",
+    "description": "Ischaemic and Other Forms of Heart Disease: Acute coronary insufficiency, angina pectoris, acute ischaemic heart disease"
+  },
+  {
+    "code": "415",
+    "description": "Ischaemic and Other Forms of Heart Disease: Pulmonary embolism, pulmonary infarction"
+  },
+  {
+    "code": "426",
+    "description": "Ischaemic and Other Forms of Heart Disease: Heart blocks, other conduction disorders"
+  },
+  {
+    "code": "427",
+    "description": "Ischaemic and Other Forms of Heart Disease: Paroxysmal tachycardia, atrial or ventricular flutter or fibrillation, cardiac arrest, other arrythmias"
+  },
+  {
+    "code": "428",
+    "description": "Ischaemic and Other Forms of Heart Disease: Congestive heart failure"
+  },
+  {
+    "code": "429",
+    "description": "Ischaemic and Other Forms of Heart Disease: All other forms of heart disease"
+  },
+  {
+    "code": "432",
+    "description": "Cerebrovascular Disease: Intracranial Haemorrhage"
+  },
+  {
+    "code": "435",
+    "description": "Cerebrovascular Disease: Transient cerebral ischaemia"
+  },
+  {
+    "code": "436",
+    "description": "Cerebrovascular Disease: Acute cerebrovascular accident, C.V.A., stroke"
+  },
+  {
+    "code": "437",
+    "description": "Cerebrovascular Disease: Chronic arteriosclerotic cerebrovascular disease, hypertensive encephalopathy"
+  },
+  {
+    "code": "440",
+    "description": "Diseases of Arteries: Generalized arteriosclerosis, atherosclerosis"
+  },
+  {
+    "code": "441",
+    "description": "Diseases of Arteries: Aortic aneurysm (non-syphilitic)"
+  },
+  {
+    "code": "443",
+    "description": "Diseases of Arteries: Raynaud's disease, Buerger's disease, peripheral vascular disease, intermittent claudication"
+  },
+  {
+    "code": "446",
+    "description": "Diseases of Arteries: Polyarteritis nodosa, temporal arteritis"
+  },
+  {
+    "code": "447",
+    "description": "Diseases of Arteries: Other disorders of arteries"
+  },
+  {
+    "code": "451",
+    "description": "Diseases of Veins and Lyphatics: Phlebitis, thrombophlebitis"
+  },
+  {
+    "code": "452",
+    "description": "Diseases of Veins and Lyphatics: Portal vein thrombosis"
+  },
+  {
+    "code": "454",
+    "description": "Diseases of Veins and Lyphatics: Varicose veins of lower extremities with or without ulcer"
+  },
+  {
+    "code": "455",
+    "description": "Diseases of Veins and Lyphatics: Haemorrhoids"
+  },
+  {
+    "code": "457",
+    "description": "Diseases of Veins and Lyphatics: Lymphangitis, lymphedema"
+  },
+  {
+    "code": "459",
+    "description": "Diseases of Veins and Lyphatics: Other disorders of circulatory system"
+  },
+  {
+    "code": "785",
+    "description": "Signs and Symptoms Not Yet Diagnosed: Chest pain, tachycardia, syncope, shock, edema, masses"
+  },
+  {
+    "code": "460",
+    "description": "Acute nasopharyngitis, common cold"
+  },
+  {
+    "code": "461",
+    "description": "Acute sinusitis"
+  },
+  {
+    "code": "463",
+    "description": "Acute tonsillitis"
+  },
+  {
+    "code": "464",
+    "description": "Acute laryngitis, tracheitis, croup, epiglottis"
+  },
+  {
+    "code": "466",
+    "description": "Acute bronchitis"
+  },
+  {
+    "code": "470",
+    "description": "Deviated nasal septum"
+  },
+  {
+    "code": "471",
+    "description": "Nasal polyp"
+  },
+  {
+    "code": "473",
+    "description": "Chronic sinusitis"
+  },
+  {
+    "code": "474",
+    "description": "Hypertrophy or chronic infection of tonsils and/or adenoids"
+  },
+  {
+    "code": "477",
+    "description": "Allergic rhinitis, hay fever"
+  },
+  {
+    "code": "486",
+    "description": "Pneumonia - all types"
+  },
+  {
+    "code": "487",
+    "description": "Influenza"
+  },
+  {
+    "code": "491",
+    "description": "Chronic bronchitis"
+  },
+  {
+    "code": "492",
+    "description": "Emphysema"
+  },
+  {
+    "code": "493",
+    "description": "Asthma, allergic bronchitis"
+  },
+  {
+    "code": "494",
+    "description": "Bronchiectasis"
+  },
+  {
+    "code": "496",
+    "description": "Other chronic obstructive pulmonary disease"
+  },
+  {
+    "code": "501",
+    "description": "Asbestosis"
+  },
+  {
+    "code": "502",
+    "description": "Silicosis"
+  },
+  {
+    "code": "511",
+    "description": "Pleurisy with or without effusion"
+  },
+  {
+    "code": "512",
+    "description": "Spontaneous pneumothorax, tension pneumothorax"
+  },
+  {
+    "code": "515",
+    "description": "Pulmonary fibrosis"
+  },
+  {
+    "code": "518",
+    "description": "Atelectasis, other diseases of lung"
+  },
+  {
+    "code": "519",
+    "description": "Other diseases of respiratory system"
+  },
+  {
+    "code": "786",
+    "description": "Signs and Symptoms Not Yet Diagnosed: Epistaxis, hemoptysis, cough, dyspnea, masses, shortness of breath, hyperventilation, sleep apnea"
+  },
+  {
+    "code": "521",
+    "description": "Diseases of Oral Cavity, Salivary Glands and Jaws: Dental caries, other diseases of hard tissues of teeth (system inserted for dentists' claims)"
+  },
+  {
+    "code": "523",
+    "description": "Diseases of Oral Cavity, Salivary Glands and Jaws: Gingivitis, periodontal disease"
+  },
+  {
+    "code": "524",
+    "description": "Diseases of Oral Cavity, Salivary Glands and Jaws: Prognathism, micrognathism, macrognathism, retrognathism, malocclusion, temporomandibular joint disorders"
+  },
+  {
+    "code": "525",
+    "description": "Diseases of Oral Cavity, Salivary Glands and Jaws: Other conditions of teeth and supporting structure"
+  },
+  {
+    "code": "527",
+    "description": "Diseases of Oral Cavity, Salivary Glands and Jaws: Disease of salivary glands"
+  },
+  {
+    "code": "528",
+    "description": "Diseases of Oral Cavity, Salivary Glands and Jaws: Stomatitis, aphthous ulcers, canker sore, diseases of lips"
+  },
+  {
+    "code": "529",
+    "description": "Diseases of Oral Cavity, Salivary Glands and Jaws: Glossitis, other conditions of the tongue"
+  },
+  {
+    "code": "530",
+    "description": "Diseases of Esophagus, Stomach and Duodenum: Esophagitis, cardiospasm, ulcer of esophagus; stricture, stenosis, or obstruction of esophagus"
+  },
+  {
+    "code": "531",
+    "description": "Diseases of Esophagus, Stomach and Duodenum: Gastric ulcer, with or without haemorrage or perforation"
+  },
+  {
+    "code": "532",
+    "description": "Diseases of Esophagus, Stomach and Duodenum: Duodenal ulcer, with or without haemorrhage or perforation"
+  },
+  {
+    "code": "534",
+    "description": "Diseases of Esophagus, Stomach and Duodenum: Stomal ulcer, gastrojejunal ulcer"
+  },
+  {
+    "code": "535",
+    "description": "Diseases of Esophagus, Stomach and Duodenum: Gastritis"
+  },
+  {
+    "code": "536",
+    "description": "Diseases of Esophagus, Stomach and Duodenum: Hyperchlorhydria, hypochlorhydria, dyspepsia, indigestion"
+  },
+  {
+    "code": "537",
+    "description": "Diseases of Esophagus, Stomach and Duodenum: Other disorders of stomach and duodenum"
+  },
+  {
+    "code": "545",
+    "description": "Diseases of Esophagus, Stomach and Duodenum: Colon Positive Fecal Occult Blood"
+  },
+  {
+    "code": "546",
+    "description": "Diseases of Esophagus, Stomach and Duodenum: Colon Surveillance"
+  },
+  {
+    "code": "547",
+    "description": "Diseases of Esophagus, Stomach and Duodenum: Colon Family history of colon cancer"
+  },
+  {
+    "code": "548",
+    "description": "Diseases of Esophagus, Stomach and Duodenum: Colon Screening"
+  },
+  {
+    "code": "550",
+    "description": "Hernia: Inguinal hernia, with or without obstruction"
+  },
+  {
+    "code": "552",
+    "description": "Hernia: Femoral, umbilical, ventral, diaphragmatic or hiatus hernia with obstruction"
+  },
+  {
+    "code": "553",
+    "description": "Hernia: Femoral, umbilical, ventral, diaphragmatic or hiatus hernia without obstruction"
+  },
+  {
+    "code": "540",
+    "description": "Other Diseases of Intestine and Peritoneum: Acute appendicitis, with or without abscess or peritonitis"
+  },
+  {
+    "code": "555",
+    "description": "Other Diseases of Intestine and Peritoneum: Regional enteritis, Crohn's disease"
+  },
+  {
+    "code": "556",
+    "description": "Other Diseases of Intestine and Peritoneum: Ulcerative colitis"
+  },
+  {
+    "code": "557",
+    "description": "Other Diseases of Intestine and Peritoneum: Mesenteric artery occlusion, other vascular conditions of intestine"
+  },
+  {
+    "code": "560",
+    "description": "Other Diseases of Intestine and Peritoneum: Intestinal obstruction, intussusception, paralytic ileus, volvulus, impaction of intestine"
+  },
+  {
+    "code": "562",
+    "description": "Other Diseases of Intestine and Peritoneum: Diverticulitis or diverticulosis of large or small intestine"
+  },
+  {
+    "code": "564",
+    "description": "Other Diseases of Intestine and Peritoneum: Spastic colon, irritable colon, mucous colitis, constipation"
+  },
+  {
+    "code": "565",
+    "description": "Other Diseases of Intestine and Peritoneum: Anal fissure, anal fistula"
+  },
+  {
+    "code": "566",
+    "description": "Other Diseases of Intestine and Peritoneum: Abscess of anal or rectal regions"
+  },
+  {
+    "code": "567",
+    "description": "Other Diseases of Intestine and Peritoneum: Peritonitis, with or without abscess"
+  },
+  {
+    "code": "569",
+    "description": "Other Diseases of Intestine and Peritoneum: Anal or rectal polyp, rectal prolapse, anal or rectal stricture, rectal bleeding, other disorders of intestine"
+  },
+  {
+    "code": "571",
+    "description": "Other Diseases of Digestive System: Cirrhosis of the liver (e.g., alcoholic cirrhosis, biliary cirrhosis)"
+  },
+  {
+    "code": "573",
+    "description": "Other Diseases of Digestive System: Other diseases of the liver"
+  },
+  {
+    "code": "574",
+    "description": "Other Diseases of Digestive System: Cholelithiasis (gall stones) with or without cholecystitis"
+  },
+  {
+    "code": "575",
+    "description": "Other Diseases of Digestive System: Cholecystitis, without gall stones"
+  },
+  {
+    "code": "576",
+    "description": "Other Diseases of Digestive System: Other diseases of gallbladder and biliary ducts"
+  },
+  {
+    "code": "577",
+    "description": "Other Diseases of Digestive System: Diseases of pancreas"
+  },
+  {
+    "code": "579",
+    "description": "Other Diseases of Digestive System: Malabsorption syndrome, sprue, celiac disease"
+  },
+  {
+    "code": "787",
+    "description": "Signs and Symptoms Not Yet Diagnosed: Anorexia, nausea and vomiting, heartburn, dysphagia, hiccough, hematemesis, jaundice, ascites, abdominal pain, melena, masses"
+  },
+  {
+    "code": "580",
+    "description": "Diseases of the Urinary System: Acute glomerulonephritis"
+  },
+  {
+    "code": "581",
+    "description": "Diseases of the Urinary System: Nephrotic Syndrome"
+  },
+  {
+    "code": "584",
+    "description": "Diseases of the Urinary System: Acute renal failure"
+  },
+  {
+    "code": "585",
+    "description": "Diseases of the Urinary System: Chronic renal failure, uremia"
+  },
+  {
+    "code": "590",
+    "description": "Diseases of the Urinary System: Acute or chronic pyelonephritis, pyelitis, abscess"
+  },
+  {
+    "code": "591",
+    "description": "Diseases of the Urinary System: Hydronephrosis"
+  },
+  {
+    "code": "592",
+    "description": "Diseases of the Urinary System: Stone in kidney or ureter"
+  },
+  {
+    "code": "593",
+    "description": "Diseases of the Urinary System: Other disorders of kidney or ureter"
+  },
+  {
+    "code": "595",
+    "description": "Diseases of the Urinary System: Cystitis"
+  },
+  {
+    "code": "597",
+    "description": "Diseases of the Urinary System: Non-specific urethritis (not sexually transmitted)"
+  },
+  {
+    "code": "598",
+    "description": "Diseases of the Urinary System: Urethral stricture"
+  },
+  {
+    "code": "599",
+    "description": "Diseases of the Urinary System: Other disorders of urinary tract"
+  },
+  {
+    "code": "600",
+    "description": "Diseases of Male Genital Organs: Benign prostatic hypertrophy"
+  },
+  {
+    "code": "601",
+    "description": "Diseases of Male Genital Organs: Prostatitis"
+  },
+  {
+    "code": "603",
+    "description": "Diseases of Male Genital Organs: Hydrocele"
+  },
+  {
+    "code": "604",
+    "description": "Diseases of Male Genital Organs: Orchitis, epididymitis"
+  },
+  {
+    "code": "605",
+    "description": "Diseases of Male Genital Organs: Phimosis, paraphimosis"
+  },
+  {
+    "code": "606",
+    "description": "Diseases of Male Genital Organs: Male infertility, oligospermia, azoospermia"
+  },
+  {
+    "code": "608",
+    "description": "Diseases of Male Genital Organs: Seminal vesiculitis, spermatocele, torsion of cord or testis, undescended testicle, other disorders of male genital organs"
+  },
+  {
+    "code": "609",
+    "description": "Diseases of Male Genital Organs: Newborn circumcision"
+  },
+  {
+    "code": "610",
+    "description": "Diseases of Breast and Female Pelvic Organs: Cystic mastitis, chronic cystic disease, breast cyst, fibro-adenosis of breast"
+  },
+  {
+    "code": "611",
+    "description": "Diseases of Breast and Female Pelvic Organs: Breast abscess, gynecomastia, hypertrophy, other disorders of breast"
+  },
+  {
+    "code": "614",
+    "description": "Diseases of Breast and Female Pelvic Organs: Acute or chronic salpingitis or oophoritis or abscess, pelvic inflammatory disease"
+  },
+  {
+    "code": "615",
+    "description": "Diseases of Breast and Female Pelvic Organs: Acute or chronic endometritis"
+  },
+  {
+    "code": "616",
+    "description": "Diseases of Breast and Female Pelvic Organs: Cervicitis, vaginitis, cyst or abscess of Bartholin's gland, vulvitis"
+  },
+  {
+    "code": "617",
+    "description": "Other Disorders of Female Genital Tract: Endometriosis"
+  },
+  {
+    "code": "618",
+    "description": "Other Disorders of Female Genital Tract: Cystocele, rectocele, urethrocele, enterocele, uterine prolapse"
+  },
+  {
+    "code": "621",
+    "description": "Other Disorders of Female Genital Tract: Retroversion of uterus, endometrial hyperplasia, other disorders of uteru"
+  },
+  {
+    "code": "622",
+    "description": "Other Disorders of Female Genital Tract: Cervical erosion, cervical dysplasia"
+  },
+  {
+    "code": "623",
+    "description": "Other Disorders of Female Genital Tract: Stricture or stenosis of vagina"
+  },
+  {
+    "code": "625",
+    "description": "Other Disorders of Female Genital Tract: Dyspareunia, dysmenorrhea, premenstrual tension, stress incontinence"
+  },
+  {
+    "code": "626",
+    "description": "Other Disorders of Female Genital Tract: Disorders of menstruation"
+  },
+  {
+    "code": "627",
+    "description": "Other Disorders of Female Genital Tract: Menopause, postmenopausal bleeding"
+  },
+  {
+    "code": "628",
+    "description": "Other Disorders of Female Genital Tract: Infertility"
+  },
+  {
+    "code": "629",
+    "description": "Other Disorders of Female Genital Tract: Other disorders of female genital organs"
+  },
+  {
+    "code": "788",
+    "description": "Signs and Symptoms Not Yet Diagnosed: Renal colic, urinary retention, nocturia, masses"
+  },
+  {
+    "code": "632",
+    "description": "Missed abortion"
+  },
+  {
+    "code": "633",
+    "description": "Ectopic pregnancy"
+  },
+  {
+    "code": "634",
+    "description": "Incomplete abortion, complete abortion"
+  },
+  {
+    "code": "635",
+    "description": "Therapeutic abortion"
+  },
+  {
+    "code": "640",
+    "description": "Threatened abortion, haemorrhage in early pregnancy"
+  },
+  {
+    "code": "641",
+    "description": "Abruptio placentae, placenta praevia"
+  },
+  {
+    "code": "642",
+    "description": "Pre-eclampsia, eclampsia, toxaemia"
+  },
+  {
+    "code": "643",
+    "description": "Vomiting, hyperemesis gravidarum"
+  },
+  {
+    "code": "644",
+    "description": "False labour, threatened labour"
+  },
+  {
+    "code": "645",
+    "description": "Prolonged pregnancy"
+  },
+  {
+    "code": "646",
+    "description": "Other complications of pregnancy (e.g., vulvitis, vaginitis, cervicitis, pyelitis, cystitis)"
+  },
+  {
+    "code": "650",
+    "description": "Normal delivery, uncomplicated pregnancy"
+  },
+  {
+    "code": "651",
+    "description": "Multiple pregnancy"
+  },
+  {
+    "code": "652",
+    "description": "Unusual position of fetus, malpresentation"
+  },
+  {
+    "code": "653",
+    "description": "Cephalo-pelvic disproportion"
+  },
+  {
+    "code": "656",
+    "description": "Foetal distress"
+  },
+  {
+    "code": "658",
+    "description": "Premature rupture of membrane"
+  },
+  {
+    "code": "660",
+    "description": "Obstructed labour"
+  },
+  {
+    "code": "661",
+    "description": "Uterine inertia"
+  },
+  {
+    "code": "662",
+    "description": "Prolonged labour"
+  },
+  {
+    "code": "664",
+    "description": "Perineal lacerations"
+  },
+  {
+    "code": "666",
+    "description": "Post-Partum haemorrhage"
+  },
+  {
+    "code": "667",
+    "description": "Retained placenta"
+  },
+  {
+    "code": "669",
+    "description": "Delivery with other complications"
+  },
+  {
+    "code": "671",
+    "description": "Post-Partum thrombophlebitis"
+  },
+  {
+    "code": "675",
+    "description": "Post-Partum mastitis or nipple infection"
+  },
+  {
+    "code": "677",
+    "description": "Post-Partum pulmonary"
+  },
+  {
+    "code": "680",
+    "description": "Infections: Boil, carbuncle, furunculosis"
+  },
+  {
+    "code": "682",
+    "description": "Infections: Cellulitis, abscess"
+  },
+  {
+    "code": "683",
+    "description": "Infections: Acute lymphadenitis"
+  },
+  {
+    "code": "684",
+    "description": "Infections: Impetigo"
+  },
+  {
+    "code": "685",
+    "description": "Infections: Pilonidal cyst or abscess"
+  },
+  {
+    "code": "686",
+    "description": "Infections: Pyoderma, pyogenic granuloma, other local infections"
+  },
+  {
+    "code": "690",
+    "description": "Other Inflammatory Conditions: Seborrheic dermatitis"
+  },
+  {
+    "code": "691",
+    "description": "Other Inflammatory Conditions: Eczema, atopic dermatitis, neurodermatitis"
+  },
+  {
+    "code": "692",
+    "description": "Other Inflammatory Conditions: Contact dermatitis"
+  },
+  {
+    "code": "695",
+    "description": "Other Inflammatory Conditions: Erythema multiforme, erythema nodosum, acne, rosacea, lupus erythematosus, intertrigo"
+  },
+  {
+    "code": "696",
+    "description": "Other Inflammatory Conditions: Psoriasis"
+  },
+  {
+    "code": "698",
+    "description": "Other Inflammatory Conditions: Pruritus ani, other itchy conditions"
+  },
+  {
+    "code": "700",
+    "description": "Other Diseases of Skin and Subcutaneous Tissue: Corns, calluses"
+  },
+  {
+    "code": "701",
+    "description": "Other Diseases of Skin and Subcutaneous Tissue: Hyperkeratosis, scleroderma, keloid"
+  },
+  {
+    "code": "703",
+    "description": "Other Diseases of Skin and Subcutaneous Tissue: Ingrown nail, onychogryposis"
+  },
+  {
+    "code": "704",
+    "description": "Other Diseases of Skin and Subcutaneous Tissue: Alopecia"
+  },
+  {
+    "code": "706",
+    "description": "Other Diseases of Skin and Subcutaneous Tissue: Acne, acne vulgaris, sebaceous cyst"
+  },
+  {
+    "code": "707",
+    "description": "Other Diseases of Skin and Subcutaneous Tissue: Debcubitus ulcer, bed sore"
+  },
+  {
+    "code": "708",
+    "description": "Other Diseases of Skin and Subcutaneous Tissue: Allergic urticaria"
+  },
+  {
+    "code": "709",
+    "description": "Other Diseases of Skin and Subcutaneous Tissue: Other disorders of skin and subcutaneous tissue"
+  },
+  {
+    "code": "710",
+    "description": "Desseminated lupus erythematosus, generalized scleroderma, dermatomyositis, polymostitis"
+  },
+  {
+    "code": "711",
+    "description": "Pyogenic arthritis"
+  },
+  {
+    "code": "714",
+    "description": "Rheumatoid arthritis, Still's disease"
+  },
+  {
+    "code": "715",
+    "description": "Osteoarthritis"
+  },
+  {
+    "code": "716",
+    "description": "Traumatic arthritis"
+  },
+  {
+    "code": "718",
+    "description": "Joint derangement, recurrent dislocation, ankylosis, meniscus or cartilage tear, loose body in joint"
+  },
+  {
+    "code": "720",
+    "description": "Ankylosing spondylitis"
+  },
+  {
+    "code": "721",
+    "description": "Sero- negative Spondyloarthropathies"
+  },
+  {
+    "code": "722",
+    "description": "Intervertebral disc disorders"
+  },
+  {
+    "code": "724",
+    "description": "Lumbar strain, lumbago, coccydynia, sciatica"
+  },
+  {
+    "code": "725",
+    "description": "Polymyalgia rheumatic"
+  },
+  {
+    "code": "726",
+    "description": "Fibromyalgia"
+  },
+  {
+    "code": "727",
+    "description": "Synovitis, tenosynovitis, bursitis, bunion, ganglion"
+  },
+  {
+    "code": "728",
+    "description": "Dupuytren's contracture"
+  },
+  {
+    "code": "729",
+    "description": "Fibrositis, myositis, muscular rheumatism"
+  },
+  {
+    "code": "730",
+    "description": "Osteomyelitis"
+  },
+  {
+    "code": "731",
+    "description": "Osteitis deformans, Paget's disease of bone"
+  },
+  {
+    "code": "732",
+    "description": "Osteochondritis, Legg-Perthes disease, Osgood-Schlatter disease, osteochondritis dissecans"
+  },
+  {
+    "code": "733",
+    "description": "Osteoporosis, spontaneous fracture, other disorders of bone and cartilage"
+  },
+  {
+    "code": "734",
+    "description": "Flat foot, pes planus"
+  },
+  {
+    "code": "735",
+    "description": "Hallux valgus, hallux varus, hammer toe"
+  },
+  {
+    "code": "737",
+    "description": "Scoliosis, kyphosis, lordosis"
+  },
+  {
+    "code": "739",
+    "description": "Other diseases of musculoskeletal system and connective tissue"
+  },
+  {
+    "code": "781",
+    "description": "Signs and Symptoms Not Yet Diagnosed: Leg cramps, leg pain, muscle pain, joint pain, arthralgia, joint swelling, masses"
+  },
+  {
+    "code": "741",
+    "description": "Spina bifida, with or without hydrocephalus, meningocele, meningomyelocele"
+  },
+  {
+    "code": "742",
+    "description": "Hydrocephalus"
+  },
+  {
+    "code": "743",
+    "description": "Congenital anomalies of eye"
+  },
+  {
+    "code": "744",
+    "description": "Congenital anomalies of ear, face, and neck"
+  },
+  {
+    "code": "745",
+    "description": "Transposition of great vessels, tetralogy of Fallot, ventricular septal defect, atrial septal defect"
+  },
+  {
+    "code": "746",
+    "description": "Other congenital anomalies of heart"
+  },
+  {
+    "code": "747",
+    "description": "Patent ductus arteriosus, coarctation of aorta, pulmonary artery stenosis, other anomalies of circulatory system"
+  },
+  {
+    "code": "748",
+    "description": "Congenital anomalies of nose and respiratory system"
+  },
+  {
+    "code": "749",
+    "description": "Cleft palate, cleft lip"
+  },
+  {
+    "code": "750",
+    "description": "Other congenital anomalies of mouth esophagus, stomach and pylorus"
+  },
+  {
+    "code": "751",
+    "description": "Digestive system"
+  },
+  {
+    "code": "752",
+    "description": "Genital organs"
+  },
+  {
+    "code": "753",
+    "description": "Urinary system"
+  },
+  {
+    "code": "754",
+    "description": "Club foot"
+  },
+  {
+    "code": "755",
+    "description": "Other congenital anomalies of limbs"
+  },
+  {
+    "code": "756",
+    "description": "Other musculoskeletal anomalies"
+  },
+  {
+    "code": "758",
+    "description": "Chromosomal anomalies (e.g., Down's syndrome, other autosomal anomalies, Klinefelter's syndrome, Turner's syndrome, other anomalies of sex chromosomes)"
+  },
+  {
+    "code": "759",
+    "description": "Other congenital anomalies"
+  },
+  {
+    "code": "762",
+    "description": "Compression of umbilical cord, prolapsed cord"
+  },
+  {
+    "code": "763",
+    "description": "Due to complications of labour or delivery"
+  },
+  {
+    "code": "765",
+    "description": "Prematurity, low-birth weight infant"
+  },
+  {
+    "code": "766",
+    "description": "Postmaturity, high-birth weight infant"
+  },
+  {
+    "code": "767",
+    "description": "Birth trauma"
+  },
+  {
+    "code": "769",
+    "description": "Hyaline membrane disease, respiratory distress syndrome"
+  },
+  {
+    "code": "773",
+    "description": "Hemolytic disease of newborn"
+  },
+  {
+    "code": "777",
+    "description": "Perinatal disorders of digestive system"
+  },
+  {
+    "code": "779",
+    "description": "Other conditions of fetus or newborn"
+  },
+  {
+    "code": "790",
+    "description": "Non-specific Abnormal Findings: Non-specific findings on examination of blood"
+  },
+  {
+    "code": "791",
+    "description": "Non-specific Abnormal Findings: Non-specific findings on examination of urine"
+  },
+  {
+    "code": "795",
+    "description": "Non-specific Abnormal Findings: Chronic fatigue syndrome"
+  },
+  {
+    "code": "796",
+    "description": "Non-specific Abnormal Findings: Other non-specific abnormal findings"
+  },
+  {
+    "code": "797",
+    "description": "Non-specific Abnormal Findings: Senility, senescence"
+  },
+  {
+    "code": "798",
+    "description": "Non-specific Abnormal Findings: Sudden death, cause unknown"
+  },
+  {
+    "code": "799",
+    "description": "Non-specific Abnormal Findings: Other ill-defined conditions"
+  },
+  {
+    "code": "802",
+    "description": "Fractures and Fracture-dislocations: Facial bones"
+  },
+  {
+    "code": "803",
+    "description": "Fractures and Fracture-dislocations: Skull"
+  },
+  {
+    "code": "805",
+    "description": "Fractures and Fracture-dislocations: Vertebral column-without spinal cord damage"
+  },
+  {
+    "code": "806",
+    "description": "Fractures and Fracture-dislocations: Vertebral column-with spinal cord damage"
+  },
+  {
+    "code": "807",
+    "description": "Fractures and Fracture-dislocations: Ribs"
+  },
+  {
+    "code": "808",
+    "description": "Fractures and Fracture-dislocations: Pelvis"
+  },
+  {
+    "code": "810",
+    "description": "Fractures and Fracture-dislocations: Clavicle"
+  },
+  {
+    "code": "812",
+    "description": "Fractures and Fracture-dislocations: Humerus"
+  },
+  {
+    "code": "813",
+    "description": "Fractures and Fracture-dislocations: Radius and/or ulna"
+  },
+  {
+    "code": "814",
+    "description": "Fractures and Fracture-dislocations: Carpal bones"
+  },
+  {
+    "code": "815",
+    "description": "Fractures and Fracture-dislocations: Metacarpals"
+  },
+  {
+    "code": "816",
+    "description": "Fractures and Fracture-dislocations: Phalanges-foot or hand"
+  },
+  {
+    "code": "821",
+    "description": "Fractures and Fracture-dislocations: Femur"
+  },
+  {
+    "code": "823",
+    "description": "Fractures and Fracture-dislocations: Tibia and/or fibula"
+  },
+  {
+    "code": "824",
+    "description": "Fractures and Fracture-dislocations: Ankle"
+  },
+  {
+    "code": "829",
+    "description": "Fractures and Fracture-dislocations: Other fractures"
+  },
+  {
+    "code": "831",
+    "description": "Dislocations: Shoulder"
+  },
+  {
+    "code": "832",
+    "description": "Dislocations: Elbow"
+  },
+  {
+    "code": "834",
+    "description": "Dislocations: Finger"
+  },
+  {
+    "code": "839",
+    "description": "Dislocations: Other dislocations"
+  },
+  {
+    "code": "840",
+    "description": "Sprains, Strains and Other Trauma: Shoulder, upper arm"
+  },
+  {
+    "code": "842",
+    "description": "Sprains, Strains and Other Trauma: Wrist, hand, fingers"
+  },
+  {
+    "code": "844",
+    "description": "Sprains, Strains and Other Trauma: Knee, leg"
+  },
+  {
+    "code": "845",
+    "description": "Sprains, Strains and Other Trauma: Ankle, foot, toes"
+  },
+  {
+    "code": "847",
+    "description": "Sprains, Strains and Other Trauma: Neck, low back, coccyx"
+  },
+  {
+    "code": "848",
+    "description": "Sprains, Strains and Other Trauma: Other sprains and strains"
+  },
+  {
+    "code": "850",
+    "description": "Sprains, Strains and Other Trauma: Concussion"
+  },
+  {
+    "code": "854",
+    "description": "Sprains, Strains and Other Trauma: Other head injuries"
+  },
+  {
+    "code": "869",
+    "description": "Sprains, Strains and Other Trauma: Internal injuries to organ(s)"
+  },
+  {
+    "code": "879",
+    "description": "Sprains, Strains and Other Trauma: Lacerations, open woundsexcept limbs"
+  },
+  {
+    "code": "884",
+    "description": "Sprains, Strains and Other Trauma: Lacerations, open wounds, traumatic amputations-upper limb(s)"
+  },
+  {
+    "code": "894",
+    "description": "Sprains, Strains and Other Trauma: Lacerations, open wounds, traumatic amputations-lower limb(s)"
+  },
+  {
+    "code": "918",
+    "description": "Sprains, Strains and Other Trauma: Automated Visual Field (AVF) test"
+  },
+  {
+    "code": "919",
+    "description": "Sprains, Strains and Other Trauma: Abrasions, bruises, contusions and other superficial injury including non-venomous bites"
+  },
+  {
+    "code": "930",
+    "description": "Sprains, Strains and Other Trauma: Foreign body in eye, or other tissues"
+  },
+  {
+    "code": "949",
+    "description": "Sprains, Strains and Other Trauma: Burns-thermal or chemical"
+  },
+  {
+    "code": "959",
+    "description": "Sprains, Strains and Other Trauma: Other injuries or trauma"
+  },
+  {
+    "code": "977",
+    "description": "Adverse Effects: Of drugs and medications-including allergy, overdose, reactions"
+  },
+  {
+    "code": "989",
+    "description": "Adverse Effects: Of other chemicals (e.g., lead, pesticides, and venomous bites)"
+  },
+  {
+    "code": "994",
+    "description": "Adverse Effects: Of physical factors (e.g., heat, cold, frostbite, pressure)"
+  },
+  {
+    "code": "995",
+    "description": "Adverse Effects: Anaphylaxis"
+  },
+  {
+    "code": "998",
+    "description": "Adverse Effects: Of surgical and medical care (e.g., wound infection, wound disruption, other iatrogenic disease)"
+  },
+  {
+    "code": "895",
+    "description": "Family Planning: Family planning, contraceptive advice, advice on sterilization or abortion"
+  },
+  {
+    "code": "896",
+    "description": "Immunization: Immunization-all types"
+  },
+  {
+    "code": "960",
+    "description": "Immunization: Pentavalent (DPT POLIO/ACT HIB)"
+  },
+  {
+    "code": "961",
+    "description": "Immunization: DPT Polio"
+  },
+  {
+    "code": "962",
+    "description": "Immunization: DT"
+  },
+  {
+    "code": "963",
+    "description": "Immunization: MMR (Measles, Mumps, Rubella)"
+  },
+  {
+    "code": "964",
+    "description": "Immunization: Hepatitis B"
+  },
+  {
+    "code": "965",
+    "description": "Immunization: TD Polio"
+  },
+  {
+    "code": "966",
+    "description": "Immunization: TD (Adults and aged 7 years and older)"
+  },
+  {
+    "code": "967",
+    "description": "Immunization: Influenza"
+  },
+  {
+    "code": "968",
+    "description": "Immunization: Pneumococcal"
+  },
+  {
+    "code": "969",
+    "description": "Immunization: Other Immunization-Not Defined"
+  },
+  {
+    "code": "897",
+    "description": "Social, Marital and Family Problems: Economic problems"
+  },
+  {
+    "code": "898",
+    "description": "Social, Marital and Family Problems: Marital difficulties"
+  },
+  {
+    "code": "899",
+    "description": "Social, Marital and Family Problems: Parent-child problems (e.g., childabuse, battered child, child neglect)"
+  },
+  {
+    "code": "900",
+    "description": "Social, Marital and Family Problems: Problems with aged parents or inlaws"
+  },
+  {
+    "code": "901",
+    "description": "Social, Marital and Family Problems: Family disruption, divorce"
+  },
+  {
+    "code": "902",
+    "description": "Social, Marital and Family Problems: Educational problems"
+  },
+  {
+    "code": "903",
+    "description": "Social, Marital and Family Problems: Illegitimacy"
+  },
+  {
+    "code": "904",
+    "description": "Social, Marital and Family Problems: Social maladjustment"
+  },
+  {
+    "code": "905",
+    "description": "Social, Marital and Family Problems: Occupational problems, unemployment, difficulty at work"
+  },
+  {
+    "code": "906",
+    "description": "Social, Marital and Family Problems: Legal problems, litigation, imprisonment"
+  },
+  {
+    "code": "909",
+    "description": "Social, Marital and Family Problems: Other problems of social adjustment"
+  },
+  {
+    "code": "916",
+    "description": "Other: Well baby care"
+  },
+  {
+    "code": "917",
+    "description": "Other: Annual health examination adolescent/adult Well Vision Care"
+  },
+  {
+    "code": "893",
+    "description": "Operations on the Musculoskeletal System: Osteotomy"
+  },
+  {
+    "code": "923",
+    "description": "Operations on the Musculoskeletal System: Excision or Destruction of Intervertebral Disc Excision of Semilunar Cartilage of Knee"
+  },
+  {
+    "code": "924",
+    "description": "Operations on the Musculoskeletal System: Synovectomy"
+  },
+  {
+    "code": "931",
+    "description": "Operations on the Musculoskeletal System: Arthrodesis of Foot and Ankle"
+  },
+  {
+    "code": "932",
+    "description": "Operations on the Musculoskeletal System: Arthrodesis of Other Joints"
+  },
+  {
+    "code": "933",
+    "description": "Operations on the Musculoskeletal System: Arthroplasty of Foot and Toe"
+  },
+  {
+    "code": "934",
+    "description": "Operations on the Musculoskeletal System: Arthroplasty of Knee and Ankle (e.g., Hauser Repair)"
+  },
+  {
+    "code": "935",
+    "description": "Operations on the Musculoskeletal System: Total Hip Replacement"
+  },
+  {
+    "code": "936",
+    "description": "Operations on the Musculoskeletal System: Other Arthroplasty of Hip"
+  },
+  {
+    "code": "940",
+    "description": "Operations on the Musculoskeletal System: Incision of Muscle, Tendon, Fascia, and Bursa of Hand"
+  },
+  {
+    "code": "941",
+    "description": "Operations on the Musculoskeletal System: Division of Muscle, Tendon, and Fascia of Hand"
+  },
+  {
+    "code": "944",
+    "description": "Operations on the Musculoskeletal System: Suture of Muscle, Tendon, and Fascia of Hand"
+  },
+  {
+    "code": "945",
+    "description": "Operations on the Musculoskeletal System: Transplantation of Muscle and Tendon of Hand"
+  },
+  {
+    "code": "970",
+    "description": "Other Acceptable Diagnosis: Prenatal Care"
+  },
+  {
+    "code": "971",
+    "description": "Other Acceptable Diagnosis: Post-Partum Observation"
+  }
+]

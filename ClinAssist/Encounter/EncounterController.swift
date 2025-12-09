@@ -6,6 +6,9 @@ class EncounterController: ObservableObject {
     @Published var state: EncounterState?
     @Published var helperSuggestions: HelperSuggestions = HelperSuggestions()
     @Published var soapNote: String = ""
+    
+    // Saved state for regeneration (preserved after encounter ends, even if new provisional recording starts)
+    private var savedStateForRegeneration: EncounterState?
     @Published var isTranscribing: Bool = false
     @Published var transcriptionError: String?
     @Published var llmError: String?
@@ -19,6 +22,9 @@ class EncounterController: ObservableObject {
     @Published var interimTranscript: String = ""  // Current interim result (may change)
     @Published var interimSpeaker: String = ""     // Speaker for interim result
     @Published var isStreamingConnected: Bool = false
+    
+    // Encounter attachments (from Chat section - images, PDFs, etc.)
+    @Published var encounterAttachments: [EncounterAttachment] = []
     
     let audioManager: AudioManager
     private let configManager: ConfigManager
@@ -64,6 +70,10 @@ class EncounterController: ObservableObject {
         self.injectedSTTClient = nil
         self.injectedStreamingClient = nil
         
+        // Load persisted SOAP settings
+        self.currentDetailLevel = Self.loadPersistedDetailLevel()
+        self.currentSOAPFormat = Self.loadPersistedFormat()
+        
         // Build session detector config from config manager
         var detectorConfig = configManager.buildSessionDetectorConfig()
         detectorConfig.useLLMForDetection = configManager.useOllamaForSessionDetection
@@ -90,6 +100,10 @@ class EncounterController: ObservableObject {
         self.injectedStreamingClient = streamingClient
         self.llmClient = llmClient
         self.ollamaClient = ollamaClient
+        
+        // Load persisted SOAP settings
+        self.currentDetailLevel = Self.loadPersistedDetailLevel()
+        self.currentSOAPFormat = Self.loadPersistedFormat()
         
         // Build session detector config from config manager
         var detectorConfig = configManager.buildSessionDetectorConfig()
@@ -256,8 +270,13 @@ class EncounterController: ObservableObject {
         lastTranscriptIndex = 0
         pendingChunks = []
         transcriptionError = nil
+        encounterAttachments = []  // Reset attachments for new encounter
         llmError = nil
         streamingWasUsedInSession = false  // Reset for new session
+        isEncounterEnded = false  // Reset encounter ended flag
+        isRegeneratingSOAP = false  // Reset regenerating flag
+        regenerationTask?.cancel()  // Cancel any pending regeneration
+        regenerationTask = nil
         
         do {
             // Connect streaming client if using streaming mode
@@ -283,12 +302,22 @@ class EncounterController: ObservableObject {
         }
     }
     
+    /// Flag to prevent new transcript entries after encounter ends
+    private var isEncounterEnded: Bool = false
+    
     func endEncounter() async {
+        // Mark encounter as ended to prevent new transcript entries
+        isEncounterEnded = true
+        
         let transcriptCount = state?.transcript.count ?? 0
         debugLog("🛑 Ending encounter - transcript has \(transcriptCount) entries", component: "Encounter")
         
         // Stop all tasks first
         stopUpdateTasks()
+        
+        // Cancel any pending transcription task
+        transcriptionTask?.cancel()
+        transcriptionTask = nil
         
         // Disconnect streaming client
         if useStreaming {
@@ -310,15 +339,13 @@ class EncounterController: ObservableObject {
         
         state?.endedAt = Date()
         
-        // Only process remaining chunks via REST if streaming wasn't used during this session
-        // If streaming was active, it already transcribed everything - processing chunks would create duplicates
-        if !streamingWasUsedInSession {
-            debugLog("📦 Processing remaining chunks (streaming was not used)...", component: "Encounter")
-        await processRemainingChunks()
-        } else {
-            debugLog("⏭️ Skipping chunk processing - streaming already transcribed everything", component: "Encounter")
-            pendingChunks = []  // Clear pending chunks, they're already transcribed
-        }
+        // Save the state for regeneration (in case provisional recording starts and overwrites state)
+        savedStateForRegeneration = state
+        
+        // Clear any pending chunks - we don't want to process them after encounter ends
+        // This prevents the transcript from growing during SOAP generation
+        pendingChunks = []
+        debugLog("📦 Cleared pending chunks to prevent transcript growth", component: "Encounter")
         
         let finalTranscriptCount = state?.transcript.count ?? 0
         debugLog("📝 About to generate FINAL SOAP - transcript has \(finalTranscriptCount) entries", component: "Encounter")
@@ -330,6 +357,9 @@ class EncounterController: ObservableObject {
         
         // NOW re-enable session detection after SOAP is done
         sessionDetector.encounterEndedManually()
+        
+        // Reset the ended flag for next encounter
+        isEncounterEnded = false
         
         // Restart monitoring if auto-detection is enabled
         if configManager.isAutoDetectionEnabled {
@@ -361,6 +391,19 @@ class EncounterController: ObservableObject {
         state?.clinicalNotes.append(note)
     }
     
+    // MARK: - Encounter Attachments (from Chat)
+    
+    /// Add an attachment from the Chat section to be included in SOAP generation
+    func addEncounterAttachment(_ attachment: EncounterAttachment) {
+        encounterAttachments.append(attachment)
+        debugLog("📎 Added encounter attachment: \(attachment.name) (\(attachment.type.rawValue))", component: "Encounter")
+    }
+    
+    /// Check if any attachments require multimodal processing
+    var hasMultimodalAttachments: Bool {
+        encounterAttachments.contains { $0.isMultimodal }
+    }
+    
     // MARK: - Update Tasks
     
     private func startUpdateTasks() {
@@ -369,14 +412,15 @@ class EncounterController: ObservableObject {
         let helperInterval = TimeInterval(config.timing.helperUpdateIntervalSeconds)
         let soapInterval = TimeInterval(config.timing.soapUpdateIntervalSeconds)
         
-        // State/Helper update task
-        stateUpdateTask = Task {
-            while !Task.isCancelled {
-                try? await Task.sleep(for: .seconds(helperInterval))
-                guard !Task.isCancelled else { break }
-                await updateStateAndHelpers()
-            }
-        }
+        // NOTE: Helper/Assistant updates disabled - UI section hidden
+        // To re-enable, uncomment the following:
+        // stateUpdateTask = Task {
+        //     while !Task.isCancelled {
+        //         try? await Task.sleep(for: .seconds(helperInterval))
+        //         guard !Task.isCancelled else { break }
+        //         await updateStateAndHelpers()
+        //     }
+        // }
         
         // Psst... prediction task (uses Groq for fast, smart predictions)
         // Updates every 15 seconds with predictive insights
@@ -418,6 +462,12 @@ class EncounterController: ObservableObject {
     // MARK: - Transcription
     
     private func transcribeChunk(_ chunkURL: URL) async {
+        // Don't process if encounter has ended
+        guard !isEncounterEnded else {
+            debugLog("⏭️ Skipping chunk transcription - encounter ended", component: "REST")
+            return
+        }
+        
         guard let sttClient = sttClient else { 
             debugLog("❌ No STT client available", component: "REST")
             return 
@@ -435,6 +485,13 @@ class EncounterController: ObservableObject {
             let segments = try await sttClient.transcribe(audioData: audioData)
             
             await MainActor.run {
+                // Double-check encounter hasn't ended during transcription
+                guard !self.isEncounterEnded else {
+                    debugLog("⏭️ Discarding transcription results - encounter ended during processing", component: "REST")
+                    self.isTranscribing = false
+                    return
+                }
+                
                 debugLog("📝 REST received \(segments.count) segments", component: "REST")
                 for segment in segments {
                     // Skip duplicates
@@ -474,6 +531,9 @@ class EncounterController: ObservableObject {
     
     // MARK: - LLM Updates
     
+    // NOTE: Helper/Assistant updates disabled - UI section hidden
+    // To re-enable, uncomment this function and the stateUpdateTask in startUpdateTasks()
+    /*
     private func updateStateAndHelpers() async {
         guard let state = state else { return }
         
@@ -532,6 +592,7 @@ class EncounterController: ObservableObject {
             debugLog("❌ Helper update error: \(error)", component: "Encounter")
         }
     }
+    */
     
     // MARK: - Psst... Prediction Updates
     
@@ -585,16 +646,97 @@ class EncounterController: ObservableObject {
     }
     
     private func updateSOAPNote() async {
-        await generateSOAPNote(isFinal: false)
+        await generateSOAPNote(isFinal: false, detailLevel: 5, format: .problemBased)
     }
     
     private func generateFinalSOAP() async {
         // Force a final SOAP generation using cloud LLM for accuracy
-        await generateSOAPNote(isFinal: true)
+        await generateSOAPNote(isFinal: true, detailLevel: currentDetailLevel, format: currentSOAPFormat)
     }
     
-    private func generateSOAPNote(isFinal: Bool) async {
-        guard let state = state else {
+    /// Public method to regenerate SOAP with a specific detail level (legacy)
+    /// Used by the EndEncounterSheet for "More Detail" / "Less Detail" buttons
+    func regenerateSOAP(detailLevel: SOAPDetailLevel) {
+        // Convert legacy detail level to numeric
+        let numericLevel: Int
+        switch detailLevel {
+        case .less: numericLevel = 3
+        case .normal: numericLevel = 5
+        case .more: numericLevel = 7
+        }
+        regenerateSOAP(detailLevel: numericLevel, format: currentSOAPFormat)
+    }
+    
+    /// Public method to regenerate SOAP with numeric detail level (1-10), format, and optional custom instructions
+    func regenerateSOAP(detailLevel: Int, format: SOAPFormat, customInstructions: String = "") {
+        // Guard against multiple concurrent regenerations
+        guard !isRegeneratingSOAP else {
+            debugLog("⚠️ Regeneration already in progress, ignoring request", component: "SOAP")
+            return
+        }
+        
+        // Cancel any existing regeneration task
+        regenerationTask?.cancel()
+        
+        currentDetailLevel = detailLevel
+        currentSOAPFormat = format
+        
+        regenerationTask = Task {
+            await generateSOAPNote(isFinal: true, detailLevel: detailLevel, format: format, customInstructions: customInstructions)
+        }
+    }
+    
+    /// Task for regeneration (to allow cancellation)
+    private var regenerationTask: Task<Void, Never>?
+    
+    /// Published property to track if SOAP is being regenerated
+    @Published var isRegeneratingSOAP: Bool = false
+    
+    /// Current detail level (1-10, default 5) - persisted to UserDefaults
+    @Published var currentDetailLevel: Int {
+        didSet {
+            UserDefaults.standard.set(currentDetailLevel, forKey: "soap_detail_level")
+        }
+    }
+    
+    /// Current SOAP format - persisted to UserDefaults
+    @Published var currentSOAPFormat: SOAPFormat {
+        didSet {
+            UserDefaults.standard.set(currentSOAPFormat.rawValue, forKey: "soap_format")
+        }
+    }
+    
+    /// Load persisted SOAP settings from UserDefaults
+    private static func loadPersistedDetailLevel() -> Int {
+        let saved = UserDefaults.standard.integer(forKey: "soap_detail_level")
+        return saved > 0 ? max(1, min(10, saved)) : 5  // Default to 5 if not set
+    }
+    
+    private static func loadPersistedFormat() -> SOAPFormat {
+        if let savedRaw = UserDefaults.standard.string(forKey: "soap_format"),
+           let format = SOAPFormat(rawValue: savedRaw) {
+            return format
+        }
+        return .problemBased  // Default
+    }
+    
+    private func generateSOAPNote(isFinal: Bool, detailLevel: Int = 5, format: SOAPFormat = .problemBased, customInstructions: String = "") async {
+        // For regeneration (isFinal = true), prefer savedStateForRegeneration if current state is empty/different
+        // This handles the case where provisional recording started and overwrote the current state
+        let effectiveState: EncounterState?
+        if isFinal, let saved = savedStateForRegeneration, !saved.transcript.isEmpty {
+            // Use saved state if current state is empty or has fewer entries (new provisional recording)
+            if state == nil || state!.transcript.isEmpty || state!.transcript.count < saved.transcript.count {
+                effectiveState = saved
+                debugLog("📝 Using saved state for regeneration (\(saved.transcript.count) entries)", component: "SOAP")
+            } else {
+                effectiveState = state
+            }
+        } else {
+            effectiveState = state
+        }
+        
+        guard let state = effectiveState else {
             debugLog("❌ SOAP update skipped - no state!", component: "SOAP")
             return
         }
@@ -604,46 +746,109 @@ class EncounterController: ObservableObject {
         }
         
         let transcriptCount = state.transcript.count
-        let logPrefix = isFinal ? "📝 Generating FINAL SOAP" : "📝 Generating live SOAP"
-        debugLog("\(logPrefix) - \(transcriptCount) transcript entries", component: "SOAP")
+        let clinicalNotesCount = state.clinicalNotes.count
+        let detailInfo = " [level \(detailLevel)/10, \(format.rawValue)]"
+        let logPrefix = isFinal ? "📝 Generating FINAL SOAP\(detailInfo)" : "📝 Generating live SOAP"
+        debugLog("\(logPrefix) - \(transcriptCount) transcript entries, \(clinicalNotesCount) clinical notes", component: "SOAP")
+        
+        // Set regenerating flag for UI feedback
+        if isFinal {
+            await MainActor.run {
+                self.isRegeneratingSOAP = true
+            }
+        }
         
         do {
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted
-            let stateJSON = try encoder.encode(state)
-            let stateString = String(data: stateJSON, encoding: .utf8) ?? "{}"
+            encoder.dateEncodingStrategy = .iso8601
+            
+            let stateJSON: Data
+            do {
+                stateJSON = try encoder.encode(state)
+            } catch {
+                debugLog("❌ SOAP: Failed to encode state to JSON: \(error)", component: "SOAP")
+                await MainActor.run {
+                    self.llmError = "Failed to encode encounter data: \(error.localizedDescription)"
+                    self.isRegeneratingSOAP = false
+                }
+                return
+            }
+            
+            guard let stateString = String(data: stateJSON, encoding: .utf8), !stateString.isEmpty else {
+                debugLog("❌ SOAP: State JSON is empty or failed UTF-8 conversion", component: "SOAP")
+                await MainActor.run {
+                    self.llmError = "Encounter data is empty"
+                    self.isRegeneratingSOAP = false
+                }
+                return
+            }
+            
+            debugLog("📊 SOAP: State JSON size: \(stateJSON.count) bytes", component: "SOAP")
             
             var response: String
             
             // Use LLMOrchestrator for intelligent provider selection
             guard let orchestrator = llmOrchestrator else {
                 debugLog("❌ No LLM orchestrator available!", component: "SOAP")
+                await MainActor.run {
+                    self.isRegeneratingSOAP = false
+                }
                 return
             }
             
+            // Get the appropriate prompt based on detail level, format, custom instructions, and attachments
+            let hasAttachments = !encounterAttachments.isEmpty
+            let prompt = LLMPrompts.soapRendererWithOptions(
+                detailLevel: detailLevel,
+                format: format,
+                customInstructions: customInstructions,
+                hasAttachments: hasAttachments
+            )
+            
             if isFinal {
-                // Final SOAP: Gemini (large) or Groq (small)
+                debugLog("🚀 SOAP: Calling generateFinalSOAP with \(stateString.count) chars, \(encounterAttachments.count) attachments", component: "SOAP")
+                // Final SOAP: Gemini multimodal (if attachments) or Groq (small) or Gemini (large)
                 response = try await orchestrator.generateFinalSOAP(
-                    systemPrompt: LLMPrompts.soapRenderer,
+                    systemPrompt: prompt,
                     content: stateString,
-                    transcriptEntryCount: transcriptCount
+                    transcriptEntryCount: transcriptCount,
+                    attachments: encounterAttachments
                 )
+                debugLog("📥 SOAP: Got response from LLM (\(response.count) chars)", component: "SOAP")
             } else {
                 // Live SOAP: Ollama (regular) → OpenRouter
                 response = try await orchestrator.generateLiveSOAP(
-                    systemPrompt: LLMPrompts.soapRenderer,
+                    systemPrompt: prompt,
                     content: stateString
                 )
+            }
+            
+            // Validate response - treat empty responses as errors
+            if response.isEmpty {
+                debugLog("❌ SOAP: LLM returned EMPTY response - treating as error", component: "SOAP")
+                await MainActor.run {
+                    self.llmError = "LLM returned an empty response. Please try regenerating the SOAP note."
+                    self.isRegeneratingSOAP = false
+                }
+                return
+            }
+            
+            if response.count < 50 {
+                debugLog("⚠️ SOAP: LLM returned very short response (\(response.count) chars): \(response)", component: "SOAP")
             }
             
             await MainActor.run {
                 self.soapNote = response
                 self.llmError = nil
-                debugLog("✅ SOAP note generated (\(response.count) chars)", component: "SOAP")
+                self.isRegeneratingSOAP = false
+                debugLog("✅ SOAP note set (\(response.count) chars)\(detailInfo)", component: "SOAP")
             }
         } catch {
+            let errorMessage = error.localizedDescription
             await MainActor.run {
-                self.llmError = error.localizedDescription
+                self.llmError = errorMessage
+                self.isRegeneratingSOAP = false
             }
             debugLog("❌ SOAP generation error: \(error)", component: "SOAP")
         }
@@ -906,6 +1111,7 @@ extension EncounterController {
         lastTranscriptIndex = 0
         pendingChunks = []
         transcriptionError = nil
+        encounterAttachments = []  // Reset attachments for new encounter
         llmError = nil
         streamingWasUsedInSession = false  // Reset for new session
         
@@ -943,6 +1149,12 @@ extension EncounterController: StreamingSTTClientDelegate {
         interimTranscript = ""
         interimSpeaker = ""
         isTranscribing = false
+        
+        // Don't add new entries if encounter has ended
+        guard !isEncounterEnded else {
+            debugLog("⏭️ Discarding streaming result - encounter ended", component: "Streaming")
+            return
+        }
         
         // Skip duplicates
         if isDuplicateTranscript(segment.text) {

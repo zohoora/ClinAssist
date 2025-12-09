@@ -170,6 +170,243 @@ struct LLMPrompts {
     static let psstPrediction = """
     What is the physician likely to want to know in the next couple of minutes? Take your best guess. Keep it really short as though you're whispering a short phrase to the physician as an assist. Start with "pssstt..."
     """
+    
+    // MARK: - SOAP Format Options
+    
+    static let problemBasedFormat = """
+    
+    **FORMAT: PROBLEM-BASED**
+    
+    Organize the SOAP note by PROBLEM. If a patient has multiple distinct medical problems or concerns, create a SEPARATE complete SOAP section for each problem. Each problem should have its own S, O, A, P sections.
+    
+    Example structure:
+    PATIENT: [Name]
+    
+    PROBLEM: [First problem title]
+    S: [Subjective for this problem]
+    O: [Objective for this problem]
+    A: [Assessment for this problem]
+    P: [Plan for this problem]
+    
+    PROBLEM: [Second problem title]
+    S: [Subjective for this problem]
+    ...and so on
+    """
+    
+    static let comprehensiveFormat = """
+    
+    **FORMAT: COMPREHENSIVE (SINGLE NOTE)**
+    
+    Create ONE unified SOAP note that covers ALL problems together. Do NOT separate by problem. Combine all subjective findings into one S section, all objective findings into one O section, list all diagnoses together in Assessment, and combine all plan items into one P section.
+    
+    The note should flow as a single cohesive document covering the entire encounter.
+    """
+    
+    // MARK: - Detail Level System (1-10)
+    
+    /// Returns a detail level modifier based on a 1-10 scale
+    /// 1 = extremely brief, 5 = standard, 10 = maximum detail
+    static func detailModifier(level: Int) -> String {
+        let clampedLevel = max(1, min(10, level))
+        
+        switch clampedLevel {
+        case 1:
+            return """
+            
+            **DETAIL LEVEL: 1/10 (ULTRA-BRIEF)**
+            
+            Create the SHORTEST possible note:
+            - Maximum 1-2 bullet points per section
+            - Only the single most important finding/symptom
+            - One-word or very short phrase bullet points
+            - Omit anything that isn't absolutely critical
+            - Skip sections entirely if minimal relevant info
+            """
+        case 2:
+            return """
+            
+            **DETAIL LEVEL: 2/10 (MINIMAL)**
+            
+            Create a very abbreviated note:
+            - Maximum 2-3 bullet points per section
+            - Only key symptoms and findings
+            - Brief, telegraphic style
+            - Omit context and history details
+            """
+        case 3:
+            return """
+            
+            **DETAIL LEVEL: 3/10 (BRIEF)**
+            
+            Create a concise note:
+            - 3-4 bullet points per section maximum
+            - Focus on primary complaint
+            - Minimal background information
+            - Essential findings only
+            """
+        case 4:
+            return """
+            
+            **DETAIL LEVEL: 4/10 (SHORT)**
+            
+            Create a shorter-than-standard note:
+            - Fewer bullet points than usual
+            - Combine related items where possible
+            - Limited contextual information
+            - Focus on main issues
+            """
+        case 5:
+            return "" // Standard - no modifier needed
+        case 6:
+            return """
+            
+            **DETAIL LEVEL: 6/10 (EXPANDED)**
+            
+            Create a slightly more detailed note:
+            - Include additional symptom descriptors
+            - Add relevant context
+            - More thorough but still concise
+            """
+        case 7:
+            return """
+            
+            **DETAIL LEVEL: 7/10 (DETAILED)**
+            
+            Create a more comprehensive note:
+            - Include symptom timing, severity, quality
+            - Add relevant history context
+            - More complete objective findings
+            - Expanded assessment reasoning
+            """
+        case 8:
+            return """
+            
+            **DETAIL LEVEL: 8/10 (THOROUGH)**
+            
+            Create a thorough, detailed note:
+            - Comprehensive symptom description with all OPQRST elements where relevant
+            - Include pertinent negatives
+            - Detailed physical exam findings
+            - Full differential consideration in assessment
+            - Detailed plan with rationale
+            """
+        case 9:
+            return """
+            
+            **DETAIL LEVEL: 9/10 (COMPREHENSIVE)**
+            
+            Create a highly detailed note:
+            - Extensive history with full context
+            - All mentioned symptoms with complete descriptors
+            - Comprehensive review of systems mentioned
+            - Detailed examination findings
+            - Thorough assessment with reasoning
+            - Complete plan with patient education points
+            """
+        case 10:
+            return """
+            
+            **DETAIL LEVEL: 10/10 (MAXIMUM)**
+            
+            Create the MOST comprehensive note possible:
+            - Include every detail mentioned in the transcript
+            - Full symptom characterization with all available details
+            - Complete history including all context
+            - Every objective finding documented
+            - Extensive differential diagnosis discussion
+            - Comprehensive plan with detailed instructions
+            - Include relevant patient statements and concerns verbatim where helpful
+            - Nothing should be omitted
+            """
+        default:
+            return ""
+        }
+    }
+    
+    /// Returns the SOAP renderer prompt with detail level, format options, custom instructions, and attachment handling
+    static func soapRendererWithOptions(detailLevel: Int, format: SOAPFormat, customInstructions: String = "", hasAttachments: Bool = false) -> String {
+        var prompt = soapRenderer
+        
+        // Add format modifier
+        switch format {
+        case .problemBased:
+            prompt += problemBasedFormat
+        case .comprehensive:
+            prompt += comprehensiveFormat
+        }
+        
+        // Add detail level modifier (skip for level 5 which is standard)
+        prompt += detailModifier(level: detailLevel)
+        
+        // Add attachment handling instructions if attachments are present
+        if hasAttachments {
+            prompt += attachmentInstructions
+        }
+        
+        // Add custom instructions if provided
+        if !customInstructions.isEmpty {
+            prompt += """
+            
+            **ADDITIONAL INSTRUCTIONS FROM PHYSICIAN:**
+            
+            \(customInstructions)
+            
+            Please incorporate these instructions when generating the SOAP note.
+            """
+        }
+        
+        return prompt
+    }
+    
+    // MARK: - Attachment Instructions
+    
+    static let attachmentInstructions = """
+    
+    **ATTACHED IMAGES/DOCUMENTS:**
+    
+    The encounter includes attached images, screenshots, or PDF documents. These may contain:
+    - Clinical images (skin conditions, wounds, X-rays, etc.)
+    - Lab results or reports
+    - Medication lists or prescription images
+    - Prior medical records or referral letters
+    - Screenshots of relevant medical information
+    
+    Instructions for handling attachments:
+    1. Carefully analyze any clinical images and describe relevant findings in the Objective section
+    2. Extract pertinent information from documents/PDFs and integrate into appropriate sections
+    3. If an image shows a skin condition, wound, or visible finding, describe its appearance, location, size, and characteristics
+    4. If lab results or vitals are shown, include the values in the Objective section
+    5. Reference the source of information when relevant (e.g., "Per attached lab report...")
+    6. Do NOT hallucinate or assume details not visible in the attachments
+    7. If an image is unclear or you cannot determine its contents, note this in the documentation
+    """
+}
+
+/// Format style for SOAP note
+enum SOAPFormat: String, CaseIterable {
+    case problemBased = "problem"
+    case comprehensive = "comprehensive"
+    
+    var displayName: String {
+        switch self {
+        case .problemBased: return "By Problem"
+        case .comprehensive: return "Comprehensive"
+        }
+    }
+    
+    var icon: String {
+        switch self {
+        case .problemBased: return "list.bullet.indent"
+        case .comprehensive: return "doc.text"
+        }
+    }
+}
+
+/// Detail level for SOAP note generation (legacy - kept for compatibility)
+enum SOAPDetailLevel: String, CaseIterable {
+    case normal = "normal"
+    case more = "more"
+    case less = "less"
 }
 
 // MARK: - Legacy Error Type (deprecated, use LLMProviderError)

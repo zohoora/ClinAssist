@@ -1,0 +1,4753 @@
+{
+  "metadata": {
+    "source": "MOH Schedule of Benefits - Physician Services",
+    "effective_date": "March 3, 2025",
+    "extracted_from": "moh-schedule-benefits-2025-trimmed.md",
+    "total_codes": 766,
+    "practice_context": {
+      "practice_type": "FHO (Family Health Organization)",
+      "physician_type": "General Practitioner / Family Physician",
+      "setting": "Outpatient",
+      "patient_status": "Rostered",
+      "province": "Ontario"
+    }
+  },
+  "billing_codes": {
+    "K001": {
+      "description": "Detention \u2013 per full quarter hour",
+      "fee": 21.1,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "A005": {
+      "description": "Consultation",
+      "fee": 87.9,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A911": {
+      "description": "Special family and general practice consultation",
+      "fee": 150.7,
+      "is_addon": false,
+      "category": "Consultations",
+      "restrictions": [
+        "Minimum 50 minutes direct contact required",
+        "Start/stop times must be recorded"
+      ]
+    },
+    "A912": {
+      "description": "Comprehensive family and general practice consultation",
+      "fee": 226.05,
+      "is_addon": false,
+      "category": "Consultations",
+      "restrictions": [
+        "Minimum 75 minutes direct contact required",
+        "Start/stop times must be recorded"
+      ]
+    },
+    "A945": {
+      "description": "Special palliative care consultation",
+      "fee": 159.2,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A905": {
+      "description": "Limited consultation",
+      "fee": 73.25,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A006": {
+      "description": "Repeat consultation",
+      "fee": 45.9,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A003": {
+      "description": "General assessment",
+      "fee": 87.35,
+      "is_addon": false,
+      "category": "Assessments",
+      "restrictions": [
+        "Not eligible for payment in patient's home"
+      ]
+    },
+    "A004": {
+      "description": "General re-assessment",
+      "fee": 38.35,
+      "is_addon": false,
+      "category": "Assessments",
+      "restrictions": [
+        "Limited to 2 per 12 months per patient per physician"
+      ]
+    },
+    "A001": {
+      "description": "Minor assessment",
+      "fee": 23.75,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "A007": {
+      "description": "Intermediate assessment or well baby care",
+      "fee": 37.95,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "A008": {
+      "description": "Mini assessment",
+      "fee": 13.05,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "K017": {
+      "description": "child",
+      "fee": 45.25,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K130": {
+      "description": "adolescent",
+      "fee": 77.2,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K131": {
+      "description": "adult age 18 to 64 inclusive",
+      "fee": 56.95,
+      "is_addon": false,
+      "category": "Preventive Care",
+      "restrictions": [
+        "One periodic health visit per 12 months for adults 18-64"
+      ]
+    },
+    "K132": {
+      "description": "adult 65 years of age and older",
+      "fee": 80.95,
+      "is_addon": false,
+      "category": "Preventive Care",
+      "restrictions": [
+        "One periodic health visit per 12 months for adults 65+"
+      ]
+    },
+    "A888": {
+      "description": "Emergency department equivalent - partial assessment",
+      "fee": 37.95,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "A900": {
+      "description": "Complex house call assessment",
+      "fee": 54.5,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "A902": {
+      "description": "House call assessment - Pronouncement of death in the home",
+      "fee": 54.5,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "A933": {
+      "description": "On-call admission assessment",
+      "fee": 79.9,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "A100": {
+      "description": "General/Family physician emergency department assessment",
+      "fee": 76.9,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "A771": {
+      "description": "Certification of death",
+      "fee": 20.6,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A772": {
+      "description": "Certification of stillbirth",
+      "fee": 20.6,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A917": {
+      "description": "Sport medicine FPA",
+      "fee": 37.95,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A927": {
+      "description": "Allergy FPA",
+      "fee": 37.95,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A937": {
+      "description": "Pain management FPA",
+      "fee": 37.95,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A947": {
+      "description": "Sleep medicine FPA",
+      "fee": 37.95,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A957": {
+      "description": "Addiction medicine FPA",
+      "fee": 37.95,
+      "is_addon": true,
+      "category": "Consultations"
+    },
+    "A967": {
+      "description": "Care of the elderly FPA",
+      "fee": 37.95,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A110": {
+      "description": "aged 19 years and below",
+      "fee": 48.9,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A112": {
+      "description": "aged 65 years and above",
+      "fee": 48.9,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "E077": {
+      "description": "identification of patient for a major eye examination",
+      "fee": 10.25,
+      "is_addon": true,
+      "category": "Add-on Codes"
+    },
+    "A115": {
+      "description": "Major eye examination",
+      "fee": 51.1,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "C005": {
+      "description": "Consultation",
+      "fee": 87.9,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "C912": {
+      "description": "Comprehensive family and general practice consultation subject to the same conditions as A912",
+      "fee": 226.05,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "C905": {
+      "description": "Limited consultation",
+      "fee": 74.25,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "C006": {
+      "description": "Repeat consultation",
+      "fee": 45.9,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "C003": {
+      "description": "General assessment",
+      "fee": 87.35,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "C004": {
+      "description": "General re-assessment",
+      "fee": 38.35,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "C813": {
+      "description": "Midwife or Aboriginal Midwife-Requested Assessment subject to the same conditions as A813",
+      "fee": 111.7,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "C904": {
+      "description": "Pre-dental/pre-operative assessment",
+      "fee": 33.7,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "C771": {
+      "description": "Certification of death - subject to the same conditions as A771",
+      "fee": 20.6,
+      "is_addon": false,
+      "category": "Hospital Services"
+    },
+    "C772": {
+      "description": "Certification of death - subject to the same conditions as A772",
+      "fee": 20.6,
+      "is_addon": false,
+      "category": "Hospital Services"
+    },
+    "C002": {
+      "description": "first five weeks........................................................ per visit",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Hospital Services"
+    },
+    "C122": {
+      "description": "day following the hospital admission assessment",
+      "fee": 61.15,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "C123": {
+      "description": "second day following the hospital assessment",
+      "fee": 61.15,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "C124": {
+      "description": "day of discharge",
+      "fee": 61.15,
+      "is_addon": false,
+      "category": "Hospital Services"
+    },
+    "C008": {
+      "description": "Concurrent care.......................................................... per visit",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Hospital Services"
+    },
+    "C010": {
+      "description": "Supportive care .......................................................... per visit",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Hospital Services"
+    },
+    "C882": {
+      "description": "Palliative care (see General Preamble GP50)............ per visit",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Palliative Care"
+    },
+    "H007": {
+      "description": "Attendance at maternal delivery for care of high risk baby(ies)",
+      "fee": 61.65,
+      "is_addon": false,
+      "category": "Long-term Care"
+    },
+    "H001": {
+      "description": "Newborn care in hospital and/or home",
+      "fee": 52.2,
+      "is_addon": false,
+      "category": "Hospital Services"
+    },
+    "H002": {
+      "description": "initial visit (per baby)",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Long-term Care"
+    },
+    "H003": {
+      "description": "subsequent visit...................................................... per visit",
+      "fee": 16.9,
+      "is_addon": false,
+      "category": "Long-term Care"
+    },
+    "H065": {
+      "description": "Consultation in Emergency Medicine",
+      "fee": 81.25,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "H105": {
+      "description": "In-patient interim admission orders",
+      "fee": 26.25,
+      "is_addon": false,
+      "category": "Hospital Services"
+    },
+    "H102": {
+      "description": "Comprehensive assessment and care",
+      "fee": 43.05,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H103": {
+      "description": "Multiple systems assessment",
+      "fee": 40.0,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H101": {
+      "description": "Minor assessment",
+      "fee": 17.1,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H104": {
+      "description": "Re-assessment",
+      "fee": 17.1,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H132": {
+      "description": "Comprehensive assessment and care",
+      "fee": 52.55,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H133": {
+      "description": "Multiple systems assessment",
+      "fee": 47.45,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H131": {
+      "description": "Minor assessment",
+      "fee": 20.95,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H134": {
+      "description": "Re-assessment",
+      "fee": 20.95,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H152": {
+      "description": "Comprehensive assessment and care",
+      "fee": 66.15,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H153": {
+      "description": "Multiple systems assessment",
+      "fee": 58.9,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H151": {
+      "description": "Minor assessment",
+      "fee": 26.35,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H154": {
+      "description": "Re-assessment",
+      "fee": 26.35,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H122": {
+      "description": "Comprehensive assessment and care",
+      "fee": 76.95,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H123": {
+      "description": "Multiple systems assessment",
+      "fee": 68.0,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H121": {
+      "description": "Minor assessment",
+      "fee": 30.7,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H124": {
+      "description": "Re-assessment",
+      "fee": 30.7,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "H112": {
+      "description": "nights (00:00h to 08:00h)",
+      "fee": 35.15,
+      "is_addon": false,
+      "category": "Long-term Care"
+    },
+    "H100": {
+      "description": "Emergency department investigative ultrasound",
+      "fee": 19.65,
+      "is_addon": false,
+      "category": "Long-term Care"
+    },
+    "W105": {
+      "description": "Consultation",
+      "fee": 87.75,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "W912": {
+      "description": "Comprehensive family and general practice consultation subject to the same conditions as A912",
+      "fee": 226.05,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "W106": {
+      "description": "Repeat consultation",
+      "fee": 45.9,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "W102": {
+      "description": "Type 1",
+      "fee": 69.35,
+      "is_addon": false,
+      "category": "Virtual Care"
+    },
+    "W104": {
+      "description": "Type 2",
+      "fee": 20.6,
+      "is_addon": false,
+      "category": "Virtual Care"
+    },
+    "W107": {
+      "description": "Type 3",
+      "fee": 30.7,
+      "is_addon": false,
+      "category": "Virtual Care"
+    },
+    "W109": {
+      "description": "Periodic health visit",
+      "fee": 70.5,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "W771": {
+      "description": "Certification of death - subject to same conditions as A771",
+      "fee": 20.6,
+      "is_addon": false,
+      "category": "Virtual Care"
+    },
+    "W904": {
+      "description": "Pre-dental/pre-operative assessment",
+      "fee": 33.7,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "W002": {
+      "description": "first 4 subsequent visits per patient per month .......per visit",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Virtual Care"
+    },
+    "W882": {
+      "description": "palliative care (see General Preamble GP50) ........per visit",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Palliative Care"
+    },
+    "W003": {
+      "description": "first 2 subsequent visits per patient per month .......per visit",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Virtual Care"
+    },
+    "W872": {
+      "description": "palliative care (see General Preamble GP50) ........per visit",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Palliative Care"
+    },
+    "K005": {
+      "description": "Individual care............................................................. per unit",
+      "fee": 70.1,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K040": {
+      "description": "combined per provider per 12 month period . per unit",
+      "fee": 50.2,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K140": {
+      "description": "2 patients................................................................ per unit",
+      "fee": 35.1,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K141": {
+      "description": "3 patients................................................................ per unit",
+      "fee": 23.35,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K142": {
+      "description": "4 patients................................................................ per unit",
+      "fee": 17.65,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K143": {
+      "description": "5 patients................................................................ per unit",
+      "fee": 14.55,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K144": {
+      "description": "6 to 12 patients....................................................... per unit",
+      "fee": 12.35,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K007": {
+      "description": "Individual care ............................................................ per unit",
+      "fee": 70.1,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K019": {
+      "description": "2 people.................................................................. per unit",
+      "fee": 35.1,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K020": {
+      "description": "3 people.................................................................. per unit",
+      "fee": 23.35,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K012": {
+      "description": "4 people.................................................................. per unit",
+      "fee": 17.65,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K024": {
+      "description": "5 people.................................................................. per unit",
+      "fee": 14.55,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K025": {
+      "description": "6 to 12 people......................................................... per unit",
+      "fee": 12.35,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K006": {
+      "description": "Individual care* ........................................................... per unit",
+      "fee": 70.1,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K623": {
+      "description": "Application for psychiatric assessment",
+      "fee": 117.05,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "K624": {
+      "description": "Certification of involuntary admission",
+      "fee": 144.15,
+      "is_addon": false,
+      "category": "Hospital Services"
+    },
+    "K708": {
+      "description": "MCC Participant, per patient",
+      "fee": 32.45,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K709": {
+      "description": "MCC Chairperson, per patient",
+      "fee": 41.85,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K710": {
+      "description": "MCC Radiologist Participant, per patient",
+      "fee": 32.45,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K121": {
+      "description": "Hospital in-patient case conference............................ per unit",
+      "fee": 32.45,
+      "is_addon": false,
+      "category": "Hospital Services"
+    },
+    "K700": {
+      "description": "Palliative care out-patient case conference................ per unit",
+      "fee": 32.45,
+      "is_addon": false,
+      "category": "Palliative Care"
+    },
+    "K704": {
+      "description": "Paediatric out-patient case conference ...................... per unit",
+      "fee": 32.45,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K701": {
+      "description": "Mental health out-patient case conference................. per unit",
+      "fee": 32.45,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K702": {
+      "description": "Bariatric out-patient case conference ......................... per unit",
+      "fee": 32.45,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K703": {
+      "description": "Geriatric out-patient case conference......................... per unit",
+      "fee": 32.45,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K707": {
+      "description": "Chronic pain out-patient case conference .................. per unit",
+      "fee": 32.45,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K124": {
+      "description": "Long-term care/CCAC case conference..................... per unit",
+      "fee": 32.45,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K705": {
+      "description": "Long-term care \u2013 high risk patient conference ........... per unit",
+      "fee": 32.45,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K706": {
+      "description": "Convalescent care program case conference",
+      "fee": 32.45,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K732": {
+      "description": "CritiCall telephone consultation - Referring physician",
+      "fee": 32.45,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "K733": {
+      "description": "CritiCall telephone consultation - Consultant physician",
+      "fee": 41.85,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "E150": {
+      "description": "CritiCall review of complex neurosurgical imaging, to K733",
+      "fee": 44.0,
+      "is_addon": false,
+      "category": "Add-on Codes"
+    },
+    "K736": {
+      "description": "CritiCall telephone consultation - Referring physician",
+      "fee": 32.45,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "K737": {
+      "description": "CritiCall telephone consultation - Consultant physician",
+      "fee": 41.85,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "K738": {
+      "description": "Physician to physician e-consultation \u2013 Referring physician",
+      "fee": 16.0,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "K739": {
+      "description": "Physician to physician e-consultation \u2013 Consultant physician",
+      "fee": 20.5,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "K022": {
+      "description": "HIV primary care......................................................... per unit",
+      "fee": 70.1,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K037": {
+      "description": "Fibromyalgia/myalgic encephalomyelitis care ............ perunit",
+      "fee": 70.1,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K023": {
+      "description": "Palliative care support ................................................ per unit",
+      "fee": 74.7,
+      "is_addon": false,
+      "category": "Palliative Care"
+    },
+    "K016": {
+      "description": "Genetic assessment ................................................... per unit",
+      "fee": 74.05,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "K028": {
+      "description": "STD management ...................................................... per unit",
+      "fee": 70.1,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K029": {
+      "description": "Insulin therapy support (ITS) ...................................... per unit",
+      "fee": 70.1,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K030": {
+      "description": "Diabetic Management Assessment",
+      "fee": 40.55,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "Q040": {
+      "description": "Diabetes management incentive",
+      "fee": 60.0,
+      "is_addon": false,
+      "category": "Chronic Disease Management"
+    },
+    "E079": {
+      "description": "Initial discussion with patient, to eligible services ............. add",
+      "fee": 15.55,
+      "is_addon": true,
+      "category": "Add-on Codes"
+    },
+    "K039": {
+      "description": "Smoking cessation follow-up visit",
+      "fee": 33.45,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K018": {
+      "description": "female",
+      "fee": 326.0,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K021": {
+      "description": "male",
+      "fee": 257.15,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K026": {
+      "description": "Certification of Medical Eligibility for OHCAP",
+      "fee": 54.7,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K032": {
+      "description": "Specific neurocognitive assessment",
+      "fee": 70.1,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "K042": {
+      "description": "Extended specific neurocognitive assessment",
+      "fee": 140.2,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "K070": {
+      "description": "Application",
+      "fee": 31.75,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K036": {
+      "description": "Completion of northern health travel grant application form",
+      "fee": 10.25,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K038": {
+      "description": "Completion of Long-Term Care health report form",
+      "fee": 45.15,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K034": {
+      "description": "Telephone reporting - specified reportable disease to a MOH",
+      "fee": 36.0,
+      "is_addon": false,
+      "category": "Virtual Care"
+    },
+    "K399": {
+      "description": "Clinical interpretation by an immunologist",
+      "fee": 29.05,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "A680": {
+      "description": "Initial assessment \u2013 substance abuse",
+      "fee": 144.75,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "K680": {
+      "description": "Substance abuse - extended assessment.................. per unit",
+      "fee": 70.1,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "A010": {
+      "description": "GP focused practice consultation by Video",
+      "fee": 87.9,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A011": {
+      "description": "GP focused practice repeat consultation by Video",
+      "fee": 45.9,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A906": {
+      "description": "GP focused practice limited consultation by Video",
+      "fee": 73.25,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A913": {
+      "description": "GP focused practice special consultation by Video",
+      "fee": 150.7,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A914": {
+      "description": "GP focused practice comprehensive consultation by Video",
+      "fee": 226.05,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A101": {
+      "description": "Limited Virtual Care by Video",
+      "fee": 20.0,
+      "is_addon": false,
+      "category": "Virtual Care"
+    },
+    "A102": {
+      "description": "Limited Virtual Care by Telephone",
+      "fee": 15.0,
+      "is_addon": false,
+      "category": "Virtual Care"
+    },
+    "A055": {
+      "description": "Consultation",
+      "fee": 125.6,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A050": {
+      "description": "Special community medicine consultation",
+      "fee": 144.75,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A400": {
+      "description": "Comprehensive community medicine consultation",
+      "fee": 240.55,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A405": {
+      "description": "Limited consultation",
+      "fee": 84.2,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A056": {
+      "description": "Repeat consultation",
+      "fee": 84.2,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "A053": {
+      "description": "Medical specific assessment",
+      "fee": 79.85,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "A054": {
+      "description": "Medical specific re-assessment",
+      "fee": 61.25,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "A051": {
+      "description": "Complex medical specific re-assessment",
+      "fee": 70.9,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "A058": {
+      "description": "Partial assessment",
+      "fee": 38.05,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "C055": {
+      "description": "Consultation",
+      "fee": 125.6,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "C405": {
+      "description": "Limited consultation",
+      "fee": 84.2,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "C056": {
+      "description": "Repeat consultation",
+      "fee": 84.2,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "C053": {
+      "description": "Medical specific assessment",
+      "fee": 79.85,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "C054": {
+      "description": "Medical specific re-assessment",
+      "fee": 61.25,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "C051": {
+      "description": "Complex medical specific re-assessment",
+      "fee": 70.9,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "C052": {
+      "description": "first five weeks ....................................................... per visit",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Hospital Services"
+    },
+    "C058": {
+      "description": "Concurrent care.......................................................... per visit",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Hospital Services"
+    },
+    "C982": {
+      "description": "Palliative care (see General Preamble GP50) ........... per visit",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Palliative Care"
+    },
+    "W055": {
+      "description": "Consultation",
+      "fee": 125.6,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "W405": {
+      "description": "Limited consultation",
+      "fee": 84.2,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "W056": {
+      "description": "Repeat consultation",
+      "fee": 84.2,
+      "is_addon": false,
+      "category": "Consultations"
+    },
+    "W402": {
+      "description": "Type 1",
+      "fee": 69.35,
+      "is_addon": false,
+      "category": "Virtual Care"
+    },
+    "W404": {
+      "description": "Type 2",
+      "fee": 20.6,
+      "is_addon": false,
+      "category": "Virtual Care"
+    },
+    "W407": {
+      "description": "Type 3",
+      "fee": 30.7,
+      "is_addon": false,
+      "category": "Virtual Care"
+    },
+    "W409": {
+      "description": "Periodic health visit",
+      "fee": 65.05,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "W052": {
+      "description": "first 4 subsequent visits per patient per month ...... per visit",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Virtual Care"
+    },
+    "W982": {
+      "description": "palliative care (see General Preamble GP50)........ per visit",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Palliative Care"
+    },
+    "W053": {
+      "description": "first 2 subsequent visits per patient per month ...... per visit",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Virtual Care"
+    },
+    "W972": {
+      "description": "palliative care (see General Preamble GP50)........ per visit",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Palliative Care"
+    },
+    "J056": {
+      "description": "transcatheter fibrinolytic therapy",
+      "fee": 670.55,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J058": {
+      "description": "Vascular stenting",
+      "fee": 101.55,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J066": {
+      "description": "Renal angioplasty",
+      "fee": 504.4,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J031": {
+      "description": "direct puncture",
+      "fee": 89.9,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J048": {
+      "description": "Percutaneous trans-hepatic catheter portal venography",
+      "fee": 311.05,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J027": {
+      "description": "direct puncture",
+      "fee": 76.55,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J026": {
+      "description": "direct puncture",
+      "fee": 70.8,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J033": {
+      "description": "Splenoportogram",
+      "fee": 128.35,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J034": {
+      "description": "Trans-lumbar aortogram",
+      "fee": 89.9,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "J032": {
+      "description": "direct puncture or by retrograde brachial injection",
+      "fee": 111.5,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "J035": {
+      "description": "Pressure measurements during angiography",
+      "fee": 34.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J001": {
+      "description": "Arthrogram, tenogram or bursogram",
+      "fee": 34.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J024": {
+      "description": "unilateral",
+      "fee": 89.9,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J044": {
+      "description": "bilateral",
+      "fee": 135.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J002": {
+      "description": "unilateral",
+      "fee": 27.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J043": {
+      "description": "bilateral",
+      "fee": 40.65,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J003": {
+      "description": "unilateral",
+      "fee": 68.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J042": {
+      "description": "bilateral",
+      "fee": 82.2,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J050": {
+      "description": "percutaneous",
+      "fee": 297.3,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J053": {
+      "description": "Cavernosography",
+      "fee": 45.35,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J005": {
+      "description": "Dacrocystogram",
+      "fee": 45.4,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "J006": {
+      "description": "one disc",
+      "fee": 105.3,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J030": {
+      "description": "each additional disc ................................................... add",
+      "fee": 54.05,
+      "is_addon": true,
+      "category": "Other Procedures"
+    },
+    "J049": {
+      "description": "percutaneous",
+      "fee": 437.3,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J036": {
+      "description": "Fistula or sinus injection",
+      "fee": 26.95,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "J068": {
+      "description": "Hydrostatic/pneumatic reduction of intussusception",
+      "fee": 44.25,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J008": {
+      "description": "Hysterosalpingogram",
+      "fee": 56.7,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J009": {
+      "description": "Laryngogram",
+      "fee": 33.5,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J010": {
+      "description": "per side",
+      "fee": 105.3,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J037": {
+      "description": "Mammary ductography",
+      "fee": 70.35,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J011": {
+      "description": "Myelogram",
+      "fee": 93.4,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J020": {
+      "description": "with posterior fossa views .......................................... add",
+      "fee": 23.85,
+      "is_addon": true,
+      "category": "Other Procedures"
+    },
+    "J060": {
+      "description": "Nephrostogram",
+      "fee": 34.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J045": {
+      "description": "Percutaneous antegrade pyelogram",
+      "fee": 140.55,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J055": {
+      "description": "Percutaneous gastrostomy",
+      "fee": 257.6,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J061": {
+      "description": "Percutaneous cecostomy",
+      "fee": 257.6,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J062": {
+      "description": "Percutaneous cholecystostomy",
+      "fee": 257.6,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "J063": {
+      "description": "Percutaneous jejunostomy",
+      "fee": 298.8,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J046": {
+      "description": "Percutaneous nephrostomy",
+      "fee": 257.6,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J065": {
+      "description": "Dilation of non-vascular structures",
+      "fee": 23.6,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J059": {
+      "description": "Non-vascular stenting",
+      "fee": 116.9,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J051": {
+      "description": "Percutaneous spinal cord puncture for syringogram",
+      "fee": 108.9,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J013": {
+      "description": "Percutaneous trans-hepatic cholangiogram",
+      "fee": 121.25,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J057": {
+      "description": "Transjugular intrahepatic portosystemic shunt (TIPS)",
+      "fee": 906.45,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J052": {
+      "description": "Positive contrast cisternogram",
+      "fee": 99.9,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "Z597": {
+      "description": "Intracavitary/intratumoural injections",
+      "fee": 103.75,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "J039": {
+      "description": "Renal cyst puncture",
+      "fee": 140.4,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "J018": {
+      "description": "Sialogram",
+      "fee": 52.25,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J029": {
+      "description": "Vasogram",
+      "fee": 69.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J122": {
+      "description": "complete, B-mode",
+      "fee": 47.2,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J102": {
+      "description": "quantitative, A-mode",
+      "fee": 22.4,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J103": {
+      "description": "B-scan immersion",
+      "fee": 43.95,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J107": {
+      "description": "B-scan contact",
+      "fee": 21.75,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J108": {
+      "description": "biometry (Axial length - A-mode)",
+      "fee": 22.8,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J105": {
+      "description": "excluding vascular study",
+      "fee": 47.3,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J125": {
+      "description": "Chest masses, pleural effusion - A & B-mode",
+      "fee": 48.75,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J135": {
+      "description": "complete",
+      "fee": 48.75,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J160": {
+      "description": "for high risk pregnancy or complications of pregnancy",
+      "fee": 48.75,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J166": {
+      "description": "multiple gestation, for each additional fetus, to J160",
+      "fee": 41.45,
+      "is_addon": true,
+      "category": "Other Procedures"
+    },
+    "J158": {
+      "description": "for high risk pregnancy or complications of pregnancy",
+      "fee": 32.1,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J169": {
+      "description": "multiple gestation, for each additional fetus, to J168",
+      "fee": 33.15,
+      "is_addon": true,
+      "category": "Other Procedures"
+    },
+    "J162": {
+      "description": "complete*",
+      "fee": 48.75,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J138": {
+      "description": "Intracavitary ultrasound* (e.g. transrectal, transvaginal) ........ 48.75",
+      "fee": 26.5,
+      "is_addon": false,
+      "category": "Women's Health Procedures"
+    },
+    "J163": {
+      "description": "limited study - for other than pregnancy",
+      "fee": 32.1,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J161": {
+      "description": "limited - for other than pregnancy",
+      "fee": 32.1,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J164": {
+      "description": "Follicle monitoring studies",
+      "fee": 24.4,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J189": {
+      "description": "Transcranial doppler assessment of intracranial circulation ...",
+      "fee": 23.65,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "J186": {
+      "description": "assessment with power mode doppler",
+      "fee": 32.5,
+      "is_addon": false,
+      "category": "Assessments"
+    },
+    "J187": {
+      "description": "prolonged study requiring at least 50 minutes",
+      "fee": 32.5,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J205": {
+      "description": "arterial and/or venous",
+      "fee": 22.05,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J197": {
+      "description": "two or more pressures",
+      "fee": 6.85,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J199": {
+      "description": "doppler scan",
+      "fee": 6.85,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J203": {
+      "description": "oxygen tension measurements",
+      "fee": 24.1,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J204": {
+      "description": "when done in addition to Doppler studies",
+      "fee": 13.2,
+      "is_addon": true,
+      "category": "Other Procedures"
+    },
+    "J180": {
+      "description": "scan B-mode",
+      "fee": 35.15,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J182": {
+      "description": "per limb (excluding vascular study)",
+      "fee": 25.5,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J127": {
+      "description": "scan B-mode (per breast)",
+      "fee": 23.7,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J183": {
+      "description": "scan",
+      "fee": 47.3,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J290": {
+      "description": "Spinal sonography..............................................................",
+      "fee": 30.6,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J151": {
+      "description": "Ultrasound compression of groin pseudoaneurysm, per \u00bc hour",
+      "fee": 19.65,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J324": {
+      "description": "repeat after bronchodilator",
+      "fee": 2.97,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J327": {
+      "description": "repeat after bronchodilator",
+      "fee": 2.97,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J311": {
+      "description": "by gas dilution method",
+      "fee": 16.3,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J307": {
+      "description": "by body plethysmography",
+      "fee": 17.5,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J303": {
+      "description": "Extra pulmonary airways resistance by plethysmography",
+      "fee": 16.2,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J340": {
+      "description": "Maximum inspiratory and expiratory pressures",
+      "fee": 2.81,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J310": {
+      "description": "Carbon monoxide diffusing capacity by single breath method 21.40",
+      "fee": 19.4,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J308": {
+      "description": "Carbon dioxide ventilatory response",
+      "fee": 19.9,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "E450": {
+      "description": "J315 plus J301 or J304 before and/or after exercise",
+      "fee": 13.3,
+      "is_addon": true,
+      "category": "Add-on Codes"
+    },
+    "J331": {
+      "description": "Estimate of shunt (Qs/Qt) breathing pure oxygen",
+      "fee": 27.55,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J313": {
+      "description": "Mixed venous PCO2, by the rebreathing method",
+      "fee": 11.25,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J323": {
+      "description": "by oximetry at rest, with or without O2",
+      "fee": 4.2,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J334": {
+      "description": "J332 with at least two levels of supplemental O2",
+      "fee": 30.55,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J322": {
+      "description": "Standard O2 consumption and CO2 production",
+      "fee": 5.3,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "J335": {
+      "description": "Antigen challenge test",
+      "fee": 51.85,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "Z459": {
+      "description": "Arterial puncture for blood gas analysis",
+      "fee": 10.2,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "G700": {
+      "description": "Basic fee-per-visit premium for procedures marked(+)",
+      "fee": 5.6,
+      "is_addon": false,
+      "category": "Premiums & Bonuses"
+    },
+    "G202": {
+      "description": "each injection",
+      "fee": 4.45,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "G212": {
+      "description": "when sole reason for visit (including first injection)",
+      "fee": 9.75,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "G206": {
+      "description": "maximum of 90 per patient, per year ..................... per test",
+      "fee": 2.39,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G208": {
+      "description": "Provocation testing .................................................... per unit",
+      "fee": 21.25,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G213": {
+      "description": "Physical urticaria challenges",
+      "fee": 13.8,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G270": {
+      "description": "Intraosseous infusion",
+      "fee": 23.9,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "Z456": {
+      "description": "Insertion of implantable central venous catheter",
+      "fee": 193.4,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z446": {
+      "description": "Insertion of subcutaneous venous access reservoir",
+      "fee": 168.0,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "Z447": {
+      "description": "revision same site",
+      "fee": 85.25,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "E684": {
+      "description": "when performed in infant or child, to Z456 or Z446 ....add",
+      "fee": 214.1,
+      "is_addon": true,
+      "category": "Add-on Codes"
+    },
+    "G275": {
+      "description": "Exchange transfusion",
+      "fee": 205.45,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G280": {
+      "description": "Intra-uterine fetal transfusion - initial or subsequent",
+      "fee": 186.9,
+      "is_addon": false,
+      "category": "Women's Health Procedures"
+    },
+    "G276": {
+      "description": "Donor cell pheresis (platelets or leukocytes)",
+      "fee": 15.35,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G277": {
+      "description": "initial and repeat, to a maximum of 5 per year ............each",
+      "fee": 82.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G278": {
+      "description": "more than 5 per year ..................................................each",
+      "fee": 41.8,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G287": {
+      "description": "initial and repeat, to a maximum of 5 per year ...........each",
+      "fee": 82.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G290": {
+      "description": "more than 5 per year ..................................................each",
+      "fee": 41.8,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "Z439": {
+      "description": "pressures only",
+      "fee": 166.9,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z440": {
+      "description": "retrograde aortic",
+      "fee": 208.5,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z441": {
+      "description": "transeptal",
+      "fee": 297.15,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "G296": {
+      "description": "Dye dilution densitometry and/or thermal dilution studies benefit covers all studies on same day in cath lab",
+      "fee": 110.95,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G299": {
+      "description": "Oximetry studies by catheterization",
+      "fee": 110.95,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G289": {
+      "description": "Fick determination",
+      "fee": 110.95,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G301": {
+      "description": "Exercise studies during catheterization",
+      "fee": 122.4,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G306": {
+      "description": "Isotope studies during cardiac catheterization",
+      "fee": 110.95,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G305": {
+      "description": "Intracardiac phonocardiography",
+      "fee": 122.4,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G509": {
+      "description": "maximum one per bypass graft",
+      "fee": 80.4,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "Z442": {
+      "description": "both arteries",
+      "fee": 286.75,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "G263": {
+      "description": "with other drug interventional studies ........................ add",
+      "fee": 96.45,
+      "is_addon": true,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "Z434": {
+      "description": "one or more sites on a single major vessel",
+      "fee": 467.05,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "G262": {
+      "description": "each additional major vessel",
+      "fee": 210.4,
+      "is_addon": true,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G298": {
+      "description": "Coronary angioplasty stent, per stent",
+      "fee": 78.95,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "Z448": {
+      "description": "aortic valve, pulmonic valve, pulmonary branch stenosis",
+      "fee": 487.9,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z449": {
+      "description": "for coarctation of aorta",
+      "fee": 415.15,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z460": {
+      "description": "closure of patent ductus arteriosis with umbrella",
+      "fee": 377.55,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z461": {
+      "description": "mitral valvuloplasty for rheumatic stenosis",
+      "fee": 566.2,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "G261": {
+      "description": "atrial",
+      "fee": 331.05,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G259": {
+      "description": "ventricular",
+      "fee": 383.3,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G176": {
+      "description": "atrial pacing and mapping",
+      "fee": 334.25,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G177": {
+      "description": "ventricular pacing and mapping",
+      "fee": 416.8,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G178": {
+      "description": "catheter ablation therapy",
+      "fee": 352.05,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G115": {
+      "description": "External cardiac pacing (temporary transthoracic) once per 24hour period",
+      "fee": 46.3,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "Z443": {
+      "description": "Insertion of temporary endocardial electrode",
+      "fee": 154.1,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z431": {
+      "description": "Repositioning of temporary endocardial electrode",
+      "fee": 64.25,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "G288": {
+      "description": "transvascular, right or left",
+      "fee": 200.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G175": {
+      "description": "Insertion of oesophageal electrode in monitoring position",
+      "fee": 21.85,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G310": {
+      "description": "technical component",
+      "fee": 7.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G313": {
+      "description": "professional component - must include written interpretation",
+      "fee": 4.45,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G315": {
+      "description": "technical component",
+      "fee": 45.95,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G319": {
+      "description": "professional component",
+      "fee": 62.05,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G111": {
+      "description": "technical component",
+      "fee": 53.6,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G112": {
+      "description": "professional component",
+      "fee": 74.25,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G651": {
+      "description": "technical component - 12 to 35 hours recording",
+      "fee": 25.25,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G652": {
+      "description": "technical component - 12 to 35 hours scanning",
+      "fee": 34.55,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G650": {
+      "description": "professional component - 12 to 35 hours recording",
+      "fee": 47.9,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G682": {
+      "description": "technical component - 36 to 59 hours recording",
+      "fee": 50.5,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G683": {
+      "description": "technical component - 36 to 59 hours scanning",
+      "fee": 69.05,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G658": {
+      "description": "professional component - 36 to 59 hours recording",
+      "fee": 75.45,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G684": {
+      "description": "technical component - 60 hours to 13 days recording",
+      "fee": 75.7,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G685": {
+      "description": "technical component - 60 hours to 13 days scanning",
+      "fee": 103.6,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G659": {
+      "description": "professional component - 60 hours to 13 days recording",
+      "fee": 95.85,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G647": {
+      "description": "technical component - 14 or more days recording",
+      "fee": 119.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G648": {
+      "description": "technical component - 14 or more days scanning",
+      "fee": 173.2,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G649": {
+      "description": "professional component - 14 or more days recording",
+      "fee": 122.25,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G654": {
+      "description": "technical component - 12 to 35 hours recording",
+      "fee": 24.05,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G655": {
+      "description": "technical component - 12 to 35 hours scanning",
+      "fee": 16.45,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G653": {
+      "description": "professional component - 12 to 35 hours recording",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G686": {
+      "description": "technical component - 36 to 59 hours recording",
+      "fee": 48.15,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G687": {
+      "description": "technical component - 36 to 59 hours scanning",
+      "fee": 32.95,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G656": {
+      "description": "professional component - 36 to 59 hours recording",
+      "fee": 51.15,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G688": {
+      "description": "technical component - 60 hours to 13 days recording",
+      "fee": 72.2,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G689": {
+      "description": "technical component - 60 hours to 13 days scanning",
+      "fee": 49.45,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G657": {
+      "description": "professional component - 60 hours to 13 days recording",
+      "fee": 68.2,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G694": {
+      "description": "technical component \u2013 14 or more days recording",
+      "fee": 113.05,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G695": {
+      "description": "technical component \u2013 14 or more days scanning",
+      "fee": 83.15,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G696": {
+      "description": "professional component \u2013 14 or more days recording",
+      "fee": 86.8,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G311": {
+      "description": "technical component",
+      "fee": 2.03,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G320": {
+      "description": "professional component",
+      "fee": 4.3,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G284": {
+      "description": "technical component",
+      "fee": 9.3,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G283": {
+      "description": "professional component",
+      "fee": 11.3,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G181": {
+      "description": "technical component",
+      "fee": 12.2,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G180": {
+      "description": "professional component",
+      "fee": 16.95,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G308": {
+      "description": "technical component",
+      "fee": 9.3,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G307": {
+      "description": "professional component",
+      "fee": 9.55,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G317": {
+      "description": "professional component",
+      "fee": 27.8,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G321": {
+      "description": "professional component",
+      "fee": 47.65,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G519": {
+      "description": "technical component",
+      "fee": 10.9,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G518": {
+      "description": "professional component",
+      "fee": 11.2,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G121": {
+      "description": "technical component",
+      "fee": 13.25,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G120": {
+      "description": "professional component",
+      "fee": 7.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G127": {
+      "description": "technical component, per extremity",
+      "fee": 13.25,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G126": {
+      "description": "professional component, per extremity",
+      "fee": 7.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G363": {
+      "description": "Cervical mucous penetration test",
+      "fee": 22.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G378": {
+      "description": "Insertion of intrauterine contraceptive device",
+      "fee": 39.95,
+      "is_addon": false,
+      "category": "Women's Health Procedures"
+    },
+    "G552": {
+      "description": "Removal of intrauterine contraceptive device",
+      "fee": 20.0,
+      "is_addon": false,
+      "category": "Women's Health Procedures"
+    },
+    "E542": {
+      "description": "when performed outside hospital",
+      "fee": 11.55,
+      "is_addon": true,
+      "category": "Hospital Services"
+    },
+    "E870": {
+      "description": "when laminaria tent supplied by the physician",
+      "fee": 8.35,
+      "is_addon": true,
+      "category": "Add-on Codes"
+    },
+    "Z463": {
+      "description": "Removal of Norplant",
+      "fee": 65.3,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "G398": {
+      "description": "Pessary fitting \u2013 initial or re-fitting",
+      "fee": 63.65,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G550": {
+      "description": "Pessary care \u2013 pessary removal, care and reinsertion",
+      "fee": 10.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G098": {
+      "description": "Transfusion support, per patient ............................. per week",
+      "fee": 32.35,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G100": {
+      "description": "Haemophilia infusion, per patient .............................per week",
+      "fee": 32.35,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G101": {
+      "description": "Home/self-care ventilation, per patient .....................per week",
+      "fee": 33.55,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G869": {
+      "description": "Botulinum toxin injection(s) of bladder detrusor muscle",
+      "fee": 150.0,
+      "is_addon": true,
+      "category": "Injections"
+    },
+    "G873": {
+      "description": "Botulinum toxin injection(s) for spasmodic dysphonia",
+      "fee": 120.0,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "G875": {
+      "description": "First injection",
+      "fee": 40.0,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "G874": {
+      "description": "or G876............................................................... add",
+      "fee": 28.1,
+      "is_addon": true,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G878": {
+      "description": ".......................................................................... add",
+      "fee": 30.6,
+      "is_addon": true,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G328": {
+      "description": "Aspiration of bursa or complex joint, with or without injection",
+      "fee": 39.8,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "G396": {
+      "description": "Injections of extensive keloids",
+      "fee": 24.9,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "Z455": {
+      "description": "under general anaesthesia",
+      "fee": 44.7,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "G372": {
+      "description": "with visit (each injection)",
+      "fee": 3.89,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "G373": {
+      "description": "sole reason (first injection)",
+      "fee": 6.75,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "G462": {
+      "description": "Administration of oral polio vaccine",
+      "fee": 1.65,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G384": {
+      "description": "Infiltration of tissues for trigger point",
+      "fee": 8.85,
+      "is_addon": false,
+      "category": "Joint & Soft Tissue Injections"
+    },
+    "G385": {
+      "description": "for each additional site (to a maximum of 2)",
+      "fee": 4.55,
+      "is_addon": true,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G536": {
+      "description": "Sclerotherapy including one post injection visit, unilateral",
+      "fee": 77.85,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "G537": {
+      "description": "Repeat sclerotherapy, unilateral",
+      "fee": 26.05,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G015": {
+      "description": "FSH (pituitary gonadotrophins)",
+      "fee": 11.37,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G016": {
+      "description": "TSH (thyroid stimulating hormone)",
+      "fee": 9.82,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G017": {
+      "description": "Prolactin",
+      "fee": 14.48,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G018": {
+      "description": "Estradiol",
+      "fee": 28.44,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G019": {
+      "description": "LH (luteinizing hormone)",
+      "fee": 9.31,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G020": {
+      "description": "Progesterone",
+      "fee": 14.48,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G021": {
+      "description": "HCG (human chorionic gonadotrophins) quantitative",
+      "fee": 15.51,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G022": {
+      "description": "Testosterone",
+      "fee": 14.48,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G023": {
+      "description": "Testosterone, free",
+      "fee": 25.85,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G024": {
+      "description": "Androstenedione",
+      "fee": 38.78,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G025": {
+      "description": "Dehydroepiandrosterone sulphate (DHEAS)",
+      "fee": 20.68,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G026": {
+      "description": "17-OH progesterone",
+      "fee": 31.02,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G027": {
+      "description": "Seminal fluid examination (complete)",
+      "fee": 11.37,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G029": {
+      "description": "Antithrombin III assay",
+      "fee": 28.44,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G030": {
+      "description": "Circulating anticoagulant (e.g., lupus anticoagulant)",
+      "fee": 5.17,
+      "is_addon": false,
+      "category": "Chronic Disease Management"
+    },
+    "G032": {
+      "description": "Anti-DNA",
+      "fee": 23.27,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G033": {
+      "description": "Anti-RNA",
+      "fee": 23.27,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G034": {
+      "description": "Serial tube 4 or more antigens",
+      "fee": 15.51,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G035": {
+      "description": "Titre - serial tube single antigen",
+      "fee": 7.76,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G036": {
+      "description": "Sperm antibodies \u2013 screen",
+      "fee": 10.34,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G037": {
+      "description": "Sperm antibodies \u2013 titre",
+      "fee": 20.68,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G041": {
+      "description": "Target drug testing, urine, qualitative or quantitative .. per test",
+      "fee": 3.7,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G042": {
+      "description": "Target drug testing, urine, qualitative or quantitative .. per test",
+      "fee": 2.5,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G039": {
+      "description": "Creatinine",
+      "fee": 1.03,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G031": {
+      "description": "Prothrombin time",
+      "fee": 6.4,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G001": {
+      "description": "Cholesterol, total",
+      "fee": 5.7,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G002": {
+      "description": "Glucose, quantitative or semi-quantitative",
+      "fee": 2.26,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G004": {
+      "description": "Occult blood",
+      "fee": 1.58,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G005": {
+      "description": "Pregnancy test",
+      "fee": 3.88,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G010": {
+      "description": "One or more parts of above without microscopy",
+      "fee": 2.64,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G011": {
+      "description": "Fungus culture including KOH preparation and smear",
+      "fee": 13.05,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G012": {
+      "description": "Wet preparation (for fungus, trichomonas, parasites)",
+      "fee": 1.93,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G014": {
+      "description": "Rapid streptococcal test",
+      "fee": 5.7,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G411": {
+      "description": "Nephrological management of donor procurement",
+      "fee": 192.1,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G347": {
+      "description": "Renal perfusion with hypothermia for organ transplantation",
+      "fee": 96.35,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G348": {
+      "description": "Renal preservation with continuous machine perfusion",
+      "fee": 96.35,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G412": {
+      "description": "1st day following transplantation",
+      "fee": 311.9,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G408": {
+      "description": "2nd to 10th day, inclusive ......................................... per diem",
+      "fee": 155.9,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G409": {
+      "description": "11th to 21st day, inclusive......................................... per diem",
+      "fee": 77.95,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G248": {
+      "description": "Caudal, single injection",
+      "fee": 55.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G125": {
+      "description": "Caudal/lumbar epidural with catheter",
+      "fee": 100.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G118": {
+      "description": "Thoracic epidural with catheter",
+      "fee": 130.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G062": {
+      "description": "Cervical epidural with catheter",
+      "fee": 160.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G260": {
+      "description": "Major plexus block",
+      "fee": 80.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G060": {
+      "description": "Peripheral nerve block, major",
+      "fee": 55.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G061": {
+      "description": "Peripheral nerve block, minor",
+      "fee": 30.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G279": {
+      "description": "Percutaneous nerve block catheter insertion",
+      "fee": 80.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G066": {
+      "description": "Intrapleural block",
+      "fee": 55.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G067": {
+      "description": "Intrapleural block with continuous catheter",
+      "fee": 80.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G068": {
+      "description": "Epidural blood patch",
+      "fee": 125.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G224": {
+      "description": "Nerve block by same physician performing the procedure",
+      "fee": 15.55,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G247": {
+      "description": "Hospital visits, to a maximum of 3 per patient per day",
+      "fee": 30.1,
+      "is_addon": false,
+      "category": "Hospital Services"
+    },
+    "G063": {
+      "description": "Initiation of outpatient continuous nerve block infusion",
+      "fee": 29.2,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G910": {
+      "description": "Cervical, first site",
+      "fee": 80.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G911": {
+      "description": "Thoracic, first site",
+      "fee": 80.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G912": {
+      "description": "Lumbar/Sacral, first site",
+      "fee": 80.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G913": {
+      "description": "each additional site, to G910, G911 or G912",
+      "fee": 20.0,
+      "is_addon": true,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G914": {
+      "description": "First site",
+      "fee": 56.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G915": {
+      "description": "each additional site, to G914",
+      "fee": 14.0,
+      "is_addon": true,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "N556": {
+      "description": "First site",
+      "fee": 142.8,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "E396": {
+      "description": "each additional site to N556....................................... add",
+      "fee": 71.4,
+      "is_addon": true,
+      "category": "Add-on Codes"
+    },
+    "N534": {
+      "description": "Percutaneous radio frequency posterior dorsal root rhizotomy any number of levels",
+      "fee": 379.45,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "G246": {
+      "description": "Percutaneous epidural injection - Lumbar",
+      "fee": 150.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections",
+      "restrictions": [
+        "Limited to 12 services per patient per 12 month period (combined with G117, G119, G918)"
+      ]
+    },
+    "G117": {
+      "description": "Percutaneous epidural injection - Thoracic",
+      "fee": 170.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections",
+      "restrictions": [
+        "Limited to 12 services per patient per 12 month period (combined with G246, G119, G918)"
+      ]
+    },
+    "G119": {
+      "description": "Percutaneous epidural injection - Cervical",
+      "fee": 190.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections",
+      "restrictions": [
+        "Limited to 12 services per patient per 12 month period (combined with G246, G117, G918)"
+      ]
+    },
+    "G918": {
+      "description": "Percutaneous epidural injection - Caudal",
+      "fee": 116.1,
+      "is_addon": true,
+      "category": "Diagnostic & Therapeutic",
+      "restrictions": [
+        "Limited to 12 services per patient per 12 month period (combined with G246, G117, G119)"
+      ]
+    },
+    "G245": {
+      "description": "Lumbar epidural or intrathecal injection of sclerosing solution",
+      "fee": 180.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G239": {
+      "description": "Differential intrathecal spinal block",
+      "fee": 127.6,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G920": {
+      "description": "with ultrasound or fluoroscopic guidance, unilateral",
+      "fee": 80.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G234": {
+      "description": "without ultrasound or fluoroscopic guidance, unilateral",
+      "fee": 55.1,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G236": {
+      "description": "unilateral or bilateral",
+      "fee": 150.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G374": {
+      "description": "I.V. regional guanethidine",
+      "fee": 54.3,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "E444": {
+      "description": "with radiofrequency ablation, to G233",
+      "fee": 50.0,
+      "is_addon": true,
+      "category": "Add-on Codes"
+    },
+    "G214": {
+      "description": "Brachial plexus",
+      "fee": 54.65,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G243": {
+      "description": "unilateral",
+      "fee": 54.65,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G244": {
+      "description": "bilateral",
+      "fee": 81.95,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G218": {
+      "description": "Ilioinguinal and iliohypogastric nerves",
+      "fee": 54.65,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G219": {
+      "description": "Infraorbital",
+      "fee": 34.2,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G220": {
+      "description": "Intercostal nerve",
+      "fee": 34.2,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G221": {
+      "description": "for each additional one",
+      "fee": 16.95,
+      "is_addon": true,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G258": {
+      "description": "Intrapleural block (single injection)",
+      "fee": 44.25,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "G225": {
+      "description": "Mental branch of mandibular nerve",
+      "fee": 34.2,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G250": {
+      "description": "Maxillary or mandibular division of trigeminal nerve",
+      "fee": 75.1,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G241": {
+      "description": "unilateral",
+      "fee": 54.65,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G242": {
+      "description": "bilateral",
+      "fee": 82.45,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G227": {
+      "description": "Other cranial nerve block",
+      "fee": 54.65,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G123": {
+      "description": "for each additional one (to a maximum of 4)",
+      "fee": 17.1,
+      "is_addon": true,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G229": {
+      "description": "unilateral",
+      "fee": 54.65,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G240": {
+      "description": "bilateral",
+      "fee": 82.45,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G230": {
+      "description": "unilateral",
+      "fee": 54.65,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G226": {
+      "description": "bilateral",
+      "fee": 82.45,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G231": {
+      "description": "one nerve or site",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G223": {
+      "description": "additional nerve(s) or site(s)",
+      "fee": 17.1,
+      "is_addon": true,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G256": {
+      "description": "Superior laryngeal nerve",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G235": {
+      "description": "Supraorbital",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G238": {
+      "description": "Transverse scapular nerve",
+      "fee": 34.1,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "Z804": {
+      "description": "Lumbar puncture",
+      "fee": 150.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "G413": {
+      "description": "Electrocorticogram - supervision and interpretation",
+      "fee": 170.85,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G419": {
+      "description": "Tensilon test",
+      "fee": 20.6,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G549": {
+      "description": "additional implantation site(s) (maximum 1 per patient)",
+      "fee": 157.85,
+      "is_addon": true,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G417": {
+      "description": "inserting subtemporal needle electrodes",
+      "fee": 15.9,
+      "is_addon": true,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G414": {
+      "description": "Routine EEG - technical component",
+      "fee": 25.75,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G415": {
+      "description": "Routine EEG - professional component",
+      "fee": 23.15,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G418": {
+      "description": "Routine EEG - professional component (16 - 21 channel EEG)",
+      "fee": 62.5,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G541": {
+      "description": "technical component",
+      "fee": 41.2,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G543": {
+      "description": "professional component",
+      "fee": 120.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G496": {
+      "description": "professional component",
+      "fee": 120.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G540": {
+      "description": "technical component .............................................. per unit",
+      "fee": 9.55,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G545": {
+      "description": "professional component ......................................... per unit",
+      "fee": 14.7,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G542": {
+      "description": "technical component",
+      "fee": 24.4,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G546": {
+      "description": "professional component",
+      "fee": 30.45,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G554": {
+      "description": "technical component",
+      "fee": 48.9,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G555": {
+      "description": "professional component",
+      "fee": 120.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G544": {
+      "description": "technical component, per item",
+      "fee": 8.75,
+      "is_addon": true,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G140": {
+      "description": "technical component",
+      "fee": 42.4,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G138": {
+      "description": "professional component",
+      "fee": 71.65,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G103": {
+      "description": "Debridement of maxillectomy cavity",
+      "fee": 6.05,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G440": {
+      "description": "technical component",
+      "fee": 10.85,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G525": {
+      "description": "professional component",
+      "fee": 5.85,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G441": {
+      "description": "technical component",
+      "fee": 18.9,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G526": {
+      "description": "professional component",
+      "fee": 16.45,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G442": {
+      "description": "technical component",
+      "fee": 3.44,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G529": {
+      "description": "professional component",
+      "fee": 1.86,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G448": {
+      "description": "technical component",
+      "fee": 22.9,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G450": {
+      "description": "professional component",
+      "fee": 5.7,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G443": {
+      "description": "technical component, to a maximum of 1............... per test",
+      "fee": 8.25,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G530": {
+      "description": "professional component, to a maximum of 1.......... per test",
+      "fee": 5.95,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G143": {
+      "description": "technical component",
+      "fee": 38.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G141": {
+      "description": "professional component",
+      "fee": 19.15,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G146": {
+      "description": "technical component",
+      "fee": 38.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G144": {
+      "description": "professional component",
+      "fee": 19.15,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G815": {
+      "description": "technical component",
+      "fee": 38.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G816": {
+      "description": "professional component",
+      "fee": 19.15,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G104": {
+      "description": "technical component",
+      "fee": 19.6,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G105": {
+      "description": "professional component",
+      "fee": 20.9,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G451": {
+      "description": "technical component",
+      "fee": 19.6,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G533": {
+      "description": "professional component",
+      "fee": 18.3,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G454": {
+      "description": "Stroboscopy",
+      "fee": 16.8,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G191": {
+      "description": "Optokinetic tests",
+      "fee": 12.4,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G108": {
+      "description": "Computerized rotation tests",
+      "fee": 20.2,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G512": {
+      "description": "Palliative care case management fee",
+      "fee": 67.75,
+      "is_addon": false,
+      "category": "Palliative Care"
+    },
+    "G455": {
+      "description": "technical component",
+      "fee": 28.9,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G456": {
+      "description": "professional component",
+      "fee": 99.9,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G466": {
+      "description": "technical component",
+      "fee": 19.45,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G457": {
+      "description": "professional component",
+      "fee": 61.95,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G471": {
+      "description": "technical component",
+      "fee": 28.9,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G458": {
+      "description": "Single fibre electromyography",
+      "fee": 191.7,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G485": {
+      "description": "first major nerve and/or branches",
+      "fee": 45.45,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G487": {
+      "description": "first major nerve and/or its branches",
+      "fee": 28.5,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G478": {
+      "description": "in-patient",
+      "fee": 89.7,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G479": {
+      "description": "out-patient",
+      "fee": 103.4,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G404": {
+      "description": "Chronic ventilatory care outside an Intensive Care Unit",
+      "fee": 61.0,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G900": {
+      "description": "Residual urine measurement by ultrasound",
+      "fee": 12.7,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G194": {
+      "description": "with EMG ................................................................... add",
+      "fee": 8.35,
+      "is_addon": true,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "E673": {
+      "description": "Lysis of extensive intra-abdominal adhesions .................. add",
+      "fee": 62.05,
+      "is_addon": true,
+      "category": "Add-on Codes"
+    },
+    "Z101": {
+      "description": "subcutaneous - one ......................................................... nil",
+      "fee": 25.75,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "Z173": {
+      "description": "subcutaneous - two",
+      "fee": 30.35,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "Z174": {
+      "description": "subcutaneous - three or more",
+      "fee": 40.8,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "Z104": {
+      "description": "perianal",
+      "fee": 20.1,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z106": {
+      "description": "ischiorectal or pilonida",
+      "fee": 44.35,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z103": {
+      "description": "palmar or plantar spaces",
+      "fee": 44.35,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z102": {
+      "description": "subcutaneous - one",
+      "fee": 44.35,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "Z172": {
+      "description": "subcutaneous - two or more",
+      "fee": 66.6,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "Z105": {
+      "description": "perianal",
+      "fee": 66.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z107": {
+      "description": "ischiorectal or pilonidal",
+      "fee": 108.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z108": {
+      "description": "palmar or plantar spaces",
+      "fee": 72.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z114": {
+      "description": "local anaesthetic",
+      "fee": 25.25,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z115": {
+      "description": "general anaesthetic",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z100": {
+      "description": "complicated (see General Preamble GP12)",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z227": {
+      "description": "Intramuscular abscess or haematoma",
+      "fee": 101.65,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z118": {
+      "description": "Aspiration of superficial lump for cytology",
+      "fee": 28.25,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z116": {
+      "description": "any method, when sutures are used",
+      "fee": 29.6,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z113": {
+      "description": "any method, when sutures are not used",
+      "fee": 29.6,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z245": {
+      "description": "Biopsy for malignant hyperthermia, three or more",
+      "fee": 152.85,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z156": {
+      "description": "single lesion",
+      "fee": 20.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z157": {
+      "description": "two lesions",
+      "fee": 26.5,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z158": {
+      "description": "three or more lesions",
+      "fee": 44.25,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z159": {
+      "description": "single lesion",
+      "fee": 10.55,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z160": {
+      "description": "two lesions",
+      "fee": 15.85,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z161": {
+      "description": "three or more lesions",
+      "fee": 26.2,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z162": {
+      "description": "single lesion",
+      "fee": 20.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z163": {
+      "description": "two lesions",
+      "fee": 26.5,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z164": {
+      "description": "three or more lesions",
+      "fee": 44.25,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z122": {
+      "description": "single lesion........................................................................ nil",
+      "fee": 38.5,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z123": {
+      "description": "two lesions",
+      "fee": 67.8,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z124": {
+      "description": "three or more lesions",
+      "fee": 78.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z145": {
+      "description": "single lesion",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z146": {
+      "description": "two lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z147": {
+      "description": "three or more lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z148": {
+      "description": "extensive or massive (see General Preamble GP12)",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z125": {
+      "description": "single lesion........................................................................ nil",
+      "fee": 32.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z126": {
+      "description": "two lesions",
+      "fee": 45.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z127": {
+      "description": "three or more lesions",
+      "fee": 60.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z149": {
+      "description": "single lesion",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z150": {
+      "description": "two lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z151": {
+      "description": "three or more lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z152": {
+      "description": "extensive or massive (see General Preamble GP12)",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z096": {
+      "description": "Lipoma - 5 to 10 cm",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z097": {
+      "description": "Lipoma - over 10 cm",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "R034": {
+      "description": "Congenital dermoid cyst adult",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "R043": {
+      "description": "infant or child",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R037": {
+      "description": "Giant cell tumour",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R035": {
+      "description": "simple excision or marsupialization",
+      "fee": 200.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "R036": {
+      "description": "excision and skin shift",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "R059": {
+      "description": "unilateral",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R060": {
+      "description": "with skin graft(s) or rotation flap(s)",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R160": {
+      "description": "single lesion",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R161": {
+      "description": "two lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R162": {
+      "description": "three or more lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R163": {
+      "description": "single lesion",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R164": {
+      "description": "two lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R165": {
+      "description": "three or more lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R048": {
+      "description": "single lesion",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R049": {
+      "description": "two lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R050": {
+      "description": "three or more lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R094": {
+      "description": "single lesion",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R040": {
+      "description": "two lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R041": {
+      "description": "three or more lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R018": {
+      "description": "single lesion",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R019": {
+      "description": "two lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R020": {
+      "description": "three or more lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R031": {
+      "description": "single lesion",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R032": {
+      "description": "two lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R033": {
+      "description": "three or more lesions",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "Z117": {
+      "description": "Chemical and/or cryotherapy treatment, one or more lesions",
+      "fee": 11.65,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "R081": {
+      "description": "Initial cut, including debulking",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "E524": {
+      "description": "one or more additional cuts, to R081 ......................... add",
+      "fee": 273.45,
+      "is_addon": true,
+      "category": "Add-on Codes"
+    },
+    "Z080": {
+      "description": "one",
+      "fee": 20.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z081": {
+      "description": "two",
+      "fee": 30.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z082": {
+      "description": "three",
+      "fee": 45.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z083": {
+      "description": "four or more",
+      "fee": 60.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z084": {
+      "description": "one",
+      "fee": 60.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z085": {
+      "description": "two or more",
+      "fee": 90.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "R030": {
+      "description": "Minor burns",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R038": {
+      "description": "Moderate burns",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R039": {
+      "description": "Major burns",
+      "fee": 8.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "Z180": {
+      "description": "first day",
+      "fee": 106.25,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z181": {
+      "description": "continuing care, 2nd to 4th day inclusive, per day",
+      "fee": 53.1,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "R691": {
+      "description": "Minor burn................................................................... per unit",
+      "fee": 75.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R692": {
+      "description": "Moderate burn ............................................................ per unit",
+      "fee": 87.5,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R693": {
+      "description": "Major burn................................................................... per unit",
+      "fee": 100.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R660": {
+      "description": "hand - each digit",
+      "fee": 28.9,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R661": {
+      "description": "dorsum, palm - each",
+      "fee": 47.95,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R662": {
+      "description": "nose, cheek, lip, ear, forehead, scalp, neck, eyelid - each",
+      "fee": 28.9,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "Z176": {
+      "description": "up to 5 cm",
+      "fee": 20.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "R024": {
+      "description": "Acute laceration earlobe, unilateral",
+      "fee": 100.65,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z187": {
+      "description": "Complex laceration repair, face",
+      "fee": 92.3,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "R528": {
+      "description": "Complex (see General Preamble GP12)",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R011": {
+      "description": "face, neck or scalp",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R002": {
+      "description": "other areas",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R012": {
+      "description": "face, neck or scalp",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R003": {
+      "description": "other areas",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R004": {
+      "description": "Defect more than 10 cm such as thoracic abdominal flap",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "R045": {
+      "description": "face, neck or scalp",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R072": {
+      "description": "other areas",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R046": {
+      "description": "face, neck or scalp",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R075": {
+      "description": "other areas",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R047": {
+      "description": "face, neck or scalp",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R073": {
+      "description": "other areas",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R076": {
+      "description": "face, neck or scalp",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R074": {
+      "description": "other areas",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R071": {
+      "description": "each subsequent stage",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R078": {
+      "description": "each subsequent stage",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R101": {
+      "description": "Delay, Small/Intermediate flap",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R100": {
+      "description": "Delay, major flap",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R006": {
+      "description": "Pectoralis major",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R155": {
+      "description": "Latissimus dorsi or unilateral rectus abdominus",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R008": {
+      "description": "Lower transverse rectus abdominus flap",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "Z196": {
+      "description": "different surgeon",
+      "fee": 377.65,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "E523": {
+      "description": "same surgeon, to other procedure............................. add",
+      "fee": 321.0,
+      "is_addon": true,
+      "category": "Add-on Codes"
+    },
+    "R088": {
+      "description": "Extensive major, very large area(s)",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R092": {
+      "description": "Minor - less than 1 cm average diameter",
+      "fee": 116.65,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R093": {
+      "description": "Intermediate - 1 cm to 5 cm average diameter",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R083": {
+      "description": "Major - over 5 cm",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R091": {
+      "description": "Complex - eyelid, nose, lip, face",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R847": {
+      "description": "with skin graft - per leg",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R845": {
+      "description": "multiple ligation and skin graft - per leg",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R013": {
+      "description": "Free jejunum artery and vein for transplantation",
+      "fee": 10.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R131": {
+      "description": "Elevation of free island bone flap and closure of defect",
+      "fee": 10.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R137": {
+      "description": "Elevation of free toe or finger and closure of defect",
+      "fee": 10.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R025": {
+      "description": "Revision of free island flaps (see General Preamble GP12)",
+      "fee": 10.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "Z128": {
+      "description": "one",
+      "fee": 33.1,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z129": {
+      "description": "multiple",
+      "fee": 35.7,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z131": {
+      "description": "multiple",
+      "fee": 82.65,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "R089": {
+      "description": "Webbed fingers - one web space",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R090": {
+      "description": "Webbed toes - one web space",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R021": {
+      "description": "face or neck",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R026": {
+      "description": "other areas",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R022": {
+      "description": "face or neck",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R027": {
+      "description": "other areas",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R023": {
+      "description": "face or neck",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R028": {
+      "description": "other areas",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R017": {
+      "description": "face or neck",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R029": {
+      "description": "other areas",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R150": {
+      "description": "Very minor",
+      "fee": 92.3,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R151": {
+      "description": "Minor",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R152": {
+      "description": "Intermediate",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R153": {
+      "description": "Major",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R154": {
+      "description": "Extensive major",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "Z132": {
+      "description": "Insertion of tissue expander",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "E527": {
+      "description": "additional expander, same incision............................ add",
+      "fee": 58.95,
+      "is_addon": true,
+      "category": "Add-on Codes"
+    },
+    "E528": {
+      "description": "additional expander, different incision........................ add",
+      "fee": 258.5,
+      "is_addon": true,
+      "category": "Add-on Codes"
+    },
+    "Z094": {
+      "description": "general anaesthetic",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z095": {
+      "description": "local anaesthetic",
+      "fee": 37.7,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z137": {
+      "description": "Percutaneous inflation of first tissue expander",
+      "fee": 23.05,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "E541": {
+      "description": "each additional expander (to a maximum of 3)",
+      "fee": 11.55,
+      "is_addon": true,
+      "category": "Add-on Codes"
+    },
+    "Z138": {
+      "description": "Replacement of tissue expander by permanent prosthesis",
+      "fee": 195.85,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z141": {
+      "description": "one or more ........................................................................ nil",
+      "fee": 37.2,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z143": {
+      "description": "large core breast biopsy - (14 gauge or larger bore needle)",
+      "fee": 132.75,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z139": {
+      "description": "one or more ........................................................................ nil",
+      "fee": 37.2,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z140": {
+      "description": "Single or multiloculated - local anaesthetic",
+      "fee": 33.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z740": {
+      "description": "Single or multiloculated - general anaesthetic",
+      "fee": 133.8,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "E505": {
+      "description": "with limited axillary node sampling, to R111............... add",
+      "fee": 178.05,
+      "is_addon": true,
+      "category": "Add-on Codes"
+    },
+    "R108": {
+      "description": "simple",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "R117": {
+      "description": "subcutaneous with nipple preservation",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "Z714": {
+      "description": "local anaesthetic",
+      "fee": 25.4,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z715": {
+      "description": "general anaesthetic",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z716": {
+      "description": "Marsupialization of Bartholin\u2019s cyst or abscess",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z477": {
+      "description": "local anaesthetic",
+      "fee": 39.6,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z475": {
+      "description": "general anaesthetic",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "S706": {
+      "description": "Cyst of Bartholin\u2019s gland",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z733": {
+      "description": "one or more",
+      "fee": 12.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z736": {
+      "description": "local anaesthetic",
+      "fee": 32.6,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z769": {
+      "description": "general anaesthetic",
+      "fee": 124.6,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "S703": {
+      "description": "simple",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "S704": {
+      "description": "radical - without gland dissection",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "Z478": {
+      "description": "Vaginoscopy (premenarchal) with or without medication",
+      "fee": 56.7,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "S712": {
+      "description": "Culdotomy, drainage or needle puncture",
+      "fee": 115.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "Z728": {
+      "description": "Incision and drainage of cyst, abscess or haematoma",
+      "fee": 97.2,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z722": {
+      "description": "local anaesthetic",
+      "fee": 39.6,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "Z723": {
+      "description": "general anaesthetic",
+      "fee": 97.2,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "S715": {
+      "description": "Excision of cyst(s), or benign tumour(s)",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "S702": {
+      "description": "Excision of congenital vaginal septum",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "S716": {
+      "description": "Anterior or posterior repair",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "S717": {
+      "description": "repair",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "S718": {
+      "description": "repair of enterocoele and/or vault prolapse",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "S719": {
+      "description": "enterocoele and/or vault prolapse",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "S723": {
+      "description": "anal sphincter",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "S721": {
+      "description": "Anterior, posterior repair with excision of cervical stump",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Nerve Blocks & Epidural Injections"
+    },
+    "S760": {
+      "description": "vaginal sacropexy",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Women's Health Procedures"
+    },
+    "S813": {
+      "description": "repeat - vaginal sacropexy",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Women's Health Procedures"
+    },
+    "S725": {
+      "description": "Colpocleisis (LeFort or modification)",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "S523": {
+      "description": "Vesicovaginal",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Women's Health Procedures"
+    },
+    "S231": {
+      "description": "Rectovaginal (any repair)",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Women's Health Procedures"
+    },
+    "S729": {
+      "description": "Ureterovaginal",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Women's Health Procedures"
+    },
+    "S709": {
+      "description": "Urethrovaginal",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Women's Health Procedures"
+    },
+    "S549": {
+      "description": "Primary procedure",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "S728": {
+      "description": "One surgeon",
+      "fee": 7.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "S730": {
+      "description": "vaginal surgeon",
+      "fee": 7.0,
+      "is_addon": false,
+      "category": "Women's Health Procedures"
+    },
+    "S740": {
+      "description": "abdominal surgeon",
+      "fee": 7.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "S731": {
+      "description": "One surgeon",
+      "fee": 7.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "S732": {
+      "description": "vaginal surgeon",
+      "fee": 7.0,
+      "is_addon": false,
+      "category": "Women's Health Procedures"
+    },
+    "S733": {
+      "description": "abdominal surgeon",
+      "fee": 7.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "S748": {
+      "description": "One surgeon",
+      "fee": 7.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "S749": {
+      "description": "vaginal surgeon",
+      "fee": 7.0,
+      "is_addon": false,
+      "category": "Women's Health Procedures"
+    },
+    "S751": {
+      "description": "abdominal surgeon",
+      "fee": 7.0,
+      "is_addon": false,
+      "category": "Other Procedures"
+    },
+    "Z735": {
+      "description": "general anaesthetic - as sole procedure",
+      "fee": 56.7,
+      "is_addon": false,
+      "category": "Minor Surgical Procedures"
+    },
+    "K057": {
+      "description": "Medical Form Part A for Medical Review process",
+      "fee": 37.0,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K054": {
+      "description": "Mandatory Special Necessities Benefit Request Form",
+      "fee": 26.4,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K055": {
+      "description": "Application for Special Diet Allowance",
+      "fee": 21.1,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "K053": {
+      "description": "A Limitation to Participation Form",
+      "fee": 15.85,
+      "is_addon": false,
+      "category": "Preventive Care"
+    },
+    "G153": {
+      "description": "technical component",
+      "fee": 10.3,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "G154": {
+      "description": "professional component",
+      "fee": 41.7,
+      "is_addon": false,
+      "category": "Diagnostic & Therapeutic"
+    },
+    "E440": {
+      "description": "Add-on: Epidural with fluoroscopy contrast injection",
+      "fee": 30.0,
+      "is_addon": true,
+      "category": "Nerve Blocks & Epidural Injections",
+      "restrictions": [
+        "Add to G246, G117, G119, or G918"
+      ]
+    },
+    "E441": {
+      "description": "Add-on: Epidural at previous spinal surgery level",
+      "fee": 16.6,
+      "is_addon": true,
+      "category": "Nerve Blocks & Epidural Injections",
+      "restrictions": [
+        "Add to G246, G117, G119, or G918"
+      ]
+    },
+    "E442": {
+      "description": "Add-on: Epidural using transforaminal technique",
+      "fee": 20.0,
+      "is_addon": true,
+      "category": "Nerve Blocks & Epidural Injections",
+      "restrictions": [
+        "Add to G246, G117, G119, or G918"
+      ]
+    },
+    "E443": {
+      "description": "Add-on: Epidural with catheter for continuous infusion",
+      "fee": 80.0,
+      "is_addon": true,
+      "category": "Nerve Blocks & Epidural Injections",
+      "restrictions": [
+        "Add to G246, G117, G119, or G918"
+      ]
+    },
+    "E502": {
+      "description": "Joint injection (intra-articular)",
+      "fee": 15.5,
+      "is_addon": false,
+      "category": "Joint & Soft Tissue Injections"
+    },
+    "G590": {
+      "description": "Injection - intramuscular",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Injections"
+    },
+    "G591": {
+      "description": "Injection - subcutaneous",
+      "fee": 6.0,
+      "is_addon": false,
+      "category": "Injections"
+    }
+  },
+  "compatibility_rules": {
+    "cannot_bill_same_day": [
+      [
+        "A911",
+        "A912"
+      ],
+      [
+        "A003",
+        "A004"
+      ],
+      [
+        "K017",
+        "K130",
+        "K131",
+        "K132",
+        "K133"
+      ],
+      [
+        "A001",
+        "A003",
+        "A004",
+        "A007"
+      ]
+    ],
+    "can_add_to": {
+      "E430": [
+        "A003",
+        "A004",
+        "A005",
+        "A006",
+        "A007",
+        "K131",
+        "K132"
+      ],
+      "E431": [
+        "A003",
+        "A004",
+        "A005",
+        "A006",
+        "A007",
+        "K131",
+        "K132"
+      ],
+      "E440": [
+        "G246",
+        "G117",
+        "G119",
+        "G918"
+      ],
+      "E441": [
+        "G246",
+        "G117",
+        "G119",
+        "G918"
+      ],
+      "E442": [
+        "G246",
+        "G117",
+        "G119",
+        "G918"
+      ],
+      "E443": [
+        "G246",
+        "G117",
+        "G119",
+        "G918"
+      ],
+      "K013": [
+        "A003",
+        "A004",
+        "A005",
+        "A006",
+        "A007",
+        "A001"
+      ],
+      "G310": [
+        "A003",
+        "A004",
+        "A005",
+        "A007"
+      ],
+      "G313": [
+        "A003",
+        "A004",
+        "A005",
+        "A007"
+      ]
+    },
+    "notes": [
+      "FHO rostered patients: Primary care services are capitated, but most A-codes still billable",
+      "General re-assessment (A004) limited to 2 per 12 months per patient",
+      "For special/comprehensive consultations, start and stop times must be in medical record",
+      "K codes for periodic health visits include all elements of a complete physical exam",
+      "Epidural injections (G246, G117, G119, G918) limited to 12 per patient per 12 months combined"
+    ]
+  }
+}

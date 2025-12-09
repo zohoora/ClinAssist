@@ -35,7 +35,8 @@ struct MainWindowView: View {
                                 appState: appDelegate.appState,
                                 autoDetectionEnabled: appDelegate.autoDetectionEnabled,
                                 silenceDuration: appDelegate.silenceDuration,
-                                audioLevel: appDelegate.audioManager.currentAudioLevel
+                                audioLevel: appDelegate.audioManager.currentAudioLevel,
+                                onShowSessionHistory: { appDelegate.showSessionHistory() }
                             )
                         } else if appDelegate.appState.isActive || appDelegate.appState == .processing {
                             ActiveEncounterView(
@@ -57,14 +58,29 @@ struct MainWindowView: View {
         .background(Color(NSColor.windowBackgroundColor))
         .sheet(isPresented: $appDelegate.showEndEncounterSheet) {
             EndEncounterSheet(
-                soapNote: appDelegate.encounterController.soapNote,
+                // Use captured SOAP note to prevent it being cleared by new provisional recording
+                soapNote: appDelegate.capturedSoapNote,
+                isRegenerating: appDelegate.encounterController.isRegeneratingSOAP,
+                currentDetailLevel: appDelegate.encounterController.currentDetailLevel,
+                currentFormat: appDelegate.encounterController.currentSOAPFormat,
+                llmError: appDelegate.encounterController.llmError,
                 onCopyToClipboard: {
                     // Already handled in the sheet
                 },
                 onDismiss: {
                     appDelegate.dismissEndEncounterSheet()
+                },
+                onRegenerate: { detailLevel, format, customInstructions in
+                    appDelegate.encounterController.regenerateSOAP(detailLevel: detailLevel, format: format, customInstructions: customInstructions)
                 }
             )
+            // Update captured SOAP note when regeneration completes
+            .onChange(of: appDelegate.encounterController.soapNote) { newValue in
+                // Only update if the sheet is showing and we got a new non-empty SOAP
+                if appDelegate.showEndEncounterSheet && !newValue.isEmpty {
+                    appDelegate.capturedSoapNote = newValue
+                }
+            }
         }
         .overlay {
             // Auto-end confirmation overlay
@@ -288,6 +304,7 @@ struct IdleStateView: View {
     let autoDetectionEnabled: Bool
     let silenceDuration: TimeInterval
     let audioLevel: Float
+    let onShowSessionHistory: () -> Void
     
     var body: some View {
         VStack(spacing: 24) {
@@ -354,6 +371,23 @@ struct IdleStateView: View {
             }
             
             Spacer()
+            
+            // Session History button
+            Button(action: onShowSessionHistory) {
+                HStack(spacing: 6) {
+                    Image(systemName: "clock.arrow.circlepath")
+                        .font(.system(size: 12))
+                    Text("Session History")
+                        .font(.system(size: 12, weight: .medium))
+                }
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background(Color(NSColor.controlBackgroundColor).opacity(0.6))
+                .cornerRadius(8)
+            }
+            .buttonStyle(.plain)
+            .help("View past encounters (⌘H)")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.vertical, 40)
@@ -477,13 +511,16 @@ struct ActiveEncounterView: View {
                 isUpdating: encounterController.isPsstUpdating
             )
             
-            // Assistant Section
-            HelperPanelView(
-                suggestions: encounterController.helperSuggestions
-            )
+            // MARK: - Assistant Section (HIDDEN - may re-enable later)
+            // HelperPanelView(
+            //     suggestions: encounterController.helperSuggestions
+            // )
             
             // Chat Section (Gemini 3 Pro)
             ChatView(encounterController: encounterController)
+            
+            // Image Generation Section (Imagen 3)
+            ImageGenerationView()
         }
     }
 }

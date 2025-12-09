@@ -22,7 +22,7 @@ class MenuBarController {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
         if let button = statusItem?.button {
-            button.image = NSImage(systemSymbolName: "stethoscope", accessibilityDescription: "ClinAssist")
+            button.image = MenuBarIcon.createIcon(for: .idle)
         }
         
         updateMenu()
@@ -112,19 +112,23 @@ class MenuBarController {
     func updateStatusIcon() {
         guard let button = statusItem?.button, let appDelegate = appDelegate else { return }
         
+        // Use custom ClinAssist icon for all states
+        button.image = MenuBarIcon.createIcon(for: appDelegate.appState)
+        
+        // Update accessibility description based on state
         switch appDelegate.appState {
         case .idle:
-            button.image = NSImage(systemSymbolName: "stethoscope", accessibilityDescription: "ClinAssist")
+            button.image?.accessibilityDescription = "ClinAssist"
         case .monitoring:
-            button.image = NSImage(systemSymbolName: "ear.badge.waveform", accessibilityDescription: "ClinAssist - Monitoring")
+            button.image?.accessibilityDescription = "ClinAssist - Monitoring"
         case .buffering:
-            button.image = NSImage(systemSymbolName: "waveform.circle", accessibilityDescription: "ClinAssist - Detecting")
+            button.image?.accessibilityDescription = "ClinAssist - Detecting"
         case .recording:
-            button.image = NSImage(systemSymbolName: "stethoscope.circle.fill", accessibilityDescription: "ClinAssist - Recording")
+            button.image?.accessibilityDescription = "ClinAssist - Recording"
         case .paused:
-            button.image = NSImage(systemSymbolName: "stethoscope.circle", accessibilityDescription: "ClinAssist - Paused")
+            button.image?.accessibilityDescription = "ClinAssist - Paused"
         case .processing:
-            button.image = NSImage(systemSymbolName: "stethoscope", accessibilityDescription: "ClinAssist - Processing")
+            button.image?.accessibilityDescription = "ClinAssist - Processing"
         }
     }
 }

@@ -6,7 +6,7 @@ class GroqClient: LLMProvider {
     private let model: String
     private let baseURL = "https://api.groq.com/openai/v1/chat/completions"
     
-    init(apiKey: String, model: String = "moonshotai/kimi-k2-instruct-0905") {
+    init(apiKey: String, model: String = "openai/gpt-oss-120b") {
         self.apiKey = apiKey
         self.model = model
     }

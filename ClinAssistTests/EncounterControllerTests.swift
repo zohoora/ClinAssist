@@ -310,4 +310,117 @@ final class EncounterControllerTests: XCTestCase {
         XCTAssertTrue(mockStreamingClient.sendAudioCalled)
         XCTAssertEqual(mockStreamingClient.lastSentSamples, samples)
     }
+    
+    // MARK: - Encounter Attachments Tests
+    
+    func testAddEncounterAttachment() {
+        controller.startEncounter()
+        
+        let attachment = EncounterAttachment(
+            name: "test_image.png",
+            type: .image,
+            base64Data: "base64encodeddata",
+            mimeType: "image/png"
+        )
+        
+        controller.addEncounterAttachment(attachment)
+        
+        XCTAssertEqual(controller.encounterAttachments.count, 1)
+        XCTAssertEqual(controller.encounterAttachments.first?.name, "test_image.png")
+        XCTAssertEqual(controller.encounterAttachments.first?.type, .image)
+    }
+    
+    func testEncounterAttachmentsResetOnStart() {
+        controller.startEncounter()
+        
+        let attachment = EncounterAttachment(
+            name: "test.pdf",
+            type: .pdf,
+            base64Data: "pdfdata",
+            mimeType: "application/pdf"
+        )
+        controller.addEncounterAttachment(attachment)
+        
+        XCTAssertEqual(controller.encounterAttachments.count, 1)
+        
+        // Start a new encounter - attachments should be reset
+        controller.startEncounter()
+        
+        XCTAssertEqual(controller.encounterAttachments.count, 0)
+    }
+    
+    func testHasMultimodalAttachmentsWithImage() {
+        controller.startEncounter()
+        
+        let imageAttachment = EncounterAttachment(
+            name: "photo.jpg",
+            type: .image,
+            base64Data: "imagedata",
+            mimeType: "image/jpeg"
+        )
+        
+        controller.addEncounterAttachment(imageAttachment)
+        
+        XCTAssertTrue(controller.hasMultimodalAttachments)
+    }
+    
+    func testHasMultimodalAttachmentsWithPDF() {
+        controller.startEncounter()
+        
+        let pdfAttachment = EncounterAttachment(
+            name: "report.pdf",
+            type: .pdf,
+            base64Data: "pdfdata",
+            mimeType: "application/pdf"
+        )
+        
+        controller.addEncounterAttachment(pdfAttachment)
+        
+        XCTAssertTrue(controller.hasMultimodalAttachments)
+    }
+    
+    func testHasMultimodalAttachmentsWithTextOnly() {
+        controller.startEncounter()
+        
+        let textAttachment = EncounterAttachment(
+            name: "notes.txt",
+            type: .textFile,
+            textContent: "Some text content"
+        )
+        
+        controller.addEncounterAttachment(textAttachment)
+        
+        XCTAssertFalse(controller.hasMultimodalAttachments)
+    }
+    
+    func testMultipleAttachmentTypes() {
+        controller.startEncounter()
+        
+        let textAttachment = EncounterAttachment(
+            name: "notes.txt",
+            type: .textFile,
+            textContent: "Some text"
+        )
+        
+        let imageAttachment = EncounterAttachment(
+            name: "photo.png",
+            type: .image,
+            base64Data: "imagedata",
+            mimeType: "image/png"
+        )
+        
+        let pdfAttachment = EncounterAttachment(
+            name: "report.pdf",
+            type: .pdf,
+            base64Data: "pdfdata",
+            mimeType: "application/pdf"
+        )
+        
+        controller.addEncounterAttachment(textAttachment)
+        controller.addEncounterAttachment(imageAttachment)
+        controller.addEncounterAttachment(pdfAttachment)
+        
+        XCTAssertEqual(controller.encounterAttachments.count, 3)
+        XCTAssertTrue(controller.hasMultimodalAttachments)
+    }
 }

@@ -259,6 +259,137 @@ final class TranscriptFlowTests: XCTestCase {
         XCTAssertNotNil(mockLLMClient.lastUserContent)
     }
     
+    // MARK: - Attachment Integration Tests
+    
+    func testAttachmentAddedToEncounter() async {
+        controller.startEncounter()
+        
+        let imageAttachment = EncounterAttachment(
+            name: "skin_photo.jpg",
+            type: .image,
+            base64Data: "base64encodedimagedata",
+            mimeType: "image/jpeg"
+        )
+        
+        controller.addEncounterAttachment(imageAttachment)
+        
+        XCTAssertEqual(controller.encounterAttachments.count, 1)
+        XCTAssertEqual(controller.encounterAttachments.first?.name, "skin_photo.jpg")
+        XCTAssertTrue(controller.hasMultimodalAttachments)
+    }
+    
+    func testMultipleAttachmentsAccumulate() async {
+        controller.startEncounter()
+        
+        let imageAttachment = EncounterAttachment(
+            name: "photo1.png",
+            type: .image,
+            base64Data: "imagedata1",
+            mimeType: "image/png"
+        )
+        
+        let pdfAttachment = EncounterAttachment(
+            name: "labresults.pdf",
+            type: .pdf,
+            base64Data: "pdfdata",
+            mimeType: "application/pdf"
+        )
+        
+        let textAttachment = EncounterAttachment(
+            name: "notes.txt",
+            type: .textFile,
+            textContent: "Some text notes"
+        )
+        
+        controller.addEncounterAttachment(imageAttachment)
+        controller.addEncounterAttachment(pdfAttachment)
+        controller.addEncounterAttachment(textAttachment)
+        
+        XCTAssertEqual(controller.encounterAttachments.count, 3)
+        XCTAssertTrue(controller.hasMultimodalAttachments)
+    }
+    
+    func testAttachmentsResetOnNewEncounter() async {
+        controller.startEncounter()
+        
+        let attachment = EncounterAttachment(
+            name: "test.png",
+            type: .image,
+            base64Data: "data",
+            mimeType: "image/png"
+        )
+        controller.addEncounterAttachment(attachment)
+        
+        XCTAssertEqual(controller.encounterAttachments.count, 1)
+        
+        // End the encounter
+        mockLLMClient.mockResponse = SampleTranscripts.soapNote
+        await controller.endEncounter()
+        
+        // Start a new encounter - attachments should be reset
+        controller.startEncounter()
+        
+        XCTAssertEqual(controller.encounterAttachments.count, 0)
+        XCTAssertFalse(controller.hasMultimodalAttachments)
+    }
+    
+    func testChatAttachmentToEncounterAttachmentConversion() {
+        // Test the static conversion function
+        let chatAttachment = ChatAttachment(
+            name: "screenshot.png",
+            type: .image,
+            data: Data(),
+            base64Data: "base64data",
+            mimeType: "image/png",
+            thumbnail: nil,
+            icon: "camera.viewfinder"
+        )
+        
+        let encounterAttachment = ChatController.toEncounterAttachment(chatAttachment)
+        
+        XCTAssertEqual(encounterAttachment.name, "screenshot.png")
+        XCTAssertEqual(encounterAttachment.type, .image)
+        XCTAssertEqual(encounterAttachment.base64Data, "base64data")
+        XCTAssertEqual(encounterAttachment.mimeType, "image/png")
+        XCTAssertTrue(encounterAttachment.isMultimodal)
+    }
+    
+    func testChatAttachmentPDFConversion() {
+        let chatAttachment = ChatAttachment(
+            name: "report.pdf",
+            type: .file,
+            data: Data(),
+            base64Data: "pdfbase64",
+            mimeType: "application/pdf",
+            thumbnail: nil,
+            icon: "doc.richtext.fill"
+        )
+        
+        let encounterAttachment = ChatController.toEncounterAttachment(chatAttachment)
+        
+        XCTAssertEqual(encounterAttachment.name, "report.pdf")
+        XCTAssertEqual(encounterAttachment.type, .pdf)
+        XCTAssertTrue(encounterAttachment.isMultimodal)
+    }
+    
+    func testChatAttachmentTextFileConversion() {
+        let chatAttachment = ChatAttachment(
+            name: "notes.txt",
+            type: .file,
+            data: Data(),
+            textContent: "Some text content",
+            thumbnail: nil,
+            icon: "doc.fill"
+        )
+        
+        let encounterAttachment = ChatController.toEncounterAttachment(chatAttachment)
+        
+        XCTAssertEqual(encounterAttachment.name, "notes.txt")
+        XCTAssertEqual(encounterAttachment.type, .textFile)
+        XCTAssertEqual(encounterAttachment.textContent, "Some text content")
+        XCTAssertFalse(encounterAttachment.isMultimodal)
+    }
+    
     // MARK: - Helper Methods
     
     private func waitForMainThread() async {

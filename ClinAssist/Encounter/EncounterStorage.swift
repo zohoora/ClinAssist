@@ -227,6 +227,115 @@ class EncounterStorage {
         return try? decoder.decode(EncounterState.self, from: data)
     }
     
+    // MARK: - List Encounters by Date
+    
+    /// Lists all encounters for a specific date (in EST timezone)
+    func listEncountersForDate(_ date: Date) -> [URL] {
+        let encountersPath = basePath.appendingPathComponent("encounters")
+        
+        guard let contents = try? FileManager.default.contentsOfDirectory(
+            at: encountersPath,
+            includingPropertiesForKeys: nil,
+            options: [.skipsHiddenFiles]
+        ) else { return [] }
+        
+        // Get the date string prefix for the target date (in EST)
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = estTimeZone
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let targetDateString = dateFormatter.string(from: date)
+        
+        // Filter encounters that match the date prefix
+        let matchingEncounters = contents.filter { url in
+            let folderName = url.lastPathComponent
+            return folderName.hasPrefix(targetDateString)
+        }
+        
+        // Sort chronologically (ascending by folder name which includes time)
+        return matchingEncounters.sorted { url1, url2 in
+            url1.lastPathComponent < url2.lastPathComponent
+        }
+    }
+    
+    /// Loads the SOAP note text from a saved encounter
+    func loadSOAPNote(from encounterPath: URL) -> String? {
+        let soapPath = encounterPath.appendingPathComponent("soap_note.txt")
+        return try? String(contentsOf: soapPath, encoding: .utf8)
+    }
+    
+    /// Loads the transcript text from a saved encounter
+    func loadTranscript(from encounterPath: URL) -> String? {
+        let transcriptPath = encounterPath.appendingPathComponent("transcript.txt")
+        return try? String(contentsOf: transcriptPath, encoding: .utf8)
+    }
+    
+    /// Saves billing codes to a saved encounter
+    func saveBillingCodes(_ suggestion: BillingSuggestion, to encounterPath: URL) {
+        let billingPath = encounterPath.appendingPathComponent("billing_codes.json")
+        
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        
+        do {
+            let data = try encoder.encode(suggestion)
+            try data.write(to: billingPath)
+            debugLog("Saved billing codes to \(billingPath.lastPathComponent)", component: "Storage")
+        } catch {
+            debugLog("❌ Failed to save billing codes: \(error)", component: "Storage")
+        }
+    }
+    
+    /// Loads billing codes from a saved encounter
+    func loadBillingCodes(from encounterPath: URL) -> BillingSuggestion? {
+        let billingPath = encounterPath.appendingPathComponent("billing_codes.json")
+        
+        guard let data = try? Data(contentsOf: billingPath) else { return nil }
+        
+        return try? JSONDecoder().decode(BillingSuggestion.self, from: data)
+    }
+    
+    /// Gets all available dates that have encounters
+    func getAvailableDates() -> [Date] {
+        let encountersPath = basePath.appendingPathComponent("encounters")
+        
+        guard let contents = try? FileManager.default.contentsOfDirectory(
+            at: encountersPath,
+            includingPropertiesForKeys: nil,
+            options: [.skipsHiddenFiles]
+        ) else { return [] }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = estTimeZone
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        // Extract unique dates from folder names
+        var uniqueDates = Set<String>()
+        for url in contents {
+            let folderName = url.lastPathComponent
+            // Folder names are like "2025-12-08_14-30-00"
+            let datePrefix = String(folderName.prefix(10))
+            if datePrefix.count == 10 && datePrefix.contains("-") {
+                uniqueDates.insert(datePrefix)
+            }
+        }
+        
+        // Convert to Date objects and sort descending
+        let dates = uniqueDates.compactMap { dateString -> Date? in
+            return dateFormatter.date(from: dateString)
+        }
+        
+        return dates.sorted(by: >)
+    }
+    
+    /// Parses the start time from an encounter folder name
+    func parseEncounterTime(from encounterPath: URL) -> Date? {
+        let folderName = encounterPath.lastPathComponent
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
+        dateFormatter.timeZone = estTimeZone
+        return dateFormatter.date(from: folderName)
+    }
+    
     // MARK: - Helpers
     
     private func formatTimestamp(_ date: Date) -> String {

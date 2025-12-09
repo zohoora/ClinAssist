@@ -70,7 +70,7 @@ struct TranscriptView: View {
                             }
                             .padding(12)
                         }
-                        .frame(maxHeight: 200)
+                        .frame(minHeight: 180, maxHeight: 280)
                         .background(Color(NSColor.controlBackgroundColor))
                         .cornerRadius(8)
                         .onChange(of: transcript.count) { _, _ in

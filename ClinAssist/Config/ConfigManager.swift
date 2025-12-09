@@ -3,6 +3,7 @@ import Foundation
 struct AppConfig: Codable {
     let openrouterApiKey: String
     let deepgramApiKey: String
+    let geminiApiKey: String?
     let model: String
     let timing: TimingConfig
     let autoDetection: AutoDetectionConfig?
@@ -13,6 +14,7 @@ struct AppConfig: Codable {
     enum CodingKeys: String, CodingKey {
         case openrouterApiKey = "openrouter_api_key"
         case deepgramApiKey = "deepgram_api_key"
+        case geminiApiKey = "gemini_api_key"
         case model
         case timing
         case autoDetection = "auto_detection"
@@ -33,10 +35,10 @@ struct GroqConfig: Codable {
         case useForFinalSoap = "use_for_final_soap"
     }
     
-    static var `default`: GroqConfig {
+        static var `default`: GroqConfig {
         GroqConfig(
             apiKey: "",
-            model: "moonshotai/kimi-k2-instruct-0905",
+            model: "openai/gpt-oss-120b",
             useForFinalSoap: true
         )
     }
@@ -203,11 +205,22 @@ class ConfigManager: ObservableObject {
     }
     
     var groqModel: String {
-        config?.groq?.model ?? "moonshotai/kimi-k2-instruct-0905"
+        config?.groq?.model ?? "openai/gpt-oss-120b"
     }
     
     var useGroqForFinalSoap: Bool {
         isGroqEnabled && (config?.groq?.useForFinalSoap ?? true)
+    }
+    
+    // MARK: - Gemini Config
+    
+    var isGeminiEnabled: Bool {
+        guard let apiKey = config?.geminiApiKey, !apiKey.isEmpty else { return false }
+        return true
+    }
+    
+    var geminiApiKey: String {
+        config?.geminiApiKey ?? ""
     }
     
     // MARK: - Deepgram Streaming Config
@@ -295,6 +308,7 @@ class ConfigManager: ObservableObject {
         {
           "openrouter_api_key": "sk-or-your-key-here",
           "deepgram_api_key": "your-deepgram-key-here",
+          "gemini_api_key": "your-gemini-api-key-here",
           "model": "anthropic/claude-sonnet-4",
           "timing": {
             "transcription_interval_seconds": 10,
@@ -337,7 +351,7 @@ class ConfigManager: ObservableObject {
           },
           "groq": {
             "api_key": "your-groq-api-key-here",
-            "model": "moonshotai/kimi-k2-instruct-0905",
+            "model": "openai/gpt-oss-120b",
             "use_for_final_soap": true
           }
         }

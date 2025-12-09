@@ -6,12 +6,19 @@ import AVFoundation
 class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private var statusItem: NSStatusItem?
     private var mainWindow: NSWindow?
+    private var sessionHistoryWindow: NSWindow?
+    private var medicationLookupWindow: NSWindow?
+    private var databaseUpdateWindow: NSWindow?
     private var hotkeyManager: GlobalHotkeyManager?
+    
+    // Database builder for updating drug database
+    private var databaseBuilder: DrugDatabaseBuilder?
     
     @Published var appState: AppState = .idle
     @Published var isWindowVisible: Bool = false
     @Published var encounterDuration: TimeInterval = 0
     @Published var showEndEncounterSheet: Bool = false
+    @Published var capturedSoapNote: String = ""  // Captured at encounter end, not cleared by new provisional recording
     @Published var autoDetectionEnabled: Bool = false
     @Published var silenceDuration: TimeInterval = 0
     @Published var showAutoEndConfirmation: Bool = false
@@ -37,6 +44,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         
         // Request microphone permission immediately on launch
         requestMicrophonePermission()
+        
+        // Request camera permission at launch (for chat image capture feature)
+        requestCameraPermission()
         
         // Setup menu bar
         setupStatusItem()
@@ -99,6 +109,28 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             DispatchQueue.main.async { [weak self] in
                 self?.startAutoDetectionIfReady()
             }
+        @unknown default:
+            break
+        }
+    }
+    
+    private func requestCameraPermission() {
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .notDetermined:
+            // Request permission - this will show the system dialog
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                DispatchQueue.main.async {
+                    if granted {
+                        debugLog("Camera permission granted", component: "AppDelegate")
+                    } else {
+                        debugLog("Camera permission denied", component: "AppDelegate")
+                    }
+                }
+            }
+        case .denied, .restricted:
+            debugLog("Camera permission denied/restricted", component: "AppDelegate")
+        case .authorized:
+            debugLog("Camera already authorized", component: "AppDelegate")
         @unknown default:
             break
         }
@@ -196,6 +228,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         }
         windowItem.target = self
         menu.addItem(windowItem)
+        
+        // Session History
+        let historyItem = NSMenuItem(title: "Session History...", action: #selector(showSessionHistory), keyEquivalent: "h")
+        historyItem.target = self
+        menu.addItem(historyItem)
+        
+        // Medication Lookup
+        let medicationItem = NSMenuItem(title: "Medication Lookup...", action: #selector(showMedicationLookup), keyEquivalent: "m")
+        medicationItem.target = self
+        menu.addItem(medicationItem)
+        
+        // Update Drug Database
+        let updateDbItem = NSMenuItem(title: "Update Drug Database...", action: #selector(showDatabaseUpdateWindow), keyEquivalent: "")
+        updateDbItem.target = self
+        menu.addItem(updateDbItem)
         
         menu.addItem(NSMenuItem.separator())
         
@@ -385,6 +432,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 if let state = encounterController.state {
                     let soapNote = encounterController.soapNote
                     
+                    // IMPORTANT: Capture the SOAP note before showing the sheet
+                    // This prevents it from being cleared if auto-detection triggers a new provisional recording
+                    capturedSoapNote = soapNote
+                    
                     do {
                         _ = try EncounterStorage.shared.saveEncounter(
                             state,
@@ -475,6 +526,126 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         mainWindow?.orderOut(nil)
         isWindowVisible = false
         updateMenu()
+    }
+    
+    // MARK: - Session History Window
+    
+    @objc func showSessionHistory() {
+        if sessionHistoryWindow == nil {
+            setupSessionHistoryWindow()
+        }
+        
+        sessionHistoryWindow?.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+    }
+    
+    private func setupSessionHistoryWindow() {
+        guard let screen = NSScreen.main else { return }
+        
+        let windowWidth: CGFloat = 950
+        let windowHeight: CGFloat = 650
+        let windowX = (screen.visibleFrame.width - windowWidth) / 2 + screen.visibleFrame.minX
+        let windowY = (screen.visibleFrame.height - windowHeight) / 2 + screen.visibleFrame.minY
+        
+        // Create LLM provider for SOAP regeneration and billing code generation
+        let llmProvider: LLMProvider
+        if configManager.isGroqEnabled {
+            llmProvider = GroqClient(apiKey: configManager.groqApiKey, model: configManager.groqModel)
+        } else if let config = configManager.config, !config.openrouterApiKey.isEmpty {
+            llmProvider = LLMClient(apiKey: config.openrouterApiKey)
+        } else {
+            // Fallback - SOAP regeneration and billing codes won't work without API key
+            llmProvider = GroqClient(apiKey: "")
+        }
+        
+        let contentView = SessionHistoryView(llmProvider: llmProvider, configManager: configManager)
+        
+        sessionHistoryWindow = NSWindow(
+            contentRect: NSRect(x: windowX, y: windowY, width: windowWidth, height: windowHeight),
+            styleMask: [.titled, .closable, .resizable, .miniaturizable],
+            backing: .buffered,
+            defer: false
+        )
+        
+        sessionHistoryWindow?.title = "Session History"
+        sessionHistoryWindow?.contentView = NSHostingView(rootView: contentView)
+        sessionHistoryWindow?.isReleasedWhenClosed = false
+        sessionHistoryWindow?.minSize = NSSize(width: 800, height: 550)
+        sessionHistoryWindow?.center()
+    }
+    
+    // MARK: - Medication Lookup Window
+    
+    @objc func showMedicationLookup() {
+        if medicationLookupWindow == nil {
+            setupMedicationLookupWindow()
+        }
+        
+        medicationLookupWindow?.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+    }
+    
+    private func setupMedicationLookupWindow() {
+        guard let screen = NSScreen.main else { return }
+        
+        let windowWidth: CGFloat = 900
+        let windowHeight: CGFloat = 600
+        let windowX = (screen.visibleFrame.width - windowWidth) / 2 + screen.visibleFrame.minX
+        let windowY = (screen.visibleFrame.height - windowHeight) / 2 + screen.visibleFrame.minY
+        
+        let contentView = MedicationLookupView()
+        
+        medicationLookupWindow = NSWindow(
+            contentRect: NSRect(x: windowX, y: windowY, width: windowWidth, height: windowHeight),
+            styleMask: [.titled, .closable, .resizable, .miniaturizable],
+            backing: .buffered,
+            defer: false
+        )
+        
+        medicationLookupWindow?.title = "Medication Lookup"
+        medicationLookupWindow?.contentView = NSHostingView(rootView: contentView)
+        medicationLookupWindow?.isReleasedWhenClosed = false
+        medicationLookupWindow?.minSize = NSSize(width: 700, height: 500)
+        medicationLookupWindow?.center()
+    }
+    
+    // MARK: - Drug Database Update Window
+    
+    @objc func showDatabaseUpdateWindow() {
+        if databaseUpdateWindow == nil {
+            setupDatabaseUpdateWindow()
+        }
+        
+        databaseUpdateWindow?.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+    }
+    
+    private func setupDatabaseUpdateWindow() {
+        guard let screen = NSScreen.main else { return }
+        
+        let windowWidth: CGFloat = 500
+        let windowHeight: CGFloat = 300
+        let windowX = (screen.visibleFrame.width - windowWidth) / 2 + screen.visibleFrame.minX
+        let windowY = (screen.visibleFrame.height - windowHeight) / 2 + screen.visibleFrame.minY
+        
+        // Create builder if needed
+        if databaseBuilder == nil {
+            databaseBuilder = DrugDatabaseBuilder()
+        }
+        
+        let contentView = DatabaseUpdateView(builder: databaseBuilder!)
+        
+        databaseUpdateWindow = NSWindow(
+            contentRect: NSRect(x: windowX, y: windowY, width: windowWidth, height: windowHeight),
+            styleMask: [.titled, .closable],
+            backing: .buffered,
+            defer: false
+        )
+        
+        databaseUpdateWindow?.title = "Update Drug Database"
+        databaseUpdateWindow?.contentView = NSHostingView(rootView: contentView)
+        databaseUpdateWindow?.isReleasedWhenClosed = false
+        databaseUpdateWindow?.center()
     }
 }
 
