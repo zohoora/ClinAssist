@@ -249,8 +249,16 @@ class AudioManager: NSObject, ObservableObject {
         
         inputNode = audioEngine.inputNode
         
-        // Get the native format
-        let nativeFormat = inputNode!.outputFormat(forBus: 0)
+        // Safely get the input node and native format
+        guard let node = inputNode else {
+            throw AudioError.engineSetupFailed
+        }
+        
+        let nativeFormat = node.outputFormat(forBus: 0)
+        guard nativeFormat.sampleRate > 0 else {
+            debugLog("❌ Invalid audio format - sample rate is 0", component: "Audio")
+            throw AudioError.engineSetupFailed
+        }
         
         // Create target format (16kHz, mono, Int16)
         guard let targetFormat = AVAudioFormat(
@@ -266,7 +274,7 @@ class AudioManager: NSObject, ObservableObject {
         let converter = AVAudioConverter(from: nativeFormat, to: targetFormat)
         
         // Install tap on input node
-        inputNode!.installTap(onBus: 0, bufferSize: 4096, format: nativeFormat) { [weak self] buffer, time in
+        node.installTap(onBus: 0, bufferSize: 4096, format: nativeFormat) { [weak self] buffer, time in
             self?.processAudioBuffer(buffer, converter: converter, targetFormat: targetFormat)
             // Also process for level monitoring during recording
             self?.processLevelBuffer(buffer)
@@ -349,7 +357,17 @@ class AudioManager: NSObject, ObservableObject {
             }
             
             inputNode = audioEngine.inputNode
-            let nativeFormat = inputNode!.outputFormat(forBus: 0)
+            
+            // Safely get the input node and native format
+            guard let node = inputNode else {
+                throw AudioError.engineSetupFailed
+            }
+            
+            let nativeFormat = node.outputFormat(forBus: 0)
+            guard nativeFormat.sampleRate > 0 else {
+                debugLog("❌ Invalid audio format - sample rate is 0", component: "Audio")
+                throw AudioError.engineSetupFailed
+            }
             
             guard let targetFormat = AVAudioFormat(
                 commonFormat: .pcmFormatInt16,
@@ -363,7 +381,7 @@ class AudioManager: NSObject, ObservableObject {
             let converter = AVAudioConverter(from: nativeFormat, to: targetFormat)
             
             // Install recording tap
-            inputNode!.installTap(onBus: 0, bufferSize: 4096, format: nativeFormat) { [weak self] buffer, time in
+            node.installTap(onBus: 0, bufferSize: 4096, format: nativeFormat) { [weak self] buffer, time in
                 self?.processAudioBuffer(buffer, converter: converter, targetFormat: targetFormat)
                 self?.processLevelBuffer(buffer)
             }

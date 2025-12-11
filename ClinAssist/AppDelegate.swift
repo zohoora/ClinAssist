@@ -5,14 +5,10 @@ import AVFoundation
 @MainActor
 class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private var statusItem: NSStatusItem?
-    private var mainWindow: NSWindow?
-    private var sessionHistoryWindow: NSWindow?
-    private var medicationLookupWindow: NSWindow?
-    private var databaseUpdateWindow: NSWindow?
     private var hotkeyManager: GlobalHotkeyManager?
     
-    // Database builder for updating drug database
-    private var databaseBuilder: DrugDatabaseBuilder?
+    // Window coordinator handles all window management
+    private var windowCoordinator: WindowCoordinator?
     
     @Published var appState: AppState = .idle
     @Published var isWindowVisible: Bool = false
@@ -51,8 +47,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         // Setup menu bar
         setupStatusItem()
         
-        // Setup main window
-        setupMainWindow()
+        // Setup window coordinator
+        windowCoordinator = WindowCoordinator(configManager: configManager)
+        windowCoordinator?.setAppDelegate(self)
+        windowCoordinator?.setupMainWindow()
         
         // Setup global hotkey
         setupGlobalHotkey()
@@ -246,6 +244,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         
         menu.addItem(NSMenuItem.separator())
         
+        // Settings
+        let settingsItem = NSMenuItem(title: "Settings...", action: #selector(showSettings), keyEquivalent: ",")
+        settingsItem.target = self
+        menu.addItem(settingsItem)
+        
+        menu.addItem(NSMenuItem.separator())
+        
         // Quit
         let quitItem = NSMenuItem(title: "Quit ClinAssist", action: #selector(quitApp), keyEquivalent: "q")
         quitItem.target = self
@@ -254,35 +259,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         statusItem?.menu = menu
     }
     
-    // MARK: - Main Window Setup
-    
-    private func setupMainWindow() {
-        guard let screen = NSScreen.main else { return }
-        
-        let windowWidth: CGFloat = 380
-        let windowHeight = screen.visibleFrame.height
-        let windowX = screen.visibleFrame.maxX - windowWidth
-        let windowY = screen.visibleFrame.minY
-        
-        let contentView = MainWindowView(appDelegate: self)
-        
-        mainWindow = NSWindow(
-            contentRect: NSRect(x: windowX, y: windowY, width: windowWidth, height: windowHeight),
-            styleMask: [.titled, .closable, .resizable, .fullSizeContentView],
-            backing: .buffered,
-            defer: false
-        )
-        
-        mainWindow?.title = "ClinAssist"
-        mainWindow?.contentView = NSHostingView(rootView: contentView)
-        mainWindow?.isReleasedWhenClosed = false
-        mainWindow?.delegate = self
-        mainWindow?.minSize = NSSize(width: 320, height: 500)
-        mainWindow?.maxSize = NSSize(width: 600, height: screen.frame.height)
-        
-        // Position on right edge
-        mainWindow?.setFrameOrigin(NSPoint(x: windowX, y: windowY))
-    }
     
     // MARK: - Global Hotkey Setup
     
@@ -516,14 +492,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     // MARK: - Window Management
     
     func showWindow() {
-        mainWindow?.makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
+        windowCoordinator?.showMainWindow()
         isWindowVisible = true
         updateMenu()
     }
     
     func hideWindow() {
-        mainWindow?.orderOut(nil)
+        windowCoordinator?.hideMainWindow()
         isWindowVisible = false
         updateMenu()
     }
@@ -531,121 +506,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     // MARK: - Session History Window
     
     @objc func showSessionHistory() {
-        if sessionHistoryWindow == nil {
-            setupSessionHistoryWindow()
-        }
-        
-        sessionHistoryWindow?.makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
-    }
-    
-    private func setupSessionHistoryWindow() {
-        guard let screen = NSScreen.main else { return }
-        
-        let windowWidth: CGFloat = 950
-        let windowHeight: CGFloat = 650
-        let windowX = (screen.visibleFrame.width - windowWidth) / 2 + screen.visibleFrame.minX
-        let windowY = (screen.visibleFrame.height - windowHeight) / 2 + screen.visibleFrame.minY
-        
-        // Create LLM provider for SOAP regeneration and billing code generation
-        let llmProvider: LLMProvider
-        if configManager.isGroqEnabled {
-            llmProvider = GroqClient(apiKey: configManager.groqApiKey, model: configManager.groqModel)
-        } else if let config = configManager.config, !config.openrouterApiKey.isEmpty {
-            llmProvider = LLMClient(apiKey: config.openrouterApiKey)
-        } else {
-            // Fallback - SOAP regeneration and billing codes won't work without API key
-            llmProvider = GroqClient(apiKey: "")
-        }
-        
-        let contentView = SessionHistoryView(llmProvider: llmProvider, configManager: configManager)
-        
-        sessionHistoryWindow = NSWindow(
-            contentRect: NSRect(x: windowX, y: windowY, width: windowWidth, height: windowHeight),
-            styleMask: [.titled, .closable, .resizable, .miniaturizable],
-            backing: .buffered,
-            defer: false
-        )
-        
-        sessionHistoryWindow?.title = "Session History"
-        sessionHistoryWindow?.contentView = NSHostingView(rootView: contentView)
-        sessionHistoryWindow?.isReleasedWhenClosed = false
-        sessionHistoryWindow?.minSize = NSSize(width: 800, height: 550)
-        sessionHistoryWindow?.center()
+        windowCoordinator?.showSessionHistoryWindow()
     }
     
     // MARK: - Medication Lookup Window
     
     @objc func showMedicationLookup() {
-        if medicationLookupWindow == nil {
-            setupMedicationLookupWindow()
-        }
-        
-        medicationLookupWindow?.makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
-    }
-    
-    private func setupMedicationLookupWindow() {
-        guard let screen = NSScreen.main else { return }
-        
-        let windowWidth: CGFloat = 900
-        let windowHeight: CGFloat = 600
-        let windowX = (screen.visibleFrame.width - windowWidth) / 2 + screen.visibleFrame.minX
-        let windowY = (screen.visibleFrame.height - windowHeight) / 2 + screen.visibleFrame.minY
-        
-        let contentView = MedicationLookupView()
-        
-        medicationLookupWindow = NSWindow(
-            contentRect: NSRect(x: windowX, y: windowY, width: windowWidth, height: windowHeight),
-            styleMask: [.titled, .closable, .resizable, .miniaturizable],
-            backing: .buffered,
-            defer: false
-        )
-        
-        medicationLookupWindow?.title = "Medication Lookup"
-        medicationLookupWindow?.contentView = NSHostingView(rootView: contentView)
-        medicationLookupWindow?.isReleasedWhenClosed = false
-        medicationLookupWindow?.minSize = NSSize(width: 700, height: 500)
-        medicationLookupWindow?.center()
+        windowCoordinator?.showMedicationLookupWindow()
     }
     
     // MARK: - Drug Database Update Window
     
     @objc func showDatabaseUpdateWindow() {
-        if databaseUpdateWindow == nil {
-            setupDatabaseUpdateWindow()
-        }
-        
-        databaseUpdateWindow?.makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
+        windowCoordinator?.showDatabaseUpdateWindow()
     }
     
-    private func setupDatabaseUpdateWindow() {
-        guard let screen = NSScreen.main else { return }
-        
-        let windowWidth: CGFloat = 500
-        let windowHeight: CGFloat = 300
-        let windowX = (screen.visibleFrame.width - windowWidth) / 2 + screen.visibleFrame.minX
-        let windowY = (screen.visibleFrame.height - windowHeight) / 2 + screen.visibleFrame.minY
-        
-        // Create builder if needed
-        if databaseBuilder == nil {
-            databaseBuilder = DrugDatabaseBuilder()
-        }
-        
-        let contentView = DatabaseUpdateView(builder: databaseBuilder!)
-        
-        databaseUpdateWindow = NSWindow(
-            contentRect: NSRect(x: windowX, y: windowY, width: windowWidth, height: windowHeight),
-            styleMask: [.titled, .closable],
-            backing: .buffered,
-            defer: false
-        )
-        
-        databaseUpdateWindow?.title = "Update Drug Database"
-        databaseUpdateWindow?.contentView = NSHostingView(rootView: contentView)
-        databaseUpdateWindow?.isReleasedWhenClosed = false
-        databaseUpdateWindow?.center()
+    // MARK: - Settings Window
+    
+    @objc func showSettings() {
+        windowCoordinator?.showSettingsWindow()
     }
 }
 

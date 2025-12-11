@@ -12,8 +12,13 @@ class GeminiImageClient {
     // Direct Gemini Imagen endpoint (if using direct API)
     private let imagenURL = "https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict"
     
-    // Gemini 3 Pro Image Preview - Google's latest image generation model
-    private let openRouterImageModel = "google/gemini-3-pro-image-preview"
+    /// Get the configured image generation model from settings
+    @MainActor
+    private func getConfiguredImageModel() -> String {
+        let model = ConfigManager.shared.getModel(for: .imageGeneration, scenario: .standard)
+        debugLog("🎨 Using configured image model: \(model.displayName)", component: "GeminiImage")
+        return model.modelId
+    }
     
     init(apiKey: String, useOpenRouter: Bool = true) {
         self.apiKey = apiKey
@@ -36,7 +41,8 @@ class GeminiImageClient {
             throw GeminiImageError.invalidURL
         }
         
-        debugLog("🎨 Generating image with Gemini 3 Pro: \(prompt.prefix(50))...", component: "GeminiImage")
+        let imageModel = await getConfiguredImageModel()
+        debugLog("🎨 Generating image with \(imageModel): \(prompt.prefix(50))...", component: "GeminiImage")
         let startTime = Date()
         
         var request = URLRequest(url: url)
@@ -47,7 +53,7 @@ class GeminiImageClient {
         request.timeoutInterval = 120
         
         let requestBody: [String: Any] = [
-            "model": openRouterImageModel,
+            "model": imageModel,
             "messages": [
                 [
                     "role": "user",

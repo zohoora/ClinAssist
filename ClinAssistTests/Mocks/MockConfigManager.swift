@@ -100,8 +100,7 @@ class MockConfigManager: ConfigManager {
         
         let autoDetectionConfig = AutoDetectionConfig(
             enabled: autoDetectionEnabled,
-            startKeywords: ["what brings you in", "how can i help"],
-            endKeywords: ["take care", "goodbye"],
+            detectEndOfEncounter: true,
             silenceThresholdSeconds: 30,
             minEncounterDurationSeconds: 60,
             speechActivityThreshold: 0.02,

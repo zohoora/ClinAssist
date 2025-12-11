@@ -33,6 +33,7 @@ class DeepgramStreamingClient: StreamingSTTClient {
     private let apiKey: String
     private let webSocketProvider: WebSocketProvider
     private var _isConnected = false
+    private var _isConnecting = false  // Prevents multiple simultaneous connection attempts
     
     // Configuration
     private let model: String
@@ -80,6 +81,7 @@ class DeepgramStreamingClient: StreamingSTTClient {
         webSocketProvider.onConnected = { [weak self] in
             guard let self = self else { return }
             
+            self._isConnecting = false
             self._isConnected = true
             self.reconnectAttempts = 0
             self.shouldReconnect = true
@@ -101,6 +103,7 @@ class DeepgramStreamingClient: StreamingSTTClient {
         webSocketProvider.onDisconnected = { [weak self] error in
             guard let self = self else { return }
             
+            self._isConnecting = false
             self._isConnected = false
             
             debugLog("❌ Disconnected: \(error?.localizedDescription ?? "clean disconnect")", component: "Streaming")
@@ -131,10 +134,16 @@ class DeepgramStreamingClient: StreamingSTTClient {
                 }
                 
             case .failure(let error):
-                debugLog("❌ Message error: \(error.localizedDescription)", component: "Streaming")
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.delegate?.streamingClient(self, didEncounterError: error)
+                // Only report errors if we're not intentionally disconnecting
+                // (shouldReconnect is set to false during intentional disconnect)
+                if self.shouldReconnect {
+                    debugLog("❌ Message error: \(error.localizedDescription)", component: "Streaming")
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.delegate?.streamingClient(self, didEncounterError: error)
+                    }
+                } else {
+                    debugLog("ℹ️ Message error during intentional disconnect (suppressed): \(error.localizedDescription)", component: "Streaming")
                 }
             }
         }
@@ -148,6 +157,12 @@ class DeepgramStreamingClient: StreamingSTTClient {
             return
         }
         
+        guard !_isConnecting else {
+            debugLog("⚠️ Connection already in progress, skipping connect()", component: "Streaming")
+            return
+        }
+        
+        _isConnecting = true
         debugLog("🔌 connect() called - starting WebSocket connection...", component: "Streaming")
         
         // Build WebSocket URL with query parameters
@@ -197,6 +212,7 @@ class DeepgramStreamingClient: StreamingSTTClient {
         }
         
         webSocketProvider.disconnect()
+        _isConnecting = false
         _isConnected = false
         pendingAudioBuffer = []
         

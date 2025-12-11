@@ -1,7 +1,7 @@
 import Foundation
 
 /// Orchestrates LLM provider selection based on configuration and availability
-/// Handles fallback logic: Groq -> Ollama -> OpenRouter
+/// Uses scenario-based config: standard, large, multimodal, backup
 @MainActor
 class LLMOrchestrator {
     
@@ -102,13 +102,8 @@ class LLMOrchestrator {
     // Gemini 2.5 Flash for multimodal (images, PDFs) - fast and reliable
     private let geminiMultimodalModel = "google/gemini-2.5-flash"
     
-    /// Generate final SOAP note
-    /// Priority order:
-    /// 1. Multimodal content (images/PDFs): Use Gemini 2.5 Flash (multimodal)
-    /// 2. Large transcripts (>500 entries): Use Gemini 2.5 Flash (1M context)
-    /// 3. Groq (if configured): Fast cloud inference for small/medium transcripts
-    /// 4. Ollama (if configured): Local fallback if Groq fails
-    /// 5. Fallback: Gemini 2.5 Flash via OpenRouter
+    /// Generate final SOAP note using scenario-based model selection
+    /// Scenarios: multimodal -> large -> standard -> backup
     func generateFinalSOAP(systemPrompt: String, content: String, transcriptEntryCount: Int = 0, attachments: [EncounterAttachment] = []) async throws -> String {
         
         debugLog("📋 generateFinalSOAP called: content=\(content.count) chars, transcriptCount=\(transcriptEntryCount), attachments=\(attachments.count)", component: "LLMOrchestrator")
@@ -117,81 +112,51 @@ class LLMOrchestrator {
         let contentPreview = String(content.prefix(500))
         debugLog("📋 Content preview: \(contentPreview)...", component: "LLMOrchestrator")
         
-        // Check for multimodal content - if present, MUST use Gemini multimodal
+        // Check for multimodal content
         let hasMultimodalContent = attachments.contains { $0.isMultimodal }
         
+        // Determine scenario
+        let scenario: LLMScenario
         if hasMultimodalContent {
-            debugLog("🖼️ Multimodal content detected (\(attachments.filter { $0.isMultimodal }.count) items) - using Gemini 2.5 Flash", component: "LLMOrchestrator")
-            return try await generateMultimodalSOAP(systemPrompt: systemPrompt, content: content, attachments: attachments)
+            scenario = .multimodal
+        } else if transcriptEntryCount > largeTranscriptThreshold {
+            scenario = .large
+        } else {
+            scenario = .standard
         }
         
-        // For large transcripts, use Gemini 2.5 Flash via OpenRouter (1M context window)
-        if transcriptEntryCount > largeTranscriptThreshold {
-            debugLog("📊 Large transcript (\(transcriptEntryCount) entries) - using Gemini 2.5 Flash (1M context)", component: "LLMOrchestrator")
+        let model = configManager.getModel(for: .finalSoap, scenario: scenario)
+        debugLog("🎯 Final SOAP scenario: \(scenario.displayName), model: \(model.displayName)", component: "LLMOrchestrator")
+        
+        // Handle multimodal separately (requires special API format)
+        if hasMultimodalContent {
+            debugLog("🖼️ Multimodal content detected (\(attachments.filter { $0.isMultimodal }.count) items)", component: "LLMOrchestrator")
+            let multimodalModel = configManager.getModel(for: .finalSoap, scenario: .multimodal)
+            return try await generateMultimodalSOAP(systemPrompt: systemPrompt, content: content, attachments: attachments, model: multimodalModel)
+        }
+        
+        // Try primary model
+        do {
+            return try await executeWithModel(model, function: .finalSoap, systemPrompt: systemPrompt, content: content)
+        } catch {
+            debugLog("⚠️ Primary model \(model.displayName) failed: \(error.localizedDescription)", component: "LLMOrchestrator")
             
-            guard let openRouter = openRouterClient else {
-                throw LLMProviderError.notAvailable(provider: "OpenRouter")
+            // Try backup model
+            let backupModel = configManager.getModel(for: .finalSoap, scenario: .backup)
+            if backupModel.id != model.id {
+                debugLog("🔄 Trying backup model: \(backupModel.displayName)", component: "LLMOrchestrator")
+                return try await executeWithModel(backupModel, function: .finalSoap, systemPrompt: systemPrompt, content: content)
             }
             
-            let startTime = Date()
-            let response = try await openRouter.complete(
-                systemPrompt: systemPrompt,
-                userContent: content,
-                modelOverride: geminiModel
-            )
-            let elapsed = Date().timeIntervalSince(startTime)
-            debugLog("✅ Gemini 2.5 Flash completed in \(String(format: "%.2f", elapsed))s", component: "LLMOrchestrator")
-            return response
+            throw error
         }
-        
-        // Try Groq first (fast cloud inference for small/medium transcripts)
-        if configManager.useGroqForFinalSoap, let groq = groqClient {
-            debugLog("⚡ Using Groq for final SOAP (\(transcriptEntryCount) entries)", component: "LLMOrchestrator")
-            let startTime = Date()
-            do {
-                let response = try await groq.complete(systemPrompt: systemPrompt, userContent: content)
-                let elapsed = Date().timeIntervalSince(startTime)
-                debugLog("✅ Groq completed in \(String(format: "%.2f", elapsed))s", component: "LLMOrchestrator")
-                return response
-            } catch {
-                debugLog("⚠️ Groq failed: \(error.localizedDescription), trying Ollama...", component: "LLMOrchestrator")
-                // Fall through to Ollama
-            }
-        }
-        
-        // Try Ollama as fallback (local, no rate limits)
-        if ollamaAvailable && configManager.useOllamaForFinalSoap, let ollama = ollamaClient {
-            debugLog("🦙 Using Ollama for final SOAP (\(transcriptEntryCount) entries)", component: "LLMOrchestrator")
-            let startTime = Date()
-            do {
-                let response = try await ollama.complete(systemPrompt: systemPrompt, userContent: content)
-                let elapsed = Date().timeIntervalSince(startTime)
-                debugLog("✅ Ollama completed in \(String(format: "%.2f", elapsed))s", component: "LLMOrchestrator")
-                return response
-            } catch {
-                debugLog("⚠️ Ollama failed: \(error.localizedDescription), trying Gemini...", component: "LLMOrchestrator")
-                // Fall through to Gemini
-            }
-        }
-        
-        // Fallback to Gemini 2.5 Flash for any size
-        guard let openRouter = openRouterClient else {
-            throw LLMProviderError.notAvailable(provider: "Any LLM")
-        }
-        
-        debugLog("☁️ Using Gemini 2.5 Flash as fallback", component: "LLMOrchestrator")
-        return try await openRouter.complete(
-            systemPrompt: systemPrompt,
-            userContent: content,
-            modelOverride: geminiModel
-        )
     }
     
     // MARK: - Multimodal SOAP Generation
     
     /// Generate SOAP note with multimodal content (images, PDFs)
-    /// Uses Gemini 2.5 Flash via OpenRouter with multimodal message format
-    private func generateMultimodalSOAP(systemPrompt: String, content: String, attachments: [EncounterAttachment]) async throws -> String {
+    /// Uses the configured multimodal model via OpenRouter
+    private func generateMultimodalSOAP(systemPrompt: String, content: String, attachments: [EncounterAttachment], model: LLMModelOption) async throws -> String {
         guard let config = configManager.config else {
             throw LLMProviderError.notAvailable(provider: "OpenRouter")
         }
@@ -201,7 +166,7 @@ class LLMOrchestrator {
         }
         
         let startTime = Date()
-        debugLog("🖼️ Building multimodal request with \(attachments.count) attachments", component: "LLMOrchestrator")
+        debugLog("🖼️ Building multimodal request with \(attachments.count) attachments using \(model.displayName)", component: "LLMOrchestrator")
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -239,7 +204,7 @@ class LLMOrchestrator {
         }
         
         let requestBody: [String: Any] = [
-            "model": geminiMultimodalModel,
+            "model": model.modelId,
             "messages": [
                 ["role": "system", "content": systemPrompt],
                 ["role": "user", "content": contentParts]
@@ -277,43 +242,70 @@ class LLMOrchestrator {
         return result
     }
     
-    /// Generate live SOAP note (uses local if available: Ollama > OpenRouter)
-    func generateLiveSOAP(systemPrompt: String, content: String) async throws -> String {
-        // Try Ollama first (local, no rate limits)
-        if ollamaAvailable && configManager.useOllamaForLiveSoap, let ollama = ollamaClient {
-            debugLog("🦙 Using Ollama for live SOAP", component: "LLMOrchestrator")
-            return try await ollama.complete(systemPrompt: systemPrompt, userContent: content)
-        }
+    // MARK: - Model Execution
+    
+    /// Execute a completion with the specified model
+    private func executeWithModel(_ model: LLMModelOption, function: LLMFunction, systemPrompt: String, content: String) async throws -> String {
+        let startTime = Date()
         
-        // Fallback to OpenRouter
-        guard let openRouter = openRouterClient else {
-            throw LLMProviderError.notAvailable(provider: "Any LLM")
+        switch model.provider {
+        case .ollama:
+            guard ollamaAvailable, let ollama = ollamaClient else {
+                throw LLMProviderError.notAvailable(provider: "Ollama")
+            }
+            debugLog("🦙 Using \(model.displayName) for \(function.displayName)", component: "LLMOrchestrator")
+            let response = try await ollama.complete(systemPrompt: systemPrompt, userContent: content, modelOverride: model.modelId)
+            let elapsed = Date().timeIntervalSince(startTime)
+            debugLog("✅ Ollama completed in \(String(format: "%.2f", elapsed))s", component: "LLMOrchestrator")
+            return response
+            
+        case .groq:
+            guard let groq = groqClient else {
+                throw LLMProviderError.notAvailable(provider: "Groq")
+            }
+            debugLog("⚡ Using \(model.displayName) for \(function.displayName)", component: "LLMOrchestrator")
+            let response = try await groq.complete(systemPrompt: systemPrompt, userContent: content, modelOverride: model.modelId)
+            let elapsed = Date().timeIntervalSince(startTime)
+            debugLog("✅ Groq completed in \(String(format: "%.2f", elapsed))s", component: "LLMOrchestrator")
+            return response
+            
+        case .openRouter:
+            guard let openRouter = openRouterClient else {
+                throw LLMProviderError.notAvailable(provider: "OpenRouter")
+            }
+            debugLog("☁️ Using \(model.displayName) for \(function.displayName)", component: "LLMOrchestrator")
+            let response = try await openRouter.complete(systemPrompt: systemPrompt, userContent: content, modelOverride: model.modelId)
+            let elapsed = Date().timeIntervalSince(startTime)
+            debugLog("✅ OpenRouter completed in \(String(format: "%.2f", elapsed))s", component: "LLMOrchestrator")
+            return response
         }
-        
-        debugLog("☁️ Using OpenRouter for live SOAP", component: "LLMOrchestrator")
-        return try await openRouter.complete(systemPrompt: systemPrompt, userContent: content)
     }
     
-    /// Generate helper suggestions (uses local if available: Ollama > OpenRouter)
-    func generateHelperSuggestions(systemPrompt: String, content: String) async throws -> String {
-        // Try Ollama first
-        if ollamaAvailable && configManager.useOllamaForHelpers, let ollama = ollamaClient {
-            debugLog("🦙 Using Ollama for helpers", component: "LLMOrchestrator")
-            return try await ollama.complete(systemPrompt: systemPrompt, userContent: content)
-        }
+    /// Generate Psst... predictions using scenario-based model selection
+    func generatePsstPrediction(systemPrompt: String, content: String) async throws -> String {
+        let model = configManager.getModel(for: .psst, scenario: .standard)
+        debugLog("🔮 Psst prediction model: \(model.displayName)", component: "LLMOrchestrator")
         
-        // Fallback to OpenRouter
-        guard let openRouter = openRouterClient else {
-            throw LLMProviderError.notAvailable(provider: "Any LLM")
+        do {
+            return try await executeWithModel(model, function: .psst, systemPrompt: systemPrompt, content: content)
+        } catch {
+            debugLog("⚠️ Primary model \(model.displayName) failed: \(error.localizedDescription)", component: "LLMOrchestrator")
+            
+            // Try backup model
+            let backupModel = configManager.getModel(for: .psst, scenario: .backup)
+            if backupModel.id != model.id {
+                debugLog("🔄 Trying backup model: \(backupModel.displayName)", component: "LLMOrchestrator")
+                return try await executeWithModel(backupModel, function: .psst, systemPrompt: systemPrompt, content: content)
+            }
+            
+            throw error
         }
-        
-        debugLog("☁️ Using OpenRouter for helpers", component: "LLMOrchestrator")
-        return try await openRouter.complete(systemPrompt: systemPrompt, userContent: content)
     }
     
     /// Get the Ollama client for session detection (if available and configured)
     func getOllamaClientForSessionDetection() -> OllamaClient? {
-        guard ollamaAvailable && configManager.useOllamaForSessionDetection else {
+        let model = configManager.getModel(for: .sessionDetection, scenario: .standard)
+        guard model.provider == .ollama, ollamaAvailable else {
             return nil
         }
         return ollamaClient

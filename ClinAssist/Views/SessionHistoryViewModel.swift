@@ -19,16 +19,16 @@ class SessionHistoryViewModel: ObservableObject {
     // MARK: - Dependencies
     
     private let storage = EncounterStorage.shared
-    private let llmProvider: LLMProvider
     private let configManager: ConfigManager
+    private let llmOrchestrator: LLMOrchestrator
     private var billingGenerator: BillingCodeGenerator?
     
     // MARK: - Initialization
     
-    init(llmProvider: LLMProvider, configManager: ConfigManager) {
-        self.llmProvider = llmProvider
+    init(configManager: ConfigManager) {
         self.configManager = configManager
-        self.billingGenerator = BillingCodeGenerator(llmProvider: llmProvider)
+        self.llmOrchestrator = LLMOrchestrator(configManager: configManager)
+        self.billingGenerator = BillingCodeGenerator()
     }
     
     // MARK: - Session Loading
@@ -129,17 +129,18 @@ class SessionHistoryViewModel: ObservableObject {
         isRegenerating = true
         
         do {
-            // Build transcript text
-            let transcriptText = state.transcript
-                .map { "[\($0.speaker)] \($0.text)" }
-                .joined(separator: "\n")
+            // Encode state to JSON (same format as SOAPGenerator)
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            encoder.dateEncodingStrategy = .iso8601
+            let stateJSON = try encoder.encode(state)
+            guard let stateString = String(data: stateJSON, encoding: .utf8) else {
+                debugLog("❌ Failed to encode state to string", component: "History")
+                isRegenerating = false
+                return
+            }
             
-            debugLog("📝 Transcript: \(state.transcript.count) entries, \(transcriptText.count) chars", component: "History")
-            
-            // Build clinical notes text
-            let clinicalNotesText = state.clinicalNotes
-                .map { $0.text }
-                .joined(separator: "\n")
+            debugLog("📝 State JSON: \(stateJSON.count) bytes, \(state.transcript.count) transcript entries", component: "History")
             
             // Get the system prompt with options
             let systemPrompt = LLMPrompts.soapRendererWithOptions(
@@ -148,20 +149,14 @@ class SessionHistoryViewModel: ObservableObject {
                 customInstructions: customInstructions
             )
             
-            // Build the user prompt
-            var userPrompt = "Generate a SOAP note from the following clinical encounter transcript:\n\n"
-            userPrompt += transcriptText
+            debugLog("📤 Calling LLMOrchestrator.generateFinalSOAP...", component: "History")
             
-            if !clinicalNotesText.isEmpty {
-                userPrompt += "\n\nClinician's Notes:\n\(clinicalNotesText)"
-            }
-            
-            debugLog("📤 Calling LLM with \(userPrompt.count) char prompt...", component: "History")
-            
-            // Call LLM
-            let newSOAPNote = try await llmProvider.complete(
+            // Use LLMOrchestrator with Final SOAP settings (scenario-based model selection)
+            let newSOAPNote = try await llmOrchestrator.generateFinalSOAP(
                 systemPrompt: systemPrompt,
-                userContent: userPrompt
+                content: stateString,
+                transcriptEntryCount: state.transcript.count,
+                attachments: []  // Historical sessions don't have attachments for now
             )
             
             debugLog("📥 LLM returned: \(newSOAPNote.count) chars", component: "History")

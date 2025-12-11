@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MainWindowView: View {
     @ObservedObject var appDelegate: AppDelegate
+    @ObservedObject var errorHandler = ErrorHandler.shared
     
     @State private var transcriptExpanded: Bool = true
     
@@ -24,6 +25,15 @@ struct MainWindowView: View {
                     silenceDuration: appDelegate.silenceDuration,
                     audioLevel: appDelegate.audioManager.currentAudioLevel
                 )
+                
+                // Error banner for non-critical errors (shown inline)
+                if let error = errorHandler.currentError, error.severity != .critical {
+                    ErrorBannerView(error: error) {
+                        errorHandler.clearError()
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.top, 8)
+                }
                 
                 Divider()
                 
@@ -56,6 +66,7 @@ struct MainWindowView: View {
         }
         .frame(minWidth: 320, maxWidth: 600)
         .background(Color(NSColor.windowBackgroundColor))
+        .withErrorHandling(errorHandler)
         .sheet(isPresented: $appDelegate.showEndEncounterSheet) {
             EndEncounterSheet(
                 // Use captured SOAP note to prevent it being cleared by new provisional recording

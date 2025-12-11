@@ -12,14 +12,17 @@ class BillingCodeGenerator: ObservableObject {
     
     // MARK: - Dependencies
     
-    private let llmProvider: LLMProvider
     private var diagnosticCodes: [DiagnosticCode] = []
     private var comprehensiveBillingData: ComprehensiveBillingData?
     
     // MARK: - Initialization
     
+    init() {
+        loadReferenceData()
+    }
+    
+    // Legacy init for compatibility
     init(llmProvider: LLMProvider) {
-        self.llmProvider = llmProvider
         loadReferenceData()
     }
     
@@ -59,10 +62,7 @@ class BillingCodeGenerator: ObservableObject {
         
         do {
             let prompt = buildPrompt(soapNote: soapNote, duration: encounterDuration)
-            let response = try await llmProvider.complete(
-                systemPrompt: billingSystemPrompt,
-                userContent: prompt
-            )
+            let response = try await callLLM(systemPrompt: billingSystemPrompt, userContent: prompt)
             
             // Parse the LLM response
             if let suggestion = parseLLMResponse(response) {
@@ -76,6 +76,122 @@ class BillingCodeGenerator: ObservableObject {
         }
         
         isGenerating = false
+    }
+    
+    /// Call the configured LLM for billing code generation
+    private func callLLM(systemPrompt: String, userContent: String) async throws -> String {
+        guard let config = ConfigManager.shared.config else {
+            throw BillingError.noConfig
+        }
+        
+        // Get the configured model for billing
+        let model = ConfigManager.shared.getModel(for: .billing, scenario: .standard)
+        debugLog("💰 Billing using model: \(model.displayName)", component: "Billing")
+        
+        // Determine API endpoint based on provider
+        let url: URL
+        var headers: [String: String] = [:]
+        var requestBody: [String: Any]
+        
+        switch model.provider {
+        case .groq:
+            guard let groqConfig = config.groq, !groqConfig.apiKey.isEmpty else {
+                throw BillingError.noApiKey
+            }
+            url = URL(string: "https://api.groq.com/openai/v1/chat/completions")!
+            headers["Authorization"] = "Bearer \(groqConfig.apiKey)"
+            headers["Content-Type"] = "application/json"
+            
+        case .openRouter:
+            url = URL(string: "https://openrouter.ai/api/v1/chat/completions")!
+            headers["Authorization"] = "Bearer \(config.openrouterApiKey)"
+            headers["Content-Type"] = "application/json"
+            headers["HTTP-Referer"] = "https://clinassist.local"
+            headers["X-Title"] = "ClinAssist"
+            
+        case .ollama:
+            let baseURL = config.ollama?.baseUrl ?? "http://localhost:11434"
+            url = URL(string: "\(baseURL)/api/chat")!
+            headers["Content-Type"] = "application/json"
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        for (key, value) in headers {
+            request.setValue(value, forHTTPHeaderField: key)
+        }
+        request.timeoutInterval = 120
+        
+        // Build request body based on provider
+        if model.provider == .ollama {
+            requestBody = [
+                "model": model.modelId,
+                "messages": [
+                    ["role": "system", "content": systemPrompt],
+                    ["role": "user", "content": userContent]
+                ],
+                "stream": false
+            ]
+        } else {
+            requestBody = [
+                "model": model.modelId,
+                "messages": [
+                    ["role": "system", "content": systemPrompt],
+                    ["role": "user", "content": userContent]
+                ],
+                "temperature": 0.3,
+                "max_tokens": 4096
+            ]
+        }
+        
+        request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw BillingError.invalidResponse
+        }
+        
+        if httpResponse.statusCode != 200 {
+            let errorText = String(data: data, encoding: .utf8) ?? "Unknown error"
+            debugLog("❌ Billing API error: HTTP \(httpResponse.statusCode): \(errorText)", component: "Billing")
+            throw BillingError.apiError(httpResponse.statusCode)
+        }
+        
+        // Parse response based on provider
+        if model.provider == .ollama {
+            guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let message = json["message"] as? [String: Any],
+                  let content = message["content"] as? String else {
+                throw BillingError.invalidResponse
+            }
+            return content
+        } else {
+            guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let choices = json["choices"] as? [[String: Any]],
+                  let firstChoice = choices.first,
+                  let message = firstChoice["message"] as? [String: Any],
+                  let content = message["content"] as? String else {
+                throw BillingError.invalidResponse
+            }
+            return content
+        }
+    }
+    
+    enum BillingError: Error, LocalizedError {
+        case noConfig
+        case noApiKey
+        case invalidResponse
+        case apiError(Int)
+        
+        var errorDescription: String? {
+            switch self {
+            case .noConfig: return "No configuration found"
+            case .noApiKey: return "API key not configured"
+            case .invalidResponse: return "Invalid response from server"
+            case .apiError(let code): return "API error (status: \(code))"
+            }
+        }
     }
     
     // MARK: - Prompt Building

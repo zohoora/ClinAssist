@@ -97,8 +97,7 @@ final class ConfigManagerTests: XCTestCase {
           },
           "auto_detection": {
             "enabled": true,
-            "start_keywords": ["hello", "what brings you in"],
-            "end_keywords": ["goodbye", "take care"],
+            "detect_end_of_encounter": true,
             "silence_threshold_seconds": 45,
             "min_encounter_duration_seconds": 60
           }
@@ -110,8 +109,7 @@ final class ConfigManagerTests: XCTestCase {
         
         XCTAssertNotNil(config.autoDetection)
         XCTAssertTrue(config.autoDetection!.enabled)
-        XCTAssertEqual(config.autoDetection!.startKeywords?.count, 2)
-        XCTAssertEqual(config.autoDetection!.endKeywords?.count, 2)
+        XCTAssertEqual(config.autoDetection!.detectEndOfEncounter, true)
         XCTAssertEqual(config.autoDetection!.silenceThresholdSeconds, 45)
     }
     

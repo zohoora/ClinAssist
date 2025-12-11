@@ -27,6 +27,7 @@ class URLSessionWebSocketProvider: NSObject, WebSocketProvider, URLSessionWebSoc
     private var webSocketTask: URLSessionWebSocketTask?
     private var session: URLSession?
     private var isConnected = false
+    private var isIntentionalDisconnect = false  // Suppress errors during intentional disconnect
     
     override init() {
         super.init()
@@ -34,6 +35,8 @@ class URLSessionWebSocketProvider: NSObject, WebSocketProvider, URLSessionWebSoc
     
     func connect(to url: URL, headers: [String: String]) {
         debugLog("🔌 Connecting to: \(url.host ?? "unknown")...", component: "WebSocket")
+        
+        isIntentionalDisconnect = false  // Reset flag for new connection
         
         let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = 30
@@ -50,9 +53,8 @@ class URLSessionWebSocketProvider: NSObject, WebSocketProvider, URLSessionWebSoc
         webSocketTask?.resume()
         
         debugLog("🚀 WebSocket task started", component: "WebSocket")
-        
-        // Start receiving messages
-        receiveMessage()
+        // Note: receiveMessage() is now called in didOpenWithProtocol delegate callback
+        // to avoid "Socket is not connected" errors
     }
     
     func send(_ data: Data) {
@@ -82,6 +84,7 @@ class URLSessionWebSocketProvider: NSObject, WebSocketProvider, URLSessionWebSoc
     }
     
     func disconnect() {
+        isIntentionalDisconnect = true
         webSocketTask?.cancel(with: .normalClosure, reason: nil)
         isConnected = false
     }
@@ -105,9 +108,15 @@ class URLSessionWebSocketProvider: NSObject, WebSocketProvider, URLSessionWebSoc
                 self.receiveMessage()
                 
             case .failure(let error):
-                self.onMessage?(.failure(error))
-                self.isConnected = false
-                self.onDisconnected?(error)
+                // Only propagate errors if not intentionally disconnecting
+                if !self.isIntentionalDisconnect {
+                    self.onMessage?(.failure(error))
+                    self.isConnected = false
+                    self.onDisconnected?(error)
+                } else {
+                    self.isConnected = false
+                    self.onDisconnected?(nil)  // Clean disconnect, no error
+                }
             }
         }
     }
@@ -117,6 +126,10 @@ class URLSessionWebSocketProvider: NSObject, WebSocketProvider, URLSessionWebSoc
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
         debugLog("✅ WebSocket connected (protocol: \(`protocol` ?? "none"))", component: "WebSocket")
         isConnected = true
+        
+        // Start receiving messages now that connection is established
+        receiveMessage()
+        
         onConnected?()
     }
     
@@ -128,9 +141,16 @@ class URLSessionWebSocketProvider: NSObject, WebSocketProvider, URLSessionWebSoc
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         if let error = error {
-            debugLog("❌ WebSocket task error: \(error.localizedDescription)", component: "WebSocket")
-            isConnected = false
-            onDisconnected?(error)
+            // Only propagate errors if not intentionally disconnecting
+            if !isIntentionalDisconnect {
+                debugLog("❌ WebSocket task error: \(error.localizedDescription)", component: "WebSocket")
+                isConnected = false
+                onDisconnected?(error)
+            } else {
+                debugLog("ℹ️ WebSocket task completed during intentional disconnect", component: "WebSocket")
+                isConnected = false
+                // Don't call onDisconnected here - didCloseWith will handle it
+            }
         }
     }
 }

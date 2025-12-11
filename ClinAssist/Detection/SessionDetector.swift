@@ -1,6 +1,14 @@
 import Foundation
 import Combine
 
+/// Protocol for LLM client used by SessionDetector
+protocol SessionDetectorLLMClient {
+    func quickComplete(prompt: String, modelOverride: String?) async throws -> String
+}
+
+// OllamaClient conforms to this protocol
+extension OllamaClient: SessionDetectorLLMClient {}
+
 /// Detects the start and end of clinical encounters based on audio activity and transcript patterns
 @MainActor
 class SessionDetector: ObservableObject {
@@ -22,37 +30,11 @@ class SessionDetector: ObservableObject {
     
     struct Config {
         var enabled: Bool = true
-        var startKeywords: [String] = [
-            "what brings you in",
-            "how can i help",
-            "what's going on",
-            "what seems to be",
-            "tell me about",
-            "let me take a look",
-            "come on in",
-            "have a seat",
-            "nice to meet you",
-            "good morning",
-            "good afternoon"
-        ]
-        var endKeywords: [String] = [
-            "take care",
-            "see you",
-            "any questions",
-            "front desk",
-            "check out",
-            "follow up",
-            "come back",
-            "feel better",
-            "bye",
-            "goodbye",
-            "have a good"
-        ]
+        var detectEndOfEncounter: Bool = true  // When false, sessions can only be manually ended
         var silenceThresholdSeconds: TimeInterval = 45
         var minEncounterDurationSeconds: TimeInterval = 60
         var speechActivityThreshold: Float = 0.02  // Audio level threshold
         var bufferDurationSeconds: TimeInterval = 45  // Needs time for: audio record + transcribe + LLM (increased for slow networks)
-        var useLLMForDetection: Bool = true
     }
     
     var config: Config
@@ -78,7 +60,7 @@ class SessionDetector: ObservableObject {
     private let maxBufferSize = 20  // Keep last 20 transcript segments
     
     // LLM-based detection
-    private var ollamaClient: OllamaClient?
+    private var llmClient: SessionDetectorLLMClient?
     private var isAnalyzing: Bool = false
     private var lastAnalysisTime: Date?
     private let analysisDebounceSeconds: TimeInterval = 3  // Don't analyze more than every 3 seconds
@@ -133,19 +115,30 @@ class SessionDetector: ObservableObject {
         self.config = config
     }
     
-    func setOllamaClient(_ client: OllamaClient?) {
-        self.ollamaClient = client
+    func setLLMClient(_ client: SessionDetectorLLMClient?) {
+        self.llmClient = client
         if client != nil {
-            log("✅ LLM-based detection enabled (Ollama client set)")
+            log("✅ LLM-based detection enabled")
         } else {
-            log("⚠️ LLM-based detection disabled (no Ollama client)")
+            log("⚠️ LLM-based detection disabled (no LLM client)")
         }
+    }
+    
+    /// Convenience method for setting OllamaClient
+    func setOllamaClient(_ client: OllamaClient?) {
+        setLLMClient(client)
     }
     
     // MARK: - Public Methods
     
     func startMonitoring() {
         guard config.enabled else { return }
+        
+        // Auto-detection requires LLM - disable if not available
+        guard llmClient != nil else {
+            log("⚠️ Auto-detection disabled - no LLM available")
+            return
+        }
         
         isMonitoring = true
         detectionStatus = .monitoring
@@ -155,7 +148,7 @@ class SessionDetector: ObservableObject {
         
         startSilenceTimer()
         
-        log("Started monitoring for encounters (LLM: \(ollamaClient != nil ? "enabled" : "disabled"))")
+        log("Started monitoring for encounters (LLM enabled)")
     }
     
     func stopMonitoring() {
@@ -225,17 +218,9 @@ class SessionDetector: ObservableObject {
             
             // If we're monitoring and speech is detected, start buffering for LLM analysis
             if detectionStatus == .monitoring {
-                log("🎙️ Speech detected! Level: \(level), hasOllama: \(ollamaClient != nil)")
-                if ollamaClient != nil && config.useLLMForDetection {
-                    // With LLM: buffer and analyze transcript
-                    log("📦 Starting buffering for LLM analysis...")
-                    startBuffering()
-                } else {
-                    // Without LLM: start immediately on speech
-                    log("⚡ No LLM, starting encounter immediately on speech")
-                    lastDetectedPattern = "Speech detected"
-                    confirmEncounterStart()
-                }
+                log("🎙️ Speech detected! Level: \(level)")
+                log("📦 Starting buffering for LLM analysis...")
+                startBuffering()
             }
         }
     }
@@ -255,19 +240,12 @@ class SessionDetector: ObservableObject {
         
         switch detectionStatus {
         case .buffering, .analyzing:
-            // Use LLM if available, otherwise use keyword detection
-            if ollamaClient != nil && config.useLLMForDetection {
-                analyzeForEncounterStart(transcript: combinedTranscript)
-            } else if detectEncounterStart(in: combinedTranscript) {
-                confirmEncounterStart()
-            }
+            analyzeForEncounterStart(transcript: combinedTranscript)
             
         case .encounterActive:
-            // Check for end patterns
-            if ollamaClient != nil && config.useLLMForDetection {
+            // Only analyze for end if end detection is enabled
+            if config.detectEndOfEncounter {
                 analyzeForEncounterEnd(transcript: combinedTranscript)
-            } else if detectEncounterEnd(in: combinedTranscript) {
-                startPotentialEndTimer()
             }
             
         case .potentialEnd:
@@ -303,8 +281,8 @@ class SessionDetector: ObservableObject {
         Task {
             do {
                 let prompt = startDetectionPrompt + "\n\n\"\"\"\n\(transcript)\n\"\"\""
-                log("📤 Calling Ollama quickComplete...")
-                let response = try await ollamaClient?.quickComplete(prompt: prompt) ?? "WAIT"
+                log("📤 Calling LLM quickComplete...")
+                let response = try await llmClient?.quickComplete(prompt: prompt, modelOverride: nil) ?? "WAIT"
                 
                 let decision = response.uppercased().trimmingCharacters(in: .whitespacesAndNewlines)
                 log("🤖 LLM raw response: \(response.prefix(200))")
@@ -329,12 +307,7 @@ class SessionDetector: ObservableObject {
                 self.log("❌ LLM analysis error: \(error.localizedDescription)")
                 await MainActor.run {
                     self.isAnalyzing = false
-                    // Fall back to keyword detection
-                    if self.detectEncounterStart(in: transcript) {
-                        self.confirmEncounterStart()
-                    } else {
-                        self.detectionStatus = .buffering
-                    }
+                    self.detectionStatus = .buffering
                 }
             }
         }
@@ -358,7 +331,7 @@ class SessionDetector: ObservableObject {
                 // Only analyze the last few transcript entries for end detection
                 let recentText = recentTranscriptBuffer.suffix(5).joined(separator: "\n")
                 let prompt = endDetectionPrompt + "\n\n\"\"\"\n\(recentText)\n\"\"\""
-                let response = try await ollamaClient?.quickComplete(prompt: prompt) ?? "CONTINUE"
+                let response = try await llmClient?.quickComplete(prompt: prompt, modelOverride: nil) ?? "CONTINUE"
                 
                 let decision = response.uppercased().trimmingCharacters(in: .whitespacesAndNewlines)
                 log("🤖 End analysis: \(decision)")
@@ -376,10 +349,6 @@ class SessionDetector: ObservableObject {
                 log("❌ LLM end analysis error: \(error)")
                 await MainActor.run {
                     self.isAnalyzing = false
-                    // Fall back to keyword detection
-                    if self.detectEncounterEnd(in: transcript) {
-                        self.startPotentialEndTimer()
-                    }
                 }
             }
         }
@@ -390,63 +359,7 @@ class SessionDetector: ObservableObject {
         return Date().timeIntervalSince(lastTime) >= analysisDebounceSeconds
     }
     
-    // MARK: - Keyword-Based Detection (Fallback)
-    
-    private func detectEncounterStart(in text: String) -> Bool {
-        let lowercased = text.lowercased()
-        
-        // Check for start keywords
-        for keyword in config.startKeywords {
-            if lowercased.contains(keyword.lowercased()) {
-                lastDetectedPattern = "Start keyword: \"\(keyword)\""
-                log("Detected start keyword: \(keyword)")
-                return true
-            }
-        }
-        
-        // Check for clinical indicators
-        let clinicalIndicators = [
-            "pain", "symptoms", "medication", "prescription",
-            "blood pressure", "temperature", "exam",
-            "diagnosis", "treatment", "referral"
-        ]
-        
-        var clinicalCount = 0
-        for indicator in clinicalIndicators {
-            if lowercased.contains(indicator) {
-                clinicalCount += 1
-            }
-        }
-        
-        if clinicalCount >= 2 {
-            lastDetectedPattern = "Clinical context detected (\(clinicalCount) indicators)"
-            log("Clinical context detected with \(clinicalCount) indicators")
-            return true
-        }
-        
-        return false
-    }
-    
-    private func detectEncounterEnd(in text: String) -> Bool {
-        // Don't end if encounter is too short
-        if let startTime = encounterStartTime,
-           Date().timeIntervalSince(startTime) < config.minEncounterDurationSeconds {
-            return false
-        }
-        
-        let lowercased = text.lowercased()
-        
-        // Check for end keywords
-        for keyword in config.endKeywords {
-            if lowercased.contains(keyword.lowercased()) {
-                lastDetectedPattern = "End keyword: \"\(keyword)\""
-                log("Detected end keyword: \(keyword)")
-                return true
-            }
-        }
-        
-        return false
-    }
+    // MARK: - Clinical Content Detection
     
     private func detectClinicalContent(in text: String) -> Bool {
         let lowercased = text.lowercased()
@@ -568,6 +481,9 @@ class SessionDetector: ObservableObject {
     }
     
     private func checkSilenceThreshold() {
+        // Skip all end detection if disabled
+        guard config.detectEndOfEncounter else { return }
+        
         // End encounter if in potentialEnd state and silence threshold exceeded
         if detectionStatus == .potentialEnd &&
            currentSilenceDuration >= config.silenceThresholdSeconds {

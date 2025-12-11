@@ -26,8 +26,8 @@ struct HistoricalSession: Identifiable {
 struct SessionHistoryView: View {
     @StateObject private var viewModel: SessionHistoryViewModel
     
-    init(llmProvider: LLMProvider, configManager: ConfigManager) {
-        _viewModel = StateObject(wrappedValue: SessionHistoryViewModel(llmProvider: llmProvider, configManager: configManager))
+    init(configManager: ConfigManager) {
+        _viewModel = StateObject(wrappedValue: SessionHistoryViewModel(configManager: configManager))
     }
     
     var body: some View {
@@ -792,7 +792,6 @@ struct FormatButton: View {
 
 #Preview {
     SessionHistoryView(
-        llmProvider: GroqClient(apiKey: "test"),
         configManager: ConfigManager.shared
     )
     .frame(width: 900, height: 650)

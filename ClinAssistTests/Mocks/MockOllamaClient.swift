@@ -2,7 +2,7 @@ import Foundation
 @testable import ClinAssist
 
 /// Mock Ollama client for testing without network calls
-class MockOllamaClient {
+class MockOllamaClient: SessionDetectorLLMClient {
     var isAvailableResult: Bool = true
     var completeResponse: String = ""
     var quickCompleteResponse: String = "START"

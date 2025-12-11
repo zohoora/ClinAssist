@@ -791,7 +791,13 @@ class ChatController: NSObject, ObservableObject, @preconcurrency AVCapturePhoto
     /// This allows attachments to be included in final SOAP generation
     var attachmentHandler: ((ChatAttachment) -> Void)?
     
-    private let model = "google/gemini-3-pro-preview"
+    /// Get the configured model for chat based on whether images are present
+    private func getConfiguredModel(hasImages: Bool) -> String {
+        let scenario: LLMScenario = hasImages ? .multimodal : .standard
+        let model = ConfigManager.shared.getModel(for: .chat, scenario: scenario)
+        debugLog("💬 Chat using model: \(model.displayName) (scenario: \(scenario.displayName))", component: "Chat")
+        return model.modelId
+    }
     
     func sendMessage(_ text: String) async {
         let attachments = pendingAttachments
@@ -900,8 +906,12 @@ class ChatController: NSObject, ObservableObject, @preconcurrency AVCapturePhoto
         
         messagesArray.append(["role": "user", "content": currentContent])
         
+        // Get model based on whether images are present
+        let hasImages = !imageAttachments.isEmpty
+        let selectedModel = getConfiguredModel(hasImages: hasImages)
+        
         let requestBody: [String: Any] = [
-            "model": model,
+            "model": selectedModel,
             "messages": messagesArray,
             "temperature": 0.3,
             "max_tokens": 8192
