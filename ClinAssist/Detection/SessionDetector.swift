@@ -61,6 +61,7 @@ class SessionDetector: ObservableObject {
     
     // LLM-based detection
     private var llmClient: SessionDetectorLLMClient?
+    private var llmModelOverride: String?
     private var isAnalyzing: Bool = false
     private var lastAnalysisTime: Date?
     private let analysisDebounceSeconds: TimeInterval = 3  // Don't analyze more than every 3 seconds
@@ -124,6 +125,14 @@ class SessionDetector: ObservableObject {
         }
     }
     
+    /// Optional model override to use for LLM-based detection (provider-specific model ID)
+    func setLLMModelOverride(_ modelOverride: String?) {
+        self.llmModelOverride = modelOverride
+        if let modelOverride {
+            log("🎯 Session detection model override set: \(modelOverride)")
+        }
+    }
+    
     /// Convenience method for setting OllamaClient
     func setOllamaClient(_ client: OllamaClient?) {
         setLLMClient(client)
@@ -131,13 +140,23 @@ class SessionDetector: ObservableObject {
     
     // MARK: - Public Methods
     
-    func startMonitoring() {
-        guard config.enabled else { return }
+    /// Starts monitoring for encounter start/end. Returns true if monitoring actually started.
+    @discardableResult
+    func startMonitoring() -> Bool {
+        guard config.enabled else {
+            isMonitoring = false
+            detectionStatus = .idle
+            lastDetectedPattern = "Auto-detection disabled in config"
+            return false
+        }
         
         // Auto-detection requires LLM - disable if not available
         guard llmClient != nil else {
             log("⚠️ Auto-detection disabled - no LLM available")
-            return
+            isMonitoring = false
+            detectionStatus = .idle
+            lastDetectedPattern = "Auto-detection unavailable (no LLM configured)"
+            return false
         }
         
         isMonitoring = true
@@ -149,6 +168,7 @@ class SessionDetector: ObservableObject {
         startSilenceTimer()
         
         log("Started monitoring for encounters (LLM enabled)")
+        return true
     }
     
     func stopMonitoring() {
@@ -282,7 +302,7 @@ class SessionDetector: ObservableObject {
             do {
                 let prompt = startDetectionPrompt + "\n\n\"\"\"\n\(transcript)\n\"\"\""
                 log("📤 Calling LLM quickComplete...")
-                let response = try await llmClient?.quickComplete(prompt: prompt, modelOverride: nil) ?? "WAIT"
+                let response = try await llmClient?.quickComplete(prompt: prompt, modelOverride: llmModelOverride) ?? "WAIT"
                 
                 let decision = response.uppercased().trimmingCharacters(in: .whitespacesAndNewlines)
                 log("🤖 LLM raw response: \(response.prefix(200))")
@@ -331,7 +351,7 @@ class SessionDetector: ObservableObject {
                 // Only analyze the last few transcript entries for end detection
                 let recentText = recentTranscriptBuffer.suffix(5).joined(separator: "\n")
                 let prompt = endDetectionPrompt + "\n\n\"\"\"\n\(recentText)\n\"\"\""
-                let response = try await llmClient?.quickComplete(prompt: prompt, modelOverride: nil) ?? "CONTINUE"
+                let response = try await llmClient?.quickComplete(prompt: prompt, modelOverride: llmModelOverride) ?? "CONTINUE"
                 
                 let decision = response.uppercased().trimmingCharacters(in: .whitespacesAndNewlines)
                 log("🤖 End analysis: \(decision)")

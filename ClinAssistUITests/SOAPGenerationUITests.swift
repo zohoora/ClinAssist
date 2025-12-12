@@ -9,6 +9,7 @@ final class SOAPGenerationUITests: XCTestCase {
         continueAfterFailure = false
         app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
+        app.launchEnvironment["UI_TESTING"] = "1"
         app.launch()
     }
     
@@ -23,50 +24,17 @@ final class SOAPGenerationUITests: XCTestCase {
         XCTAssertTrue(mainWindow.waitForExistence(timeout: 5))
         
         // Start and end an encounter to trigger the sheet
-        let startButton = mainWindow.buttons["Start Encounter"]
-        let startManuallyButton = mainWindow.buttons["Start Encounter Manually"]
+        let startEndButton = mainWindow.buttons["startEndEncounterButton"]
+        XCTAssertTrue(startEndButton.waitForExistence(timeout: 5))
+        startEndButton.click()
+        Thread.sleep(forTimeInterval: 0.5)
+        startEndButton.click()
         
-        if startButton.waitForExistence(timeout: 2) {
-            startButton.click()
-        } else if startManuallyButton.waitForExistence(timeout: 2) {
-            startManuallyButton.click()
-        } else {
-            // Skip if no start button
-            throw XCTSkip("Start button not found - may need configuration")
-        }
-        
-        sleep(2)
-        
-        // End the encounter
-        let endButton = mainWindow.buttons["End Encounter"]
-        XCTAssertTrue(endButton.waitForExistence(timeout: 5))
-        endButton.click()
-        
-        // Wait for SOAP generation (up to 60 seconds)
-        let timeout: TimeInterval = 60
-        let startTime = Date()
-        
-        while Date().timeIntervalSince(startTime) < timeout {
-            // Look for the End Encounter sheet/modal elements
-            let copyButton = mainWindow.buttons["Copy to Clipboard"]
-            let doneButton = mainWindow.buttons["Done"]
-            
-            if copyButton.exists || doneButton.exists {
-                // Sheet appeared
-                XCTAssertTrue(true)
-                
-                // Dismiss the sheet
-                if doneButton.exists {
-                    doneButton.click()
-                }
-                return
-            }
-            
-            sleep(1)
-        }
-        
-        // If we get here, the sheet didn't appear in time
-        XCTFail("End encounter sheet did not appear within timeout")
+        let copyButton = mainWindow.buttons["copyToClipboardButton"]
+        XCTAssertTrue(copyButton.waitForExistence(timeout: 10))
+        let doneButton = mainWindow.buttons["doneButton"]
+        XCTAssertTrue(doneButton.exists)
+        doneButton.click()
     }
     
     func testSOAPDetailLevelSlider() throws {
@@ -168,88 +136,45 @@ final class SOAPGenerationUITests: XCTestCase {
         XCTAssertTrue(mainWindow.waitForExistence(timeout: 5))
         
         // Start and end an encounter
-        let startButton = mainWindow.buttons["Start Encounter"]
-        let startManuallyButton = mainWindow.buttons["Start Encounter Manually"]
-        
-        if startButton.waitForExistence(timeout: 2) {
-            startButton.click()
-        } else if startManuallyButton.waitForExistence(timeout: 2) {
-            startManuallyButton.click()
-        } else {
-            throw XCTSkip("Start button not found")
-        }
-        
-        sleep(2)
-        
-        let endButton = mainWindow.buttons["End Encounter"]
-        XCTAssertTrue(endButton.waitForExistence(timeout: 5))
-        endButton.click()
-        
-        // Wait for sheet
-        sleep(20)
+        let startEndButton = mainWindow.buttons["startEndEncounterButton"]
+        XCTAssertTrue(startEndButton.waitForExistence(timeout: 5))
+        startEndButton.click()
+        Thread.sleep(forTimeInterval: 1.0)
+        startEndButton.click()
         
         // Find and click Copy to Clipboard
-        let copyButton = mainWindow.buttons["Copy to Clipboard"]
+        let copyButton = mainWindow.buttons["copyToClipboardButton"]
         
-        if copyButton.waitForExistence(timeout: 40) {
-            XCTAssertTrue(copyButton.isEnabled)
-            copyButton.click()
-            
-            // Verify clipboard has content (indirectly through UI feedback)
-            // The button might change to "Copied!" or similar
-            sleep(1)
-        }
+        XCTAssertTrue(copyButton.waitForExistence(timeout: 30))
+        XCTAssertTrue(copyButton.isEnabled)
+        copyButton.click()
         
         // Dismiss sheet
-        let doneButton = mainWindow.buttons["Done"]
-        if doneButton.exists {
-            doneButton.click()
-        }
+        let doneButton = mainWindow.buttons["doneButton"]
+        XCTAssertTrue(doneButton.exists)
+        doneButton.click()
     }
     
     func testRegenerateSOAP() throws {
         let mainWindow = app.windows["ClinAssist"]
         XCTAssertTrue(mainWindow.waitForExistence(timeout: 5))
         
-        // Start and end an encounter
-        let startButton = mainWindow.buttons["Start Encounter"]
-        let startManuallyButton = mainWindow.buttons["Start Encounter Manually"]
-        
-        if startButton.waitForExistence(timeout: 2) {
-            startButton.click()
-        } else if startManuallyButton.waitForExistence(timeout: 2) {
-            startManuallyButton.click()
-        } else {
-            throw XCTSkip("Start button not found")
-        }
-        
-        sleep(2)
-        
-        let endButton = mainWindow.buttons["End Encounter"]
-        XCTAssertTrue(endButton.waitForExistence(timeout: 5))
-        endButton.click()
-        
-        // Wait for initial SOAP generation
-        sleep(20)
+        let startEndButton = mainWindow.buttons["startEndEncounterButton"]
+        XCTAssertTrue(startEndButton.waitForExistence(timeout: 5))
+        startEndButton.click()
+        Thread.sleep(forTimeInterval: 1.0)
+        startEndButton.click()
         
         // Find and click Regenerate button
-        let regenerateButton = mainWindow.buttons["Regenerate"]
+        let regenerateButton = mainWindow.buttons["regenerateSoapButton"]
         
-        if regenerateButton.waitForExistence(timeout: 40) {
-            XCTAssertTrue(regenerateButton.isEnabled)
-            regenerateButton.click()
-            
-            // Wait for regeneration (might show loading indicator)
-            sleep(15)
-            
-            // Verify regeneration completed (button should be enabled again)
-            XCTAssertTrue(regenerateButton.waitForExistence(timeout: 60))
-        }
+        XCTAssertTrue(regenerateButton.waitForExistence(timeout: 30))
+        XCTAssertTrue(regenerateButton.isEnabled)
+        regenerateButton.click()
         
         // Dismiss sheet
-        let doneButton = mainWindow.buttons["Done"]
-        if doneButton.exists {
-            doneButton.click()
-        }
+        let doneButton = mainWindow.buttons["doneButton"]
+        XCTAssertTrue(doneButton.waitForExistence(timeout: 10))
+        doneButton.click()
     }
 }

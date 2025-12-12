@@ -89,6 +89,7 @@ struct EndEncounterSheet: View {
                         .foregroundColor(.secondary)
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier("endEncounterSheetCloseButton")
             }
             .padding()
             
@@ -273,6 +274,7 @@ struct EndEncounterSheet: View {
                 }
                 .buttonStyle(.bordered)
                 .disabled(isRegenerating || soapNoteForCopy.isEmpty)
+                .accessibilityIdentifier("regenerateSoapButton")
             }
             .padding(.horizontal)
             .padding(.vertical, 12)
@@ -293,12 +295,14 @@ struct EndEncounterSheet: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(soapNoteForCopy.isEmpty || isRegenerating)
+                .accessibilityIdentifier("copyToClipboardButton")
                 
                 Button(action: onDismiss) {
                     Text("Done")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.bordered)
+                .accessibilityIdentifier("doneButton")
             }
             .padding()
         }
@@ -351,6 +355,7 @@ struct FormatToggleButton: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(format == .problemBased ? "soapFormatProblemBased" : "soapFormatComprehensive")
     }
 }
 

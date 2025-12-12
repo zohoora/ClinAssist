@@ -423,4 +423,26 @@ final class EncounterControllerTests: XCTestCase {
         XCTAssertEqual(controller.encounterAttachments.count, 3)
         XCTAssertTrue(controller.hasMultimodalAttachments)
     }
+    
+    // MARK: - Config Change / Hot Reload Tests
+    
+    func testConfigChangeNotificationReloadsStreamingFlagWhenIdle() {
+        // Initial config in setUp uses streaming=true
+        XCTAssertTrue(mockAudioManager.streamingEnabled)
+        
+        // Flip config to streaming=false
+        mockConfigManager.config?.deepgram?.useStreaming = false
+        
+        NotificationCenter.default.post(name: .clinAssistConfigDidChange, object: nil)
+        
+        // Wait for observer to run on main queue
+        let expectation = XCTestExpectation(description: "Config reload applied")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1.0)
+        
+        XCTAssertFalse(mockAudioManager.streamingEnabled)
+        XCTAssertTrue(mockStreamingClient.disconnectCalled)
+    }
 }

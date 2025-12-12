@@ -36,8 +36,9 @@ final class SessionDetectorTests: XCTestCase {
     func testStartMonitoringSetsCorrectState() {
         // LLM client is required for monitoring
         detector.setLLMClient(MockOllamaClient())
-        detector.startMonitoring()
+        let started = detector.startMonitoring()
         
+        XCTAssertTrue(started)
         XCTAssertEqual(detector.detectionStatus, .monitoring)
         XCTAssertTrue(detector.isMonitoring)
     }
@@ -56,10 +57,12 @@ final class SessionDetectorTests: XCTestCase {
     
     func testMonitoringRequiresLLM() {
         // Without LLM, monitoring should not start
-        detector.startMonitoring()
+        let started = detector.startMonitoring()
         
+        XCTAssertFalse(started)
         XCTAssertEqual(detector.detectionStatus, .idle)
         XCTAssertFalse(detector.isMonitoring)
+        XCTAssertNotNil(detector.lastDetectedPattern)
     }
     
     func testSpeechDetectionStartsBufferingWithLLM() {
@@ -150,10 +153,38 @@ final class SessionDetectorTests: XCTestCase {
         detector = SessionDetector(config: config)
         detector.setLLMClient(MockOllamaClient())
         
-        detector.startMonitoring()
+        let started = detector.startMonitoring()
         
         // Should remain idle when disabled
+        XCTAssertFalse(started)
         XCTAssertEqual(detector.detectionStatus, .idle)
+        XCTAssertNotNil(detector.lastDetectedPattern)
+    }
+    
+    func testModelOverrideIsPassedToLLMQuickComplete() async {
+        let mockLLM = MockOllamaClient()
+        mockLLM.quickCompleteResponse = "WAIT"
+        
+        detector.setLLMClient(mockLLM)
+        detector.setLLMModelOverride("override-model-id")
+        
+        XCTAssertTrue(detector.startMonitoring())
+        
+        // Trigger buffering and analysis by providing speech + transcript
+        detector.processSpeechActivity(level: 0.05)
+        XCTAssertEqual(detector.detectionStatus, .buffering)
+        
+        detector.processTranscript("Hello doctor")
+        
+        // Wait for async Task to call quickComplete
+        await withCheckedContinuation { continuation in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                continuation.resume()
+            }
+        }
+        
+        XCTAssertEqual(mockLLM.lastQuickCompleteModelOverride, "override-model-id")
+        XCTAssertNotNil(mockLLM.lastQuickCompletePrompt)
     }
 }
 

@@ -9,6 +9,7 @@ final class EncounterUITests: XCTestCase {
         continueAfterFailure = false
         app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
+        app.launchEnvironment["UI_TESTING"] = "1"
         app.launch()
     }
     
@@ -22,51 +23,21 @@ final class EncounterUITests: XCTestCase {
         let mainWindow = app.windows["ClinAssist"]
         XCTAssertTrue(mainWindow.waitForExistence(timeout: 5))
         
-        // Find the Start Encounter button
-        let startButton = mainWindow.buttons["Start Encounter"]
-        let startManuallyButton = mainWindow.buttons["Start Encounter Manually"]
-        
-        // Click start (either button depending on auto-detection state)
-        if startButton.waitForExistence(timeout: 2) {
-            startButton.click()
-        } else if startManuallyButton.waitForExistence(timeout: 2) {
-            startManuallyButton.click()
-        } else {
-            XCTFail("No start button found")
-            return
-        }
+        let startEndButton = mainWindow.buttons["startEndEncounterButton"]
+        XCTAssertTrue(startEndButton.waitForExistence(timeout: 5))
+        startEndButton.click()
         
         // Wait for encounter to start
-        sleep(1)
+        Thread.sleep(forTimeInterval: 0.5)
         
-        // Look for End Encounter button (indicates encounter started)
-        let endButton = mainWindow.buttons["End Encounter"]
+        // End encounter
+        XCTAssertTrue(startEndButton.waitForExistence(timeout: 2))
+        startEndButton.click()
         
-        if endButton.waitForExistence(timeout: 5) {
-            // Encounter started successfully
-            XCTAssertTrue(endButton.isEnabled)
-            
-            // Click End Encounter
-            endButton.click()
-            
-            // Wait for processing to complete
-            let processingText = mainWindow.staticTexts["Processing..."]
-            let finalizingText = mainWindow.staticTexts["Finalizing"]
-            
-            // Wait up to 30 seconds for SOAP generation
-            let timeout: TimeInterval = 30
-            let startTime = Date()
-            
-            while Date().timeIntervalSince(startTime) < timeout {
-                if !processingText.exists && !finalizingText.exists {
-                    break
-                }
-                sleep(1)
-            }
-            
-            // Verify end encounter sheet appears
-            // This might be a sheet or overlay
-        }
+        // Verify end encounter sheet appears (Copy/Done buttons)
+        let done = mainWindow.buttons["doneButton"]
+        XCTAssertTrue(done.waitForExistence(timeout: 10))
+        done.click()
     }
     
     func testAutoDetectionToggle() throws {
@@ -74,7 +45,7 @@ final class EncounterUITests: XCTestCase {
         XCTAssertTrue(mainWindow.waitForExistence(timeout: 5))
         
         // Look for auto-detection toggle
-        let autoDetectToggle = mainWindow.switches["Auto-detect encounters"]
+        let autoDetectToggle = mainWindow.switches["autoDetectToggle"]
         
         if autoDetectToggle.waitForExistence(timeout: 2) {
             // Get initial state
@@ -84,7 +55,7 @@ final class EncounterUITests: XCTestCase {
             autoDetectToggle.click()
             
             // Verify state changed
-            sleep(1)
+            Thread.sleep(forTimeInterval: 0.5)
             let newValue = autoDetectToggle.value as? String == "1"
             XCTAssertNotEqual(initialValue, newValue)
             
@@ -100,27 +71,19 @@ final class EncounterUITests: XCTestCase {
         XCTAssertTrue(mainWindow.waitForExistence(timeout: 5))
         
         // Start an encounter to see transcript view
-        let startButton = mainWindow.buttons["Start Encounter"]
-        let startManuallyButton = mainWindow.buttons["Start Encounter Manually"]
-        
-        if startButton.waitForExistence(timeout: 2) {
-            startButton.click()
-        } else if startManuallyButton.waitForExistence(timeout: 2) {
-            startManuallyButton.click()
-        }
-        
-        sleep(2)
+        let startEndButton = mainWindow.buttons["startEndEncounterButton"]
+        XCTAssertTrue(startEndButton.waitForExistence(timeout: 5))
+        startEndButton.click()
         
         // Look for transcript section
-        let transcriptHeader = mainWindow.staticTexts["Transcript"]
+        let transcriptHeader = mainWindow.staticTexts["TRANSCRIPT"]
         XCTAssertTrue(transcriptHeader.waitForExistence(timeout: 5))
         
         // End encounter to clean up
-        let endButton = mainWindow.buttons["End Encounter"]
-        if endButton.exists {
-            endButton.click()
-            sleep(5) // Wait for SOAP generation
-        }
+        startEndButton.click()
+        let done = mainWindow.buttons["doneButton"]
+        XCTAssertTrue(done.waitForExistence(timeout: 10))
+        done.click()
     }
     
     // MARK: - Clinical Notes Tests
@@ -130,38 +93,31 @@ final class EncounterUITests: XCTestCase {
         XCTAssertTrue(mainWindow.waitForExistence(timeout: 5))
         
         // Start an encounter
-        let startButton = mainWindow.buttons["Start Encounter"]
-        let startManuallyButton = mainWindow.buttons["Start Encounter Manually"]
-        
-        if startButton.waitForExistence(timeout: 2) {
-            startButton.click()
-        } else if startManuallyButton.waitForExistence(timeout: 2) {
-            startManuallyButton.click()
-        }
-        
-        sleep(2)
+        let startEndButton = mainWindow.buttons["startEndEncounterButton"]
+        XCTAssertTrue(startEndButton.waitForExistence(timeout: 5))
+        startEndButton.click()
         
         // Look for clinical notes input
-        let notesField = mainWindow.textFields.firstMatch
-        
-        if notesField.waitForExistence(timeout: 5) {
-            notesField.click()
-            notesField.typeText("BP 120/80")
-            
-            // Press Enter to add the note
-            notesField.typeKey(.return, modifierFlags: [])
-            
-            sleep(1)
-            
-            // Verify the note was added (would appear in a list)
+        let notesField = mainWindow.textFields["clinicalNotesTextField"]
+        if !notesField.exists {
+            // Scroll down to bring notes into view (SwiftUI ScrollView can lazily create content)
+            let scroll = mainWindow.scrollViews.firstMatch
+            for _ in 0..<5 {
+                if notesField.exists { break }
+                scroll.swipeUp()
+                Thread.sleep(forTimeInterval: 0.2)
+            }
         }
+        XCTAssertTrue(notesField.waitForExistence(timeout: 10))
+        notesField.click()
+        notesField.typeText("BP 120/80")
+        notesField.typeKey(.return, modifierFlags: [])
         
         // End encounter to clean up
-        let endButton = mainWindow.buttons["End Encounter"]
-        if endButton.exists {
-            endButton.click()
-            sleep(5)
-        }
+        startEndButton.click()
+        let done = mainWindow.buttons["doneButton"]
+        XCTAssertTrue(done.waitForExistence(timeout: 10))
+        done.click()
     }
     
     // MARK: - Timer Display Tests
@@ -171,29 +127,20 @@ final class EncounterUITests: XCTestCase {
         XCTAssertTrue(mainWindow.waitForExistence(timeout: 5))
         
         // Start an encounter
-        let startButton = mainWindow.buttons["Start Encounter"]
-        let startManuallyButton = mainWindow.buttons["Start Encounter Manually"]
-        
-        if startButton.waitForExistence(timeout: 2) {
-            startButton.click()
-        } else if startManuallyButton.waitForExistence(timeout: 2) {
-            startManuallyButton.click()
-        }
+        let startEndButton = mainWindow.buttons["startEndEncounterButton"]
+        XCTAssertTrue(startEndButton.waitForExistence(timeout: 5))
+        startEndButton.click()
         
         // Wait for timer to appear
-        sleep(2)
+        Thread.sleep(forTimeInterval: 1.0)
         
-        // Look for timer display (format: 00:00:00)
-        // The timer should show something like "00:00:01" or higher
-        let timerPattern = mainWindow.staticTexts.matching(NSPredicate(format: "label MATCHES %@", "\\d{2}:\\d{2}:\\d{2}"))
-        
-        XCTAssertGreaterThan(timerPattern.count, 0, "Timer display should be visible")
+        let timer = mainWindow.staticTexts["encounterTimerText"]
+        XCTAssertTrue(timer.waitForExistence(timeout: 10), "Timer display should be visible")
         
         // End encounter to clean up
-        let endButton = mainWindow.buttons["End Encounter"]
-        if endButton.exists {
-            endButton.click()
-            sleep(5)
-        }
+        startEndButton.click()
+        let done = mainWindow.buttons["doneButton"]
+        XCTAssertTrue(done.waitForExistence(timeout: 10))
+        done.click()
     }
 }

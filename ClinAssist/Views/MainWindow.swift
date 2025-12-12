@@ -8,6 +8,30 @@ struct MainWindowView: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            // UI testing helpers (avoid menu bar interactions in XCUITest)
+            if UITestingSupport.isUITesting && appDelegate.configManager.isConfigured {
+                HStack(spacing: 12) {
+                    Button("Settings") { appDelegate.showSettings() }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                        .accessibilityIdentifier("openSettingsButton")
+                    
+                    Button("Medication Lookup") { appDelegate.showMedicationLookup() }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                        .accessibilityIdentifier("openMedicationLookupButton")
+                    
+                    Button("Session History") { appDelegate.showSessionHistory() }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                        .accessibilityIdentifier("openSessionHistoryButton")
+                    
+                    Spacer()
+                }
+                .padding(.horizontal, 12)
+                .padding(.top, 8)
+            }
+            
             // Check if configured
             if !appDelegate.configManager.isConfigured {
                 SetupView(configManager: appDelegate.configManager) {
@@ -265,6 +289,7 @@ struct StatusBarView: View {
                 Text(formatDuration(duration))
                     .font(.system(size: 13, weight: .medium, design: .monospaced))
                     .foregroundColor(.secondary)
+                    .accessibilityIdentifier("encounterTimerText")
             }
             
             // Silence timer (show during monitoring/active with potential end)
@@ -399,6 +424,7 @@ struct IdleStateView: View {
             }
             .buttonStyle(.plain)
             .help("View past encounters (⌘H)")
+            .accessibilityIdentifier("sessionHistoryButton")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.vertical, 40)
@@ -586,10 +612,12 @@ struct BottomActionView: View {
                     }
                     .toggleStyle(.switch)
                     .controlSize(.small)
+                    .accessibilityIdentifier("autoDetectToggle")
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
                 .background(Color(NSColor.controlBackgroundColor).opacity(0.5))
+                .accessibilityIdentifier("autoDetectToggleRow")
             }
             
             Button(action: {
@@ -614,6 +642,7 @@ struct BottomActionView: View {
             .tint(buttonColor)
             .disabled(appDelegate.appState == .processing || (!appDelegate.audioManager.permissionGranted && appDelegate.appState == .idle))
             .padding(16)
+            .accessibilityIdentifier("startEndEncounterButton")
         }
         .background(Color(NSColor.windowBackgroundColor))
     }

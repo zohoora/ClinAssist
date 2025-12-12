@@ -14,6 +14,7 @@
 		4A0000000000000000000005 /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000015 /* MainWindow.swift */; };
 		4A0000000000000000000006 /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000016 /* ConfigManager.swift */; };
 		4A0000000000000000000007 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000017 /* AudioManager.swift */; };
+		4A0000000000000000000AB2 /* AudioEngineAbstractions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000AB1 /* AudioEngineAbstractions.swift */; };
 		4A0000000000000000000008 /* STTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000018 /* STTClient.swift */; };
 		4A0000000000000000000009 /* DeepgramRESTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000019 /* DeepgramRESTClient.swift */; };
 		4A000000000000000000000A /* LLMClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000020 /* LLMClient.swift */; };
@@ -85,9 +86,13 @@
 		4A00000000000000000000Z1 /* WindowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A00000000000000000000Z2 /* WindowCoordinator.swift */; };
 		4A00000000000000000000Z3 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A00000000000000000000Z4 /* ErrorHandler.swift */; };
 		4A00000000000000000000Z5 /* SOAPGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A00000000000000000000Z6 /* SOAPGenerator.swift */; };
+		4A0000000000000000000AC2 /* UITestingSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0000000000000000000AC1 /* UITestingSupport.swift */; };
 		4CUITEST000000000000001 /* ClinAssistUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CUITEST000000000000011 /* ClinAssistUITests.swift */; };
 		4CUITEST000000000000002 /* EncounterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CUITEST000000000000012 /* EncounterUITests.swift */; };
 		4CUITEST000000000000003 /* SOAPGenerationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CUITEST000000000000013 /* SOAPGenerationUITests.swift */; };
+		4BTEST00000000000000A2 /* GroqClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BTEST00000000000000A1 /* GroqClientTests.swift */; };
+		4BTEST00000000000000B2 /* ConfigManagerSaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BTEST00000000000000B1 /* ConfigManagerSaveTests.swift */; };
+		4BTEST00000000000000C2 /* ChatControllerRequestBodyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BTEST00000000000000C1 /* ChatControllerRequestBodyTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,6 +121,7 @@
 		4A0000000000000000000015 /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
 		4A0000000000000000000016 /* ConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
 		4A0000000000000000000017 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		4A0000000000000000000AB1 /* AudioEngineAbstractions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinAssist/Audio/AudioEngineAbstractions.swift; sourceTree = "<group>"; };
 		4A0000000000000000000018 /* STTClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTClient.swift; sourceTree = "<group>"; };
 		4A0000000000000000000019 /* DeepgramRESTClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepgramRESTClient.swift; sourceTree = "<group>"; };
 		4A0000000000000000000020 /* LLMClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMClient.swift; sourceTree = "<group>"; };
@@ -167,6 +173,9 @@
 		4BTEST0000000000000033 /* SampleDeepgramResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDeepgramResponses.swift; sourceTree = "<group>"; };
 		4BTEST0000000000000034 /* SampleTranscripts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleTranscripts.swift; sourceTree = "<group>"; };
 		4BTEST0000000000000035 /* LLMOrchestratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMOrchestratorTests.swift; sourceTree = "<group>"; };
+		4BTEST00000000000000A1 /* GroqClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinAssistTests/GroqClientTests.swift; sourceTree = "<group>"; };
+		4BTEST00000000000000B1 /* ConfigManagerSaveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinAssistTests/ConfigManagerSaveTests.swift; sourceTree = "<group>"; };
+		4BTEST00000000000000C1 /* ChatControllerRequestBodyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinAssistTests/ChatControllerRequestBodyTests.swift; sourceTree = "<group>"; };
 		4A00000000000000000000J2 /* SessionHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionHistoryView.swift; sourceTree = "<group>"; };
 		4A00000000000000000000K2 /* SessionHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionHistoryViewModel.swift; sourceTree = "<group>"; };
 		4A00000000000000000000L2 /* BillingCodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BillingCodeGenerator.swift; sourceTree = "<group>"; };
@@ -190,6 +199,7 @@
 		4A00000000000000000000Z2 /* WindowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowCoordinator.swift; sourceTree = "<group>"; };
 		4A00000000000000000000Z4 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
 		4A00000000000000000000Z6 /* SOAPGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOAPGenerator.swift; sourceTree = "<group>"; };
+		4A0000000000000000000AC1 /* UITestingSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinAssist/Utilities/UITestingSupport.swift; sourceTree = "<group>"; };
 		4CUITEST000000000000010 /* ClinAssistUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClinAssistUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CUITEST000000000000011 /* ClinAssistUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinAssistUITests.swift; sourceTree = "<group>"; };
 		4CUITEST000000000000012 /* EncounterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterUITests.swift; sourceTree = "<group>"; };
@@ -620,6 +630,7 @@
 				4A0000000000000000000005 /* MainWindow.swift in Sources */,
 				4A0000000000000000000006 /* ConfigManager.swift in Sources */,
 				4A0000000000000000000007 /* AudioManager.swift in Sources */,
+				4A0000000000000000000AB2 /* AudioEngineAbstractions.swift in Sources */,
 				4A0000000000000000000008 /* STTClient.swift in Sources */,
 				4A0000000000000000000009 /* DeepgramRESTClient.swift in Sources */,
 				4A000000000000000000000A /* LLMClient.swift in Sources */,
@@ -664,6 +675,7 @@
 				4A00000000000000000000Z1 /* WindowCoordinator.swift in Sources */,
 				4A00000000000000000000Z3 /* ErrorHandler.swift in Sources */,
 				4A00000000000000000000Z5 /* SOAPGenerator.swift in Sources */,
+				4A0000000000000000000AC2 /* UITestingSupport.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -692,6 +704,9 @@
 				4BTEST0000000000000023 /* SampleDeepgramResponses.swift in Sources */,
 				4BTEST0000000000000024 /* SampleTranscripts.swift in Sources */,
 				4BTEST0000000000000025 /* LLMOrchestratorTests.swift in Sources */,
+				4BTEST00000000000000A2 /* GroqClientTests.swift in Sources */,
+				4BTEST00000000000000B2 /* ConfigManagerSaveTests.swift in Sources */,
+				4BTEST00000000000000C2 /* ChatControllerRequestBodyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

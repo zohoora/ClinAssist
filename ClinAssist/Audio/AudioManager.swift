@@ -20,8 +20,11 @@ extension AudioManagerDelegate {
 class AudioManager: NSObject, ObservableObject {
     weak var delegate: AudioManagerDelegate?
     
-    private var audioEngine: AVAudioEngine?
-    private var inputNode: AVAudioInputNode?
+    private var audioEngine: AudioEngineProtocol?
+    private var inputNode: AudioInputNodeProtocol?
+    private let engineFactory: AudioEngineFactoryProtocol
+    private let permissionProvider: MicrophonePermissionProviding
+    private let tempBasePath: URL
     
     @Published var isRecording = false
     @Published var isMonitoring = false
@@ -55,7 +58,17 @@ class AudioManager: NSObject, ObservableObject {
     
     @Published var mode: Mode = .idle
     
-    override init() {
+    init(
+        engineFactory: AudioEngineFactoryProtocol = SystemAudioEngineFactory(),
+        permissionProvider: MicrophonePermissionProviding = SystemMicrophonePermissionProvider(),
+        tempBasePath: URL? = nil
+    ) {
+        self.engineFactory = engineFactory
+        self.permissionProvider = permissionProvider
+        self.tempBasePath = tempBasePath ?? FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Dropbox")
+            .appendingPathComponent("livecode_records")
+            .appendingPathComponent("temp")
         super.init()
         checkPermissions()
     }
@@ -63,7 +76,7 @@ class AudioManager: NSObject, ObservableObject {
     // MARK: - Permissions
     
     func checkPermissions() {
-        switch AVCaptureDevice.authorizationStatus(for: .audio) {
+        switch permissionProvider.authorizationStatus() {
         case .authorized:
             permissionGranted = true
             permissionError = nil
@@ -79,7 +92,7 @@ class AudioManager: NSObject, ObservableObject {
     }
     
     private func requestPermissions() {
-        AVCaptureDevice.requestAccess(for: .audio) { [weak self] granted in
+        permissionProvider.requestAccess { [weak self] granted in
             DispatchQueue.main.async {
                 self?.permissionGranted = granted
                 if !granted {
@@ -103,7 +116,7 @@ class AudioManager: NSObject, ObservableObject {
         }
         
         // Setup audio engine for monitoring
-        audioEngine = AVAudioEngine()
+        audioEngine = engineFactory.makeEngine()
         guard let audioEngine = audioEngine else {
             throw AudioError.engineSetupFailed
         }
@@ -139,7 +152,7 @@ class AudioManager: NSObject, ObservableObject {
         guard mode == .monitoring else { return }
         
         stopLevelTimer()
-        audioEngine?.inputNode.removeTap(onBus: 0)
+        inputNode?.removeTap(onBus: 0)
         audioEngine?.stop()
         audioEngine = nil
         inputNode = nil
@@ -242,7 +255,7 @@ class AudioManager: NSObject, ObservableObject {
         try FileManager.default.createDirectory(at: tempPath, withIntermediateDirectories: true)
         
         // Setup audio engine
-        audioEngine = AVAudioEngine()
+        audioEngine = engineFactory.makeEngine()
         guard let audioEngine = audioEngine else {
             throw AudioError.engineSetupFailed
         }
@@ -311,7 +324,7 @@ class AudioManager: NSObject, ObservableObject {
             saveCurrentChunk()
         }
         
-        audioEngine?.inputNode.removeTap(onBus: 0)
+        inputNode?.removeTap(onBus: 0)
         audioEngine?.stop()
         audioEngine = nil
         inputNode = nil
@@ -341,7 +354,7 @@ class AudioManager: NSObject, ObservableObject {
     func transitionToRecording(encounterId: UUID) throws {
         if mode == .monitoring {
             // Stop monitoring tap
-            audioEngine?.inputNode.removeTap(onBus: 0)
+            inputNode?.removeTap(onBus: 0)
             stopLevelTimer()
             
             currentEncounterId = encounterId
@@ -413,7 +426,7 @@ class AudioManager: NSObject, ObservableObject {
             }
             
             // Remove recording tap
-            audioEngine?.inputNode.removeTap(onBus: 0)
+            inputNode?.removeTap(onBus: 0)
             
             guard let audioEngine = audioEngine else {
                 throw AudioError.engineSetupFailed
@@ -603,10 +616,7 @@ class AudioManager: NSObject, ObservableObject {
     // MARK: - Paths
     
     private func encounterTempPath(for encounterId: UUID) -> URL {
-        FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Dropbox")
-            .appendingPathComponent("livecode_records")
-            .appendingPathComponent("temp")
+        tempBasePath
             .appendingPathComponent(encounterId.uuidString)
     }
     

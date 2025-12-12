@@ -49,6 +49,7 @@ struct ClinicalNotesInputView: View {
                             .onSubmit {
                                 submitNote()
                             }
+                            .accessibilityIdentifier("clinicalNotesTextField")
                         
                         Button(action: submitNote) {
                             Image(systemName: "plus.circle.fill")
@@ -57,6 +58,7 @@ struct ClinicalNotesInputView: View {
                         }
                         .buttonStyle(.plain)
                         .disabled(inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        .accessibilityIdentifier("addClinicalNoteButton")
                     }
                     
                     // List of entered notes

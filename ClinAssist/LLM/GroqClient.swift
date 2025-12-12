@@ -72,6 +72,56 @@ class GroqClient: LLMProvider {
     }
 }
 
+extension GroqClient: SessionDetectorLLMClient {
+    /// Fast short response completion used by SessionDetector (expects 1-word outputs like START/WAIT/END/CONTINUE).
+    func quickComplete(prompt: String, modelOverride: String? = nil) async throws -> String {
+        guard let url = URL(string: baseURL) else {
+            throw LLMProviderError.invalidURL
+        }
+        
+        let effectiveModel = modelOverride ?? model
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.timeoutInterval = 30
+        
+        let requestBody: [String: Any] = [
+            "model": effectiveModel,
+            "messages": [
+                ["role": "user", "content": prompt]
+            ],
+            "temperature": 0.1,
+            "max_tokens": 64
+        ]
+        
+        request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw LLMProviderError.invalidResponse
+        }
+        
+        if httpResponse.statusCode == 401 {
+            throw LLMProviderError.invalidAPIKey(provider: "Groq")
+        }
+        
+        if httpResponse.statusCode == 429 {
+            let errorMessage = String(data: data, encoding: .utf8) ?? "Rate limited"
+            throw LLMProviderError.rateLimited(provider: "Groq", message: errorMessage)
+        }
+        
+        if httpResponse.statusCode != 200 {
+            let errorMessage = String(data: data, encoding: .utf8) ?? "Unknown error"
+            throw LLMProviderError.requestFailed(provider: "Groq", message: "HTTP \(httpResponse.statusCode): \(errorMessage)")
+        }
+        
+        return try LLMResponseParser.parseOpenAIChatResponse(data)
+    }
+}
+
 // MARK: - Legacy Error Type (deprecated, use LLMProviderError)
 
 @available(*, deprecated, message: "Use LLMProviderError instead")

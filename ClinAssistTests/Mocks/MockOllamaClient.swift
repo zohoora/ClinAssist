@@ -9,6 +9,9 @@ class MockOllamaClient: SessionDetectorLLMClient {
     var shouldThrowError: Bool = false
     var errorToThrow: Error = LLMProviderError.notAvailable(provider: "Ollama")
     
+    var lastQuickCompletePrompt: String?
+    var lastQuickCompleteModelOverride: String?
+    
     private let model: String
     
     init(model: String = "test-model") {
@@ -30,6 +33,8 @@ class MockOllamaClient: SessionDetectorLLMClient {
         if shouldThrowError {
             throw errorToThrow
         }
+        lastQuickCompletePrompt = prompt
+        lastQuickCompleteModelOverride = modelOverride
         return quickCompleteResponse
     }
 }

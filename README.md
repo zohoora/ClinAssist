@@ -13,7 +13,7 @@ A native macOS menu bar app that acts as a real-time ambient assistant for famil
 - **Problem-oriented SOAP Notes**: Automatically generates and updates SOAP notes
 - **Clinical Decision Support**: Provides DDx suggestions, red flags, and suggested questions
 - **Drug Cards**: Displays medication information when drugs are mentioned
-- **Local Storage**: All encounter data saved locally on your Desktop
+- **Dropbox-synced Storage**: Encounter data is written to your local Dropbox folder for cross-device syncing
 
 ## Requirements
 
@@ -47,13 +47,16 @@ You'll need API keys from:
 
 ### Configuration
 
-Create a config file at `~/Desktop/ClinAssist/config.json`:
+ClinAssist reads configuration from:
+
+`~/Dropbox/livecode_records/config.json`
 
 ```json
 {
   "openrouter_api_key": "sk-or-your-key-here",
   "deepgram_api_key": "your-deepgram-key-here",
-  "model": "openai/gpt-4.1",
+  "gemini_api_key": "optional-if-needed",
+  "model": "anthropic/claude-sonnet-4",
   "timing": {
     "transcription_interval_seconds": 10,
     "helper_update_interval_seconds": 20,
@@ -107,18 +110,23 @@ ClinAssist/
 
 ## Data Storage
 
-Encounters are saved to:
+Encounters are saved under your Dropbox folder:
+
 ```
-~/Desktop/ClinAssist/encounters/YYYY-MM-DD_HH-MM-SS/
+~/Dropbox/livecode_records/encounters/YYYY-MM-DD_HH-MM-SS/
 ├── encounter.json      # Full encounter state
 ├── transcript.txt      # Plain text transcript
 └── soap_note.txt       # Final SOAP note
 ```
 
+Debug logs are written to:
+
+`~/Dropbox/livecode_records/debug.log`
+
 ## Privacy & Security
 
-- **All data stays local**: No cloud sync, no telemetry
-- **API keys stored locally**: In your config.json file
+- **Dropbox sync**: Data is stored in `~/Dropbox/livecode_records/` so it can sync across machines (depending on your Dropbox settings).
+- **API keys stored in config**: Keys are read from `config.json`.
 - **Audio deleted after processing**: Temp files cleaned up automatically
 
 ## Tech Stack

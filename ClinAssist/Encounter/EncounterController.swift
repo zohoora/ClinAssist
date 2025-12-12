@@ -72,6 +72,11 @@ class EncounterController: ObservableObject {
     private var injectedSTTClient: STTClient?
     private var injectedStreamingClient: StreamingSTTClient?
     
+    // MARK: - Config change handling
+    
+    private var configDidChangeObserver: Any?
+    private var needsConfigReload: Bool = false
+    
     /// Primary initializer for production use
     init(audioManager: AudioManager, configManager: ConfigManager) {
         self.audioManager = audioManager
@@ -90,6 +95,7 @@ class EncounterController: ObservableObject {
         sessionDetector.delegate = self
         
         setupClients()
+        installConfigObserver()
     }
     
     /// Testing initializer with dependency injection
@@ -119,6 +125,13 @@ class EncounterController: ObservableObject {
         sessionDetector.delegate = self
         
         setupClients()
+        installConfigObserver()
+    }
+    
+    deinit {
+        if let observer = configDidChangeObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
     
     private func setupClients() {
@@ -160,18 +173,18 @@ class EncounterController: ObservableObject {
             debugLog("📦 Batch transcription mode (streaming disabled in config)", component: "Encounter")
         }
         
-        // Setup cloud LLM client (use injected or create new, fallback for final SOAP)
+        // Setup cloud LLM client (use injected or create new)
         if llmClient == nil {
         llmClient = LLMClient(apiKey: config.openrouterApiKey, model: config.model)
         }
         
-        // Setup Groq client for fast final SOAP generation
-        if configManager.useGroqForFinalSoap {
+        // Setup Groq client if configured (used by orchestrator and optionally for final SOAP)
+        if configManager.isGroqEnabled {
             let groqModel = configManager.groqModel
-            debugLog("🚀 Groq enabled for final SOAP: model=\(groqModel)", component: "Encounter")
+            debugLog("⚡ Groq configured: model=\(groqModel)", component: "Encounter")
             groqClient = GroqClient(apiKey: configManager.groqApiKey, model: groqModel)
         } else {
-            debugLog("☁️ Using OpenRouter for final SOAP", component: "Encounter")
+            groqClient = nil
         }
         
         // Setup Ollama client if enabled
@@ -222,20 +235,112 @@ class EncounterController: ObservableObject {
         
         // Set orchestrator on SOAP generator
         soapGenerator.setOrchestrator(llmOrchestrator)
+        
+        // Refresh session detector config + LLM wiring
+        sessionDetector.config = configManager.buildSessionDetectorConfig()
+        configureSessionDetectionLLM()
+    }
+    
+    private func configureSessionDetectionLLM() {
+        func canUse(_ model: LLMModelOption) -> Bool {
+            switch model.provider {
+            case .ollama:
+                return configManager.useOllamaForSessionDetection && ollamaAvailable && ollamaClient != nil
+            case .openRouter:
+                return llmClient != nil
+            case .groq:
+                return groqClient != nil
+            }
+        }
+        
+        func apply(_ model: LLMModelOption) {
+            debugLog("🎯 Session detection using: \(model.displayName)", component: "Encounter")
+            switch model.provider {
+            case .ollama:
+                sessionDetector.setLLMClient(ollamaClient)
+            case .openRouter:
+                sessionDetector.setLLMClient(llmClient)
+            case .groq:
+                sessionDetector.setLLMClient(groqClient)
+            }
+            sessionDetector.setLLMModelOverride(model.modelId)
+        }
+        
+        let preferred = configManager.getModel(for: .sessionDetection, scenario: .standard)
+        if canUse(preferred) {
+            apply(preferred)
+            return
+        }
+        
+        let backup = configManager.getModel(for: .sessionDetection, scenario: .backup)
+        if canUse(backup) {
+            debugLog("↪️ Session detection falling back to backup model", component: "Encounter")
+            apply(backup)
+            return
+        }
+        
+        // No usable client configured
+        sessionDetector.setLLMClient(nil)
+        sessionDetector.setLLMModelOverride(nil)
+    }
+    
+    private func installConfigObserver() {
+        configDidChangeObserver = NotificationCenter.default.addObserver(
+            forName: .clinAssistConfigDidChange,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self else { return }
+            self.handleConfigDidChange()
+        }
+    }
+    
+    private func handleConfigDidChange() {
+        // Avoid restarting clients mid-encounter; defer until safe.
+        if audioManager.mode == .recording || isProvisionalRecording {
+            needsConfigReload = true
+            debugLog("🕒 Config changed during recording; deferring reload until encounter ends", component: "Encounter")
+            return
+        }
+        
+        debugLog("🔄 Applying config changes (safe to reload)", component: "Encounter")
+        
+        // Tear down streaming if present before rebuilding
+        streamingClient?.disconnect()
+        isStreamingConnected = false
+        
+        // Rebuild clients & session detector config/LLM
+        setupClients()
+        
+        // If we are currently monitoring, restart detection so it uses updated settings/LLM
+        if audioManager.mode == .monitoring && configManager.isAutoDetectionEnabled {
+            _ = startMonitoring()
+        }
     }
     
     // MARK: - Monitoring Mode (Auto-Detection)
     
     // Use global debugLog() function from DebugLogger.swift
     
-    func startMonitoring() {
+    @discardableResult
+    func startMonitoring() -> Bool {
         debugLog("startMonitoring called", component: "Encounter")
         debugLog("isAutoDetectionEnabled: \(configManager.isAutoDetectionEnabled)", component: "Encounter")
         debugLog("audioManager.mode: \(audioManager.mode)", component: "Encounter")
         
         guard configManager.isAutoDetectionEnabled else {
             debugLog("Auto-detection not enabled - returning", component: "Encounter")
-            return
+            return false
+        }
+        
+        // Ensure the session detector has up-to-date config + LLM wiring.
+        sessionDetector.config = configManager.buildSessionDetectorConfig()
+        configureSessionDetectionLLM()
+        
+        // Start session detector first; if it can't start (no LLM), don't enter monitoring mode.
+        guard sessionDetector.startMonitoring() else {
+            errorHandler.report(message: "Auto-detection couldn't start (no session-detection model available). Check Settings → AI Models → Session Detection.", showAlert: false)
+            return false
         }
         
         do {
@@ -248,14 +353,13 @@ class EncounterController: ObservableObject {
                 debugLog("audioManager already in monitoring mode - skipping", component: "Encounter")
             }
             
-            // Always restart session detector to reset internal state
-            debugLog("Starting sessionDetector monitoring...", component: "Encounter")
-            sessionDetector.startMonitoring()
-            debugLog("sessionDetector started OK", component: "Encounter")
-            
             debugLog("Ollama client set: \(ollamaClient != nil)", component: "Encounter")
+            return true
         } catch {
             debugLog("❌ ERROR starting monitoring: \(error)", component: "Encounter")
+            sessionDetector.stopMonitoring()
+            errorHandler.report(message: "Failed to start audio monitoring for auto-detection: \(error.localizedDescription)", showAlert: false)
+            return false
         }
     }
     
@@ -377,10 +481,16 @@ class EncounterController: ObservableObject {
             debugLog("▶️ Restarting session detection...", component: "Encounter")
             do {
                 try audioManager.startMonitoring()
-                sessionDetector.startMonitoring()
+                _ = startMonitoring()
             } catch {
                 debugLog("❌ Failed to restart monitoring: \(error)", component: "Encounter")
             }
+        }
+        
+        // Apply deferred config reload if needed
+        if needsConfigReload {
+            needsConfigReload = false
+            handleConfigDidChange()
         }
     }
     

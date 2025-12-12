@@ -7,9 +7,89 @@ final class AudioManagerTests: XCTestCase {
     
     var audioManager: AudioManager!
     var mockDelegate: MockAudioManagerDelegate!
+    var tempDir: URL!
+    var fakeNode: FakeInputNode!
+    var fakeEngine: FakeAudioEngine!
+    
+    // MARK: - Test Doubles
+    
+    final class FakePermissionProvider: MicrophonePermissionProviding {
+        var status: AVAuthorizationStatus = .authorized
+        func authorizationStatus() -> AVAuthorizationStatus { status }
+        func requestAccess(_ completion: @escaping (Bool) -> Void) { completion(status == .authorized) }
+    }
+    
+    final class FakeInputNode: AudioInputNodeProtocol {
+        let format: AVAudioFormat
+        var installedTap: ((AVAudioPCMBuffer, AVAudioTime) -> Void)?
+        
+        init(format: AVAudioFormat) {
+            self.format = format
+        }
+        
+        func outputFormat(forBus bus: AVAudioNodeBus) -> AVAudioFormat { format }
+        
+        func installTap(
+            onBus bus: AVAudioNodeBus,
+            bufferSize: AVAudioFrameCount,
+            format: AVAudioFormat?,
+            block: @escaping (AVAudioPCMBuffer, AVAudioTime) -> Void
+        ) {
+            installedTap = block
+        }
+        
+        func removeTap(onBus bus: AVAudioNodeBus) {
+            installedTap = nil
+        }
+        
+        func emit(buffer: AVAudioPCMBuffer) {
+            guard let installedTap else { return }
+            let time = AVAudioTime(sampleTime: 0, atRate: buffer.format.sampleRate)
+            installedTap(buffer, time)
+        }
+    }
+    
+    final class FakeAudioEngine: AudioEngineProtocol {
+        let node: FakeInputNode
+        var started = false
+        
+        init(node: FakeInputNode) {
+            self.node = node
+        }
+        
+        var inputNode: AudioInputNodeProtocol { node }
+        var isRunning: Bool { started }
+        
+        func start() throws { started = true }
+        func stop() { started = false }
+        func pause() { started = false }
+    }
+    
+    final class FakeEngineFactory: AudioEngineFactoryProtocol {
+        let engine: FakeAudioEngine
+        init(engine: FakeAudioEngine) { self.engine = engine }
+        func makeEngine() -> AudioEngineProtocol { engine }
+    }
     
     override func setUpWithError() throws {
-        audioManager = AudioManager()
+        tempDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("ClinAssistTestsAudioTemp")
+            .appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
+        
+        let floatFormat = AVAudioFormat(
+            commonFormat: .pcmFormatFloat32,
+            sampleRate: 16000,
+            channels: 1,
+            interleaved: false
+        )!
+        fakeNode = FakeInputNode(format: floatFormat)
+        fakeEngine = FakeAudioEngine(node: fakeNode)
+        let factory = FakeEngineFactory(engine: fakeEngine)
+        let permissions = FakePermissionProvider()
+        permissions.status = .authorized
+        
+        audioManager = AudioManager(engineFactory: factory, permissionProvider: permissions, tempBasePath: tempDir)
         mockDelegate = MockAudioManagerDelegate()
         audioManager.delegate = mockDelegate
         
@@ -23,6 +103,10 @@ final class AudioManagerTests: XCTestCase {
         audioManager.stopMonitoring()
         audioManager = nil
         mockDelegate = nil
+        fakeNode = nil
+        fakeEngine = nil
+        try? FileManager.default.removeItem(at: tempDir)
+        tempDir = nil
     }
     
     // MARK: - Initial State Tests
@@ -40,11 +124,6 @@ final class AudioManagerTests: XCTestCase {
     // MARK: - Mode Transition Tests
     
     func testStartMonitoringSetsMode() throws {
-        // Skip if no permission (CI environment)
-        guard audioManager.permissionGranted else {
-            throw XCTSkip("Microphone permission not granted")
-        }
-        
         try audioManager.startMonitoring()
         
         XCTAssertEqual(audioManager.mode, .monitoring)
@@ -53,10 +132,6 @@ final class AudioManagerTests: XCTestCase {
     }
     
     func testStopMonitoringSetsIdleMode() throws {
-        guard audioManager.permissionGranted else {
-            throw XCTSkip("Microphone permission not granted")
-        }
-        
         try audioManager.startMonitoring()
         audioManager.stopMonitoring()
         
@@ -65,10 +140,6 @@ final class AudioManagerTests: XCTestCase {
     }
     
     func testStartRecordingSetsMode() throws {
-        guard audioManager.permissionGranted else {
-            throw XCTSkip("Microphone permission not granted")
-        }
-        
         let encounterId = UUID()
         try audioManager.startRecording(encounterId: encounterId)
         
@@ -78,10 +149,6 @@ final class AudioManagerTests: XCTestCase {
     }
     
     func testStopRecordingSetsIdleMode() throws {
-        guard audioManager.permissionGranted else {
-            throw XCTSkip("Microphone permission not granted")
-        }
-        
         let encounterId = UUID()
         try audioManager.startRecording(encounterId: encounterId)
         audioManager.stopRecording()
@@ -91,10 +158,6 @@ final class AudioManagerTests: XCTestCase {
     }
     
     func testTransitionFromMonitoringToRecording() throws {
-        guard audioManager.permissionGranted else {
-            throw XCTSkip("Microphone permission not granted")
-        }
-        
         try audioManager.startMonitoring()
         XCTAssertEqual(audioManager.mode, .monitoring)
         
@@ -107,10 +170,6 @@ final class AudioManagerTests: XCTestCase {
     }
     
     func testTransitionFromRecordingToMonitoring() throws {
-        guard audioManager.permissionGranted else {
-            throw XCTSkip("Microphone permission not granted")
-        }
-        
         let encounterId = UUID()
         try audioManager.startRecording(encounterId: encounterId)
         XCTAssertEqual(audioManager.mode, .recording)
@@ -152,10 +211,6 @@ final class AudioManagerTests: XCTestCase {
     // MARK: - Pause/Resume Tests
     
     func testPauseAndResumeRecording() throws {
-        guard audioManager.permissionGranted else {
-            throw XCTSkip("Microphone permission not granted")
-        }
-        
         let encounterId = UUID()
         try audioManager.startRecording(encounterId: encounterId)
         
@@ -187,6 +242,32 @@ final class AudioManagerTests: XCTestCase {
         XCTAssertNotEqual(idle, monitoring)
         XCTAssertNotEqual(monitoring, recording)
         XCTAssertNotEqual(idle, recording)
+    }
+    
+    // MARK: - Signal Processing / Delegate Tests
+    
+    func testMonitoringTapUpdatesAudioLevelAndStreamsSamples() throws {
+        try audioManager.startMonitoring()
+        
+        let format = fakeNode.format
+        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 1024) else {
+            XCTFail("Failed to create buffer")
+            return
+        }
+        
+        buffer.frameLength = 1024
+        let data = buffer.floatChannelData![0]
+        for i in 0..<Int(buffer.frameLength) { data[i] = 0.1 } // RMS should be ~0.1
+        
+        fakeNode.emit(buffer: buffer)
+        
+        let expectation = XCTestExpectation(description: "Main thread updates applied")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { expectation.fulfill() }
+        wait(for: [expectation], timeout: 1.0)
+        
+        XCTAssertGreaterThan(audioManager.currentAudioLevel, 0.05)
+        XCTAssertFalse(mockDelegate.capturedSamples.isEmpty)
+        XCTAssertEqual(mockDelegate.capturedSamples.last?.count, 1024)
     }
 }
 

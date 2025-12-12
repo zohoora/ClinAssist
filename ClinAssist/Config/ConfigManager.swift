@@ -1,5 +1,10 @@
 import Foundation
 
+extension Notification.Name {
+    /// Posted after config.json is saved successfully and in-memory config is updated.
+    static let clinAssistConfigDidChange = Notification.Name("clinassist.configDidChange")
+}
+
 // MARK: - LLM Function and Scenario Types
 
 /// Functions that use LLM providers
@@ -831,17 +836,26 @@ class ConfigManager: ObservableObject {
         return getModel(for: function, scenario: scenario).provider
     }
     
-    init() {
-        let dropboxPath = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Dropbox")
-            .appendingPathComponent("livecode_records")
+    /// Create a ConfigManager.
+    /// - Parameters:
+    ///   - configPath: Path to `config.json`. Defaults to `~/Dropbox/livecode_records/config.json`.
+    ///   - shouldLoad: If true, loads config immediately.
+    init(configPath: URL? = nil, shouldLoad: Bool = true) {
+        if let configPath {
+            self.configPath = configPath
+        } else {
+            let dropboxPath = FileManager.default.homeDirectoryForCurrentUser
+                .appendingPathComponent("Dropbox")
+                .appendingPathComponent("livecode_records")
+            self.configPath = dropboxPath.appendingPathComponent("config.json")
+        }
         
-        configPath = dropboxPath.appendingPathComponent("config.json")
+        // Ensure parent directory exists.
+        try? FileManager.default.createDirectory(at: self.configPath.deletingLastPathComponent(), withIntermediateDirectories: true)
         
-        // Create livecode_records folder if needed
-        try? FileManager.default.createDirectory(at: dropboxPath, withIntermediateDirectories: true)
-        
-        loadConfig()
+        if shouldLoad {
+            loadConfig()
+        }
     }
     
     func loadConfig() {
@@ -866,13 +880,21 @@ class ConfigManager: ObservableObject {
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         
         let data = try encoder.encode(newConfig)
-        try data.write(to: configPath)
+        try persistConfigData(data)
         
         // Update the in-memory config
         config = newConfig
         configError = nil
         
         debugLog("✅ Config saved to \(configPath.path)", component: "ConfigManager")
+        
+        // Notify listeners (AppDelegate / EncounterController) to refresh clients safely.
+        NotificationCenter.default.post(name: .clinAssistConfigDidChange, object: nil)
+    }
+    
+    /// Persist config bytes to storage. Overridable for testing.
+    func persistConfigData(_ data: Data) throws {
+        try data.write(to: configPath)
     }
     
     /// Get the path to the config file

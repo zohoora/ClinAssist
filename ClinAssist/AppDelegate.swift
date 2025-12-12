@@ -21,9 +21,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     
     // Managers
     let configManager = ConfigManager.shared
-    let audioManager = AudioManager()
+    let audioManager: AudioManager
     lazy var encounterController: EncounterController = {
-        let controller = EncounterController(audioManager: audioManager, configManager: configManager)
+        let controller: EncounterController
+        if UITestingSupport.isUITesting {
+            controller = EncounterController(
+                audioManager: audioManager,
+                configManager: configManager,
+                sttClient: UITestingSTTClient(),
+                streamingClient: UITestingStreamingClient(),
+                llmClient: UITestingLLMClient(apiKey: "uitest", model: "uitest"),
+                ollamaClient: nil
+            )
+        } else {
+            controller = EncounterController(audioManager: audioManager, configManager: configManager)
+        }
         controller.delegate = self
         return controller
     }()
@@ -32,17 +44,50 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private var encounterStartTime: Date?
     private var silenceUpdateTimer: Timer?
     
+    private var configDidChangeObserver: Any?
+    
+    override init() {
+        if UITestingSupport.isUITesting {
+            let temp = FileManager.default.temporaryDirectory
+                .appendingPathComponent("ClinAssistUITestTemp")
+            self.audioManager = AudioManager(
+                engineFactory: UITestingAudioEngineFactory(),
+                permissionProvider: UITestingPermissionProvider(),
+                tempBasePath: temp
+            )
+        } else {
+            self.audioManager = AudioManager()
+        }
+        super.init()
+    }
+    
     // MARK: - App Lifecycle
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Hide from Dock
         NSApp.setActivationPolicy(.accessory)
         
-        // Request microphone permission immediately on launch
-        requestMicrophonePermission()
-        
-        // Request camera permission at launch (for chat image capture feature)
-        requestCameraPermission()
+        // UI tests: avoid system permission prompts and ensure the app is "configured".
+        if UITestingSupport.isUITesting {
+            if configManager.config == nil {
+                var cfg = AppConfig.default
+                cfg.openrouterApiKey = "uitest"
+                cfg.deepgramApiKey = "uitest"
+                cfg.model = "openai/gpt-4o-mini"
+                cfg.autoDetection?.enabled = false
+                cfg.deepgram?.useStreaming = true
+                configManager.config = cfg
+                configManager.configError = nil
+            }
+            audioManager.permissionGranted = true
+            audioManager.permissionError = nil
+        } else {
+            // Request microphone permission immediately on launch
+            requestMicrophonePermission()
+            
+            // Request camera permission at launch (for chat image capture feature)
+            requestCameraPermission()
+        }
         
         // Setup menu bar
         setupStatusItem()
@@ -55,6 +100,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         // Setup global hotkey
         setupGlobalHotkey()
         
+        // Listen for config updates (Settings save) so toggles take effect immediately.
+        configDidChangeObserver = NotificationCenter.default.addObserver(
+            forName: .clinAssistConfigDidChange,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.handleConfigDidChange()
+        }
+        
         // Check if auto-detection should be enabled
         autoDetectionEnabled = configManager.isAutoDetectionEnabled
         NSLog("[AppDelegate] Auto-detection enabled from config: %@", autoDetectionEnabled ? "YES" : "NO")
@@ -64,6 +118,31 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         
         // Show the main window on app launch
         showWindow()
+    }
+    
+    private func handleConfigDidChange() {
+        // Treat config auto_detection.enabled as the desired runtime state.
+        let shouldEnable = configManager.isAutoDetectionEnabled
+        
+        if shouldEnable && !autoDetectionEnabled {
+            // If user enabled auto-detection via Settings, start it (if permissions allow).
+            autoDetectionEnabled = true
+            startAutoDetectionIfReady()
+        } else if !shouldEnable && autoDetectionEnabled {
+            // If user disabled auto-detection via Settings, stop monitoring mode.
+            autoDetectionEnabled = false
+            if appState == .monitoring || appState == .buffering {
+                stopAutoDetection()
+            } else {
+                stopSilenceUpdateTimer()
+                silenceDuration = 0
+                updateMenu()
+                updateStatusIcon()
+            }
+        } else {
+            // No change; just refresh menu labels.
+            updateMenu()
+        }
     }
     
     /// Start auto-detection only if enabled and microphone permission is granted
@@ -135,6 +214,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
     
     func applicationWillTerminate(_ notification: Notification) {
+        if let observer = configDidChangeObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
         hotkeyManager?.unregister()
         
         // Stop monitoring if active
@@ -333,10 +415,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             print("[AppDelegate] Auto-detection not enabled in config")
             return
         }
+                
+        // Attempt to start monitoring; only enter monitoring state if it actually started.
+        let started = encounterController.startMonitoring()
+        guard started else {
+            autoDetectionEnabled = false
+            appState = .idle
+            stopSilenceUpdateTimer()
+            silenceDuration = 0
+            updateMenu()
+            updateStatusIcon()
+            print("[AppDelegate] Auto-detection failed to start")
+            return
+        }
         
         autoDetectionEnabled = true
         appState = .monitoring
-        encounterController.startMonitoring()
         
         // Start silence duration tracking
         startSilenceUpdateTimer()
@@ -437,7 +531,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 if autoDetectionEnabled {
                     appState = .monitoring
                     // IMPORTANT: Restart monitoring in the controller to reset SessionDetector state
-                    encounterController.startMonitoring()
+                    _ = encounterController.startMonitoring()
                     // Restart silence tracking
                     startSilenceUpdateTimer()
                 } else {

@@ -4,6 +4,17 @@ import XCTest
 @MainActor
 final class LLMClientTests: XCTestCase {
     
+    override func setUpWithError() throws {
+        // Intercept URLSession.shared requests for networked tests.
+        URLProtocol.registerClass(MockURLProtocol.self)
+        MockURLProtocol.reset()
+    }
+    
+    override func tearDownWithError() throws {
+        URLProtocol.unregisterClass(MockURLProtocol.self)
+        MockURLProtocol.reset()
+    }
+    
     // MARK: - JSON Parsing Helper Tests
     
     func testCleanJSONParsingFromMarkdown() {
@@ -132,6 +143,102 @@ final class LLMClientTests: XCTestCase {
     
     func testStateUpdaterPromptExists() {
         XCTAssertFalse(LLMPrompts.stateUpdater.isEmpty)
+    }
+    
+    // MARK: - Network Request Tests (MockURLProtocol)
+    
+    func testQuickCompleteBuildsExpectedRequestBodyAndParsesResponse() async throws {
+        let client = LLMClient(apiKey: "test-openrouter-key", model: "default-model")
+        
+        let responseJSON = """
+        {
+          "choices": [
+            { "message": { "content": "START" } }
+          ]
+        }
+        """
+        
+        func requestBodyData(_ request: URLRequest) throws -> Data {
+            if let body = request.httpBody { return body }
+            guard let stream = request.httpBodyStream else { return Data() }
+            stream.open()
+            defer { stream.close() }
+            var data = Data()
+            let bufferSize = 16 * 1024
+            var buffer = Array<UInt8>(repeating: 0, count: bufferSize)
+            while stream.hasBytesAvailable {
+                let read = stream.read(&buffer, maxLength: bufferSize)
+                if read > 0 {
+                    data.append(buffer, count: read)
+                } else {
+                    break
+                }
+            }
+            return data
+        }
+        
+        MockURLProtocol.requestHandler = { request in
+            XCTAssertEqual(request.httpMethod, "POST")
+            XCTAssertTrue(request.url?.absoluteString.contains("openrouter.ai/api/v1/chat/completions") ?? false)
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Authorization"), "Bearer test-openrouter-key")
+            XCTAssertEqual(request.value(forHTTPHeaderField: "Content-Type"), "application/json")
+            
+            // Validate JSON body
+            let bodyData = try requestBodyData(request)
+            let json = try JSONSerialization.jsonObject(with: bodyData) as? [String: Any]
+            XCTAssertEqual(json?["model"] as? String, "override-model")
+            XCTAssertEqual(json?["max_tokens"] as? Int, 64)
+            XCTAssertEqual(json?["temperature"] as? Double, 0.1)
+            
+            let messages = json?["messages"] as? [[String: Any]]
+            XCTAssertEqual(messages?.count, 1)
+            XCTAssertEqual(messages?.first?["role"] as? String, "user")
+            XCTAssertNotNil(messages?.first?["content"] as? String)
+            
+            let data = responseJSON.data(using: .utf8)!
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (data, response)
+        }
+        
+        let result = try await client.quickComplete(prompt: "Detect encounter start", modelOverride: "override-model")
+        XCTAssertTrue(result.uppercased().contains("START"))
+    }
+    
+    func testQuickComplete401ThrowsInvalidAPIKey() async {
+        let client = LLMClient(apiKey: "bad-key", model: "default-model")
+        
+        MockURLProtocol.setupErrorResponse(statusCode: 401, message: "Invalid key")
+        
+        do {
+            _ = try await client.quickComplete(prompt: "Test", modelOverride: nil)
+            XCTFail("Expected error")
+        } catch {
+            guard case LLMProviderError.invalidAPIKey(provider: "OpenRouter") = error else {
+                XCTFail("Expected invalidAPIKey(OpenRouter), got \(error)")
+                return
+            }
+        }
+    }
+    
+    func testQuickCompleteNon200ThrowsRequestFailed() async {
+        let client = LLMClient(apiKey: "test-openrouter-key", model: "default-model")
+        
+        MockURLProtocol.setupErrorResponse(statusCode: 500, message: "Server error")
+        
+        do {
+            _ = try await client.quickComplete(prompt: "Test", modelOverride: nil)
+            XCTFail("Expected error")
+        } catch {
+            guard case LLMProviderError.requestFailed(provider: "OpenRouter", message: _) = error else {
+                XCTFail("Expected requestFailed(OpenRouter), got \(error)")
+                return
+            }
+        }
     }
     
     // MARK: - Helper Functions

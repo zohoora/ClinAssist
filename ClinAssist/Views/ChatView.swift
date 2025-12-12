@@ -21,10 +21,6 @@ struct ChatView: View {
                     .font(.system(size: 11, weight: .semibold))
                     .foregroundColor(.secondary)
                 
-                Text("(Gemini 3 Pro)")
-                    .font(.system(size: 9))
-                    .foregroundColor(.secondary)
-                
                 Spacer()
                 
                 if chatController.isLoading {
@@ -799,6 +795,67 @@ class ChatController: NSObject, ObservableObject, @preconcurrency AVCapturePhoto
         return model.modelId
     }
     
+    // MARK: - OpenRouter request building (testable)
+    
+    static func isMultimodalAttachment(_ attachment: ChatAttachment) -> Bool {
+        if attachment.type == .image, attachment.base64Data != nil {
+            return true
+        }
+        if attachment.mimeType == "application/pdf", attachment.base64Data != nil {
+            return true
+        }
+        return false
+    }
+    
+    static func buildOpenRouterRequestBody(
+        selectedModel: String,
+        systemPrompt: String,
+        recentMessages: ArraySlice<ChatMessage>,
+        userContent: String,
+        attachments: [ChatAttachment]
+    ) -> [String: Any] {
+        // Build messages array
+        var messagesArray: [[String: Any]] = [
+            ["role": "system", "content": systemPrompt]
+        ]
+        
+        // Add conversation history (last N messages for context)
+        for msg in recentMessages {
+            let role = msg.role == .user ? "user" : "assistant"
+            messagesArray.append(["role": role, "content": msg.text])
+        }
+        
+        // Add current message with potential multimodal content (images + PDFs)
+        let multimodalAttachments = attachments.filter { isMultimodalAttachment($0) }
+        var currentContent: Any = userContent
+        
+        if !multimodalAttachments.isEmpty {
+            var contentParts: [[String: Any]] = []
+            contentParts.append(["type": "text", "text": userContent])
+            
+            for attachment in multimodalAttachments {
+                if let base64 = attachment.base64Data {
+                    contentParts.append([
+                        "type": "image_url",
+                        "image_url": [
+                            "url": "data:\(attachment.mimeType ?? "image/png");base64,\(base64)"
+                        ]
+                    ])
+                }
+            }
+            currentContent = contentParts
+        }
+        
+        messagesArray.append(["role": "user", "content": currentContent])
+        
+        return [
+            "model": selectedModel,
+            "messages": messagesArray,
+            "temperature": 0.3,
+            "max_tokens": 8192
+        ]
+    }
+    
     func sendMessage(_ text: String) async {
         let attachments = pendingAttachments
         
@@ -870,52 +927,20 @@ class ChatController: NSObject, ObservableObject, @preconcurrency AVCapturePhoto
         request.setValue("ClinAssist", forHTTPHeaderField: "X-Title")
         request.timeoutInterval = 60
         
-        // Build messages array
-        var messagesArray: [[String: Any]] = [
-            ["role": "system", "content": systemPrompt]
-        ]
-        
         // Add conversation history (last 10 messages for context)
         let recentMessages = messages.suffix(10)
-        for msg in recentMessages {
-            let role = msg.role == .user ? "user" : "assistant"
-            messagesArray.append(["role": role, "content": msg.text])
-        }
         
-        // Add current message with potential image
-        var currentContent: Any = userContent
+        // Get model based on whether multimodal content is present
+        let hasMultimodal = attachments.contains { Self.isMultimodalAttachment($0) }
+        let selectedModel = getConfiguredModel(hasImages: hasMultimodal)
         
-        // Check for image attachments - use multimodal format
-        let imageAttachments = attachments.filter { $0.type == .image && $0.base64Data != nil }
-        if !imageAttachments.isEmpty {
-            var contentParts: [[String: Any]] = []
-            contentParts.append(["type": "text", "text": userContent])
-            
-            for attachment in imageAttachments {
-                if let base64 = attachment.base64Data {
-                    contentParts.append([
-                        "type": "image_url",
-                        "image_url": [
-                            "url": "data:\(attachment.mimeType ?? "image/png");base64,\(base64)"
-                        ]
-                    ])
-                }
-            }
-            currentContent = contentParts
-        }
-        
-        messagesArray.append(["role": "user", "content": currentContent])
-        
-        // Get model based on whether images are present
-        let hasImages = !imageAttachments.isEmpty
-        let selectedModel = getConfiguredModel(hasImages: hasImages)
-        
-        let requestBody: [String: Any] = [
-            "model": selectedModel,
-            "messages": messagesArray,
-            "temperature": 0.3,
-            "max_tokens": 8192
-        ]
+        let requestBody = Self.buildOpenRouterRequestBody(
+            selectedModel: selectedModel,
+            systemPrompt: systemPrompt,
+            recentMessages: recentMessages,
+            userContent: userContent,
+            attachments: attachments
+        )
         
         request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
         
